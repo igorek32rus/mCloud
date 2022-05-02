@@ -1,0 +1,80 @@
+.dropMenu {
+    position: absolute;
+    background-color: rgba(30, 36, 68, .95);
+    border-radius: 7px;
+    visibility: hidden;
+    z-index: 1;
+}
+  
+.dropMenu.contextMenu {
+    /* top: 10px;
+    right: 10px; */
+    width: 200px;
+    right: -205px;
+    top: 10px;
+    display: block;
+}
+
+ul.menu.context li .icon {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+    margin: -2px 5px -2px 0;
+}
+  
+ul.menu.context li div.icon.share {
+    background: url('../images/share.svg') no-repeat;
+    background-size: contain;
+}
+  
+ul.menu.context li div.icon.edit {
+    background: url('../images/edit.svg') no-repeat;
+    background-size: contain;
+}
+  
+ul.menu.context li div.icon.download {
+    background: url('../images/download.svg') no-repeat;
+    background-size: contain;
+}
+  
+ul.menu.context li div.icon.copy {
+    background: url('../images/copy.svg') no-repeat;
+    background-size: contain;
+}
+  
+ul.menu.context li div.icon.delete {
+    background: url('../images/delete.svg') no-repeat;
+    background-size: contain;
+}
+  
+.dropMenu.contextMenu::after {
+    content: '';
+    position: absolute;
+    left: -10px; top: 10px;
+    border: 5px solid transparent;
+    border-right: 5px solid rgba(30, 36, 68, .95);
+}
+
+ul.menu {
+    height: auto;
+    list-style: none;
+}
+  
+ul.menu.context {
+    text-align: left;
+}
+  
+ul.menu li {
+    /* display: list-item; */
+    display: flex;
+    padding: 5px 15px;
+}
+  
+ul.menu li:not(:first-child) {
+    border-top: 1px solid rgba(255, 255, 255, .1);
+}
+  
+ul.menu li:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, .1);
+}

@@ -1,0 +1,97 @@
+.dirContent {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 3;
+}
+  
+.block {
+    /*background-color: #2b365b;*/
+    position: relative;
+    background: rgba(255, 255, 255, .2);
+    height: 150px;
+    width: 130px;
+    border-radius: 5px;
+    margin: 0 10px 10px 0;
+    font-size: 12px;
+    transition: box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+}
+  
+.block:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+  
+input[type='checkbox'].check-custom {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+  
+input[type='checkbox'].check-custom ~ .check-toggle {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-color .2s ease-in-out;
+    opacity: .7;
+}
+  
+input[type='checkbox'].check-custom:checked ~ .check-toggle {
+    border-color: #fff;
+    background: #fff url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQgMjQ7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGcgaWQ9ImluZm8iLz48ZyBpZD0iaWNvbnMiPjxwYXRoIGQ9Ik0xMCwxOGMtMC41LDAtMS0wLjItMS40LTAuNmwtNC00Yy0wLjgtMC44LTAuOC0yLDAtMi44YzAuOC0wLjgsMi4xLTAuOCwyLjgsMGwyLjYsMi42bDYuNi02LjYgICBjMC44LTAuOCwyLTAuOCwyLjgsMGMwLjgsMC44LDAuOCwyLDAsMi44bC04LDhDMTEsMTcuOCwxMC41LDE4LDEwLDE4eiIgaWQ9ImNoZWNrIi8+PC9nPjwvc3ZnPg==) center no-repeat;
+    background-size: 90%;
+}
+  
+.block .image {
+    position: relative;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    opacity: .5;
+}
+  
+.block .image .type {
+    position: absolute;
+    bottom: 5px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 1);
+    font-size: 14px;
+    border: 5px solid rgba(255, 255, 255, 1);
+    border-radius: 7px;
+    font-weight: 600;
+    padding: 3px;
+    text-transform: uppercase;
+}
+  
+.block .image.folder {
+    background: url('../images/folder-64.webp') center no-repeat;
+}
+  
+.block .image.file {
+    background: url('../images/file-64.webp') center no-repeat;
+}
+  
+.block .name {
+    margin: 5px;
+    /* max-height: 30px; */
+    overflow: hidden;
+    /* word-wrap: break-word; */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+  
+.block .date {
+    margin: 5px;
+}

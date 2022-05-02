@@ -1,0 +1,22 @@
+import React, { useContext } from 'react';
+
+import Logo from './Logo';
+import Search from './Search';
+import MainMenu from './MainMenu';
+
+import '../styles/Header.css'
+import { AuthContext } from '../Context';
+
+function Header() {
+    const {isAuth} = useContext(AuthContext)
+
+    return (
+        <header>
+            <Logo />
+            { isAuth ? <Search /> : '' }
+            <MainMenu />
+        </header>
+    )
+}
+
+export default Header

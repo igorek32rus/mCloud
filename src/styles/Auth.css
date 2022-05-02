@@ -1,0 +1,27 @@
+.reg-block {
+    width: 400px;
+    /* height: 300px; */
+    background-color: rgba(255, 255, 255, .2);
+    margin: 150px auto;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+  
+.reg-block .reg-logo {
+    background: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698868-icon-132-cloud-128.png');
+    width: 128px;
+    height: 128px;
+    margin: -20px auto;
+}
+  
+.reg-block .reg-title {
+    font-size: 25px;
+    margin: 0 auto;
+}
+
+input[type=text]::placeholder, input[type=password]::placeholder {
+    color: #ddd;
+}
