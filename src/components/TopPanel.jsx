@@ -3,6 +3,8 @@ import React, { useContext } from "react";
 import '../styles/TopPanel.css'
 import Button from "./UI/button/Button";
 
+import Path from "./Path"
+
 import { ModalContext } from '../Context'
 
 function TopPanel(props) {
@@ -26,13 +28,7 @@ function TopPanel(props) {
 
     return (
         <div className="top-panel">
-            <div className="path">
-                <a href="/" style={{padding: 3}}>
-                    <div className="home"></div>
-                </a>
-                <div className="delimiter">&#10140;</div>
-                <a href="/">Папка</a>
-            </div>
+            <Path />
 
             <Button click={createFolder}>Создать папку</Button>
             <Button click={uploadFiles}>Загрузить</Button>

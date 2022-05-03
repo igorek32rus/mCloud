@@ -32,23 +32,23 @@ function MainPage() {
       size: 252
     },
     {
-        id: 121,
-        type: 'file',
-        name: 'testFile.txt',
-        date: new Date(),
-        link: 'https://igorek.xyz',
-        size: 252
+      id: 121,
+      type: 'file',
+      name: 'testFile.txt',
+      date: new Date(),
+      link: 'https://igorek.xyz',
+      size: 252
     }
   ])
 
   const createFolder = (name) => {
     const folder = {
-        id: new Date(),
-        type: 'folder',
-        name: name,
-        date: new Date(),
-        link: 'https://igorek.xyz',
-        size: 0
+      id: new Date(),
+      type: 'folder',
+      name: name,
+      date: new Date(),
+      link: 'https://igorek.xyz',
+      size: 0
     }
     const newDir = [...dir, folder]
 

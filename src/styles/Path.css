@@ -1,0 +1,37 @@
+.path {
+    /*background-color: #2b365b;*/
+    background-color: rgba(43, 54, 91, .3);
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .7);
+    border-radius: 5px;
+    padding: 5px;
+    margin-right: 10px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.path .home {
+    height: 24px;
+    background: no-repeat url('../images/home-24.webp');
+    background-size: contain;
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.path .delimiter {
+    margin: 0 5px;
+    opacity: .7;
+}
+
+.path a {
+    padding: 7px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    transition: background-color .3s ease-in-out;
+}
+
+.path a:hover {
+    background-color: rgba(255, 255, 255, .2);
+}
