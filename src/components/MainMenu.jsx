@@ -30,7 +30,7 @@ function MainMenu() {
             { isAuth ? 
                 <div className="profile" onClick={handleClickProfile}>
                     <div style={{width: 32, height: 32, marginLeft: 10}}>
-                        <img className="profile" src="https://yt3.ggpht.com/-EMbaZfC1_04/AAAAAAAAAAI/AAAAAAAAAAA/E5q8rnZNAts/s108-c-k-c0x00ffffff-no-rj-mo/photo.jpg" alt="profile" />
+                        <img className="profile" src="/photo.jpg" alt="profile" />
                     </div>
                 </div>
                 :

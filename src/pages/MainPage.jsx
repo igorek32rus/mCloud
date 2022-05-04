@@ -27,6 +27,7 @@ function MainPage() {
       id: 111,
       type: 'folder',
       name: 'test',
+      parent: 'root',
       date: new Date(),
       link: 'https://igorek.xyz',
       size: 252
@@ -35,6 +36,7 @@ function MainPage() {
       id: 121,
       type: 'file',
       name: 'testFile.txt',
+      parent: 'root',
       date: new Date(),
       link: 'https://igorek.xyz',
       size: 252
@@ -46,6 +48,7 @@ function MainPage() {
       id: new Date(),
       type: 'folder',
       name: name,
+      parent: 'root',
       date: new Date(),
       link: 'https://igorek.xyz',
       size: 0

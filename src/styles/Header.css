@@ -31,30 +31,6 @@ header {
     font-weight: 900;
 }
 
-.search {
-    display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, .15);
-    border: 1px solid rgba(255, 255, 255, .3);
-    border-radius: 7px;
-    height: 32px;
-}
-
-.search .icon-search {
-    background: url('../images/search-16.webp');
-    height: 16px;
-    width: 16px;
-    margin-right: 10px;
-    opacity: .5;
-    margin: 5px;
-}
-
-.search input[type=text] {
-    border: none;
-    margin: 0;
-    padding: 0 3px;
-}
-
 .main-menu {
     position: relative;
     margin-right: 20px;
@@ -79,6 +55,7 @@ header {
 .main-menu .profile {
     opacity: .8;
     transition: opacity .2s ease-in-out;
+    cursor: pointer;
 }
 
 .main-menu .profile:hover {
