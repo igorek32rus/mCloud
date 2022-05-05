@@ -28,7 +28,7 @@ function DirItem(props) {
 
     return (
         <div className="block" onContextMenu={(e) => handleContextMenu(e)} onClick={() => handleClick()}>
-            <Checkbox checked={checked} />
+            {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
                 <div className="image file">

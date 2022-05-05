@@ -40,6 +40,15 @@ function MainPage() {
       date: new Date(),
       link: 'https://igorek.xyz',
       size: 252
+    },
+    {
+      id: 122,
+      type: 'file',
+      name: 'test test',
+      parent: 'root',
+      date: new Date(),
+      link: 'https://igorek.xyz',
+      size: 252
     }
   ])
 
