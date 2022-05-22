@@ -1,5 +1,5 @@
 .path {
-    /*background-color: #2b365b;*/
+    background-color: #2b365b;
     background-color: rgba(43, 54, 91, .3);
     box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .7);
     border-radius: 5px;
@@ -8,7 +8,33 @@
     flex-grow: 1;
     display: flex;
     align-items: center;
-    overflow: hidden;
+    /* overflow: hidden; */
+
+    position: relative;
+    z-index: 2;
+    height: 2.5rem;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+}
+
+.path ul {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding-bottom: 1.5rem;
+    padding-left: 0;
+    margin-block: 0;
+    overflow-x: scroll;
+    list-style: none;
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+    top: 1.2rem;
+}
+
+.path ul li {
+    display: flex;
+    align-items: center;
 }
 
 .path .home {
@@ -26,6 +52,7 @@
 }
 
 .path a {
+    display: block;
     padding: 7px 5px;
     border-radius: 3px;
     white-space: nowrap;
