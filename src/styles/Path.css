@@ -29,7 +29,7 @@
     text-align: center;
     white-space: nowrap;
     position: relative;
-    top: 1.2rem;
+    top: 1.3rem;
 }
 
 .path ul li {
@@ -41,7 +41,7 @@
     height: 24px;
     background: no-repeat url('../images/home-24.webp');
     background-size: contain;
-    padding-left: 30px;
+    padding: 0 2px 0 30px;
     display: flex;
     align-items: center;
 }
