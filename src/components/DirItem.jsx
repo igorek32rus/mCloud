@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import ContextMenu from "./ContextMenu";
 
@@ -6,6 +6,7 @@ import Checkbox from "./UI/checkbox/Checkbox";
 
 function DirItem(props) {
     const [checked, setChecked] = useState(false)
+    const blockEl = useRef(null);
 
     const getExtension = (fileName) => {
         const ext = fileName.split('.').pop()
@@ -26,8 +27,19 @@ function DirItem(props) {
         props.contextCallback(0)
     }
 
+    useEffect(() => {
+        const params = {
+            id: props.item.id,
+            left: blockEl.current.offsetLeft,
+            top: blockEl.current.offsetTop,
+            width: blockEl.current.offsetWidth,
+            height: blockEl.current.offsetHeight
+        }
+        props.setPosItem(params)
+    }, [])
+
     return (
-        <div className="block" onContextMenu={(e) => handleContextMenu(e)} onClick={() => handleClick()}>
+        <div className={props.item.selected ? 'block selected' : 'block'} ref={blockEl} onContextMenu={(e) => handleContextMenu(e)} onClick={() => handleClick()}>
             {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
