@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import DirItem from "./DirItem";
 
@@ -18,6 +18,13 @@ function DirContent(props) {
         height: 0
     })
 
+    const [elemDrag, setElemDrag] = useState({
+        dragstart: false,
+        id: 0,
+        startX: 0,
+        startY: 0
+    })
+
     const [dirItemsPos, setDirItemsPos] = useState(props.dir.reduce((prev, cur) => {
         return [...prev, {
             id: cur.id,
@@ -25,7 +32,9 @@ function DirContent(props) {
             top: 0,
             width: 0,
             height: 0,
-            changed: false
+            changed: false,
+            selected: false,
+            transform: ''
         }]
     }, []))
 
@@ -77,44 +86,50 @@ function DirContent(props) {
                 top
             })
 
-            let changed = []
+            const cloneDirItemsPos = [...dirItemsPos]
         
-            dirItemsPos.forEach((item) => {
+            cloneDirItemsPos.forEach((item) => {
                 const intersect = checkIntersectSelection(item, selection)
           
                 if (e.ctrlKey) {
                     if (intersect && !item.changed) {
-                        const changeItem = props.dir.find(itemDir => itemDir.id === item.id)
-                        changeItem.selected = !changeItem.selected
-                        const dir = props.dir.filter(itemDir => itemDir.id !== item.id)
-                        props.setDir([...dir, changeItem])
-
-                        changed.push(item.id)
+                        item.selected = !item.selected
+                        item.changed = true
                     }
                     return
                 }
           
                 if (!intersect) {
-                    const changeItem = props.dir.find(itemDir => itemDir.id === item.id)
-                    changeItem.selected = false
-                    const dir = props.dir.filter(itemDir => itemDir.id !== item.id)
-                    props.setDir([...dir, changeItem])
-
+                    item.selected = false
                     return
                 }
-          
-                const changeItem = props.dir.find(itemDir => itemDir.id === item.id)
-                changeItem.selected = true
-                const dir = props.dir.filter(itemDir => itemDir.id !== item.id)
-                props.setDir([...dir, changeItem])
+
+                item.selected = true
             })
             
-            const changedItems = dirItemsPos.reduce((prev, cur) => {
-                cur.changed = cur.id in changed
-                return [...prev, cur]
-            }, [])
-            setDirItemsPos(changedItems)
+            setDirItemsPos(cloneDirItemsPos)
         }
+
+        if (elemDrag.dragstart) {
+            const selectedItemsPos = dirItemsPos.filter(item => item.selected)
+            const notSelected = dirItemsPos.filter(item => !item.selected)
+
+            selectedItemsPos.forEach(item => {
+                let coordX = (e.pageX - elemDrag.startX)
+                let coordY = (e.pageY - elemDrag.startY)
+                item.transform = 'translate(' + coordX + 'px, ' + coordY + 'px)'
+            })
+
+            setDirItemsPos([...notSelected, ...selectedItemsPos])
+        }
+    }
+
+    const resetSelectedItems = () => {
+        const resetSelected = dirItemsPos.reduce((prev, cur) => {
+            cur.selected = false
+            return [...prev, cur]
+        }, [])
+        setDirItemsPos(resetSelected)
     }
 
     const handleMouseUp = (e) => {
@@ -122,18 +137,24 @@ function DirContent(props) {
             const posX = Math.abs(e.pageX - selection.startX)
             const posY = Math.abs(e.pageY - selection.startY)
 
-            if (posX < 2 && posY < 2) {
-                const resetSelectedItems = props.dir.reduce((prev, cur) => {
-                    cur.selected = false
-                    return [...prev, cur]
-                }, [])
-
-                props.setDir(resetSelectedItems)
-            }
+            if (posX < 2 && posY < 2) resetSelectedItems()
 
             setSelection({...selection,
                 dragstart: false
             })
+            return
+        }
+
+        if (elemDrag.dragstart) {
+            const selectedItemsPos = dirItemsPos.filter(item => item.selected)
+            const notSelected = dirItemsPos.filter(item => !item.selected)
+
+            selectedItemsPos.forEach(item => {
+                item.transform = 'translate(' + 0 + 'px, ' + 0 + 'px)'
+            })
+
+            setDirItemsPos([...notSelected, ...selectedItemsPos])
+            setElemDrag({...elemDrag, dragstart: false})
             return
         }
     }
@@ -142,22 +163,27 @@ function DirContent(props) {
         return false
     }
 
-    const setPosItem = ({id, left, top, width, height}) => {
-        const curItem = dirItemsPos.find(item => item.id === id)
-        curItem.left = left
-        curItem.top = top
-        curItem.width = width
-        curItem.height = height
-
-        const posItems = dirItemsPos.filter(item => item.id !== id)
-        setDirItemsPos([...posItems, curItem])
+    let storePos = []
+    const collectPos = (itemPos) => {
+        storePos.push(itemPos)
     }
+
+    const updatePos = (itemPos) => {
+        let posItems = dirItemsPos.filter(item => item.id !== itemPos.id)
+        posItems.push(itemPos)
+        setDirItemsPos(posItems)
+    }
+
+    useEffect(() => {
+        setDirItemsPos(storePos)
+    }, [])
 
     return (
         <div className="dirContent" onContextMenu={(e) => handleContextMenu(e)} onClick={() => handleClick()} onMouseDown={(e) => handleMouseDown(e)} onMouseMove={(e) => handleMouseMove(e)} onMouseUp={(e) => handleMouseUp(e)} onDragStart={() => handleDragStart() } >
             { selection.dragstart ? <div className="selection" style={{width: selection.width, height: selection.height, top: selection.top + 'px', left: selection.left + 'px'}}></div> : '' }
-            { props.dir.map((item) => item.type === 'folder' && <DirItem item={item} key={item.id} context={contextMenu} contextCallback={contextCallback} setPosItem={setPosItem} />) }
-            { props.dir.map((item) => item.type === 'file' && <DirItem item={item} key={item.id} context={contextMenu} contextCallback={contextCallback} setPosItem={setPosItem} />) }
+            { props.dir.map((item) => item.type === 'folder' && <DirItem item={item} key={item.id} context={contextMenu} contextCallback={contextCallback} posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} collectPos={collectPos} setElemDrag={setElemDrag} resetSelectedItems={resetSelectedItems} updatePos={updatePos} />) }
+            { props.dir.map((item) => item.type === 'file' && <DirItem item={item}  key={item.id} context={contextMenu} contextCallback={contextCallback} posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} collectPos={collectPos} setElemDrag={setElemDrag} resetSelectedItems={resetSelectedItems} updatePos={updatePos} />) }
+        
         </div>
     )
 }

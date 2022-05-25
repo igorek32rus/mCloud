@@ -30,8 +30,7 @@ function MainPage() {
       parent: 'root',
       date: new Date(),
       link: 'https://igorek.xyz',
-      size: 252,
-      selected: false
+      size: 252
     },
     {
       id: 121,
@@ -40,8 +39,7 @@ function MainPage() {
       parent: 'root',
       date: new Date(),
       link: 'https://igorek.xyz',
-      size: 252,
-      selected: false
+      size: 252
     },
     {
       id: 122,
@@ -50,8 +48,7 @@ function MainPage() {
       parent: 'root',
       date: new Date(),
       link: 'https://igorek.xyz',
-      size: 252,
-      selected: false
+      size: 252
     }
   ])
 
@@ -97,7 +94,7 @@ function MainPage() {
         <Header />
         <TopPanel />
         <TitlePage />
-        <DirContent dir={dir} setDir={setDir} />
+        <DirContent dir={dir} />
         <Notify />
         <Footer />
       </ModalContext.Provider>

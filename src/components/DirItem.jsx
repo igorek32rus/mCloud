@@ -28,18 +28,47 @@ function DirItem(props) {
     }
 
     useEffect(() => {
-        const params = {
-            id: props.item.id,
+        const params = {...props.posItem,
             left: blockEl.current.offsetLeft,
             top: blockEl.current.offsetTop,
             width: blockEl.current.offsetWidth,
             height: blockEl.current.offsetHeight
         }
-        props.setPosItem(params)
+        props.collectPos(params)
     }, [])
 
+    const handleMouseDown = (e) => {
+        e.stopPropagation()
+
+        const dragParams = {
+            startX: e.pageX,
+            startY: e.pageY,
+            id: props.item.id,
+            dragstart: false
+        }
+
+        const tempElem = {...props.posItem}
+        const elemSelected = tempElem.selected    // начальное состояние
+
+        if (e.ctrlKey) {
+            tempElem.selected = !tempElem.selected
+        }
+
+        if (!e.ctrlKey && !elemSelected) {
+            props.resetSelectedItems()
+            tempElem.selected = true
+        }
+
+        if (!e.ctrlKey) {
+            dragParams.dragstart = true
+        }
+
+        props.setElemDrag(dragParams)
+        props.updatePos(tempElem)
+    }
+
     return (
-        <div className={props.item.selected ? 'block selected' : 'block'} ref={blockEl} onContextMenu={(e) => handleContextMenu(e)} onClick={() => handleClick()}>
+        <div className={props.posItem.selected ? 'block selected' : 'block'} ref={blockEl} style={{transform: props.posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
             {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
