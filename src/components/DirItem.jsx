@@ -68,7 +68,7 @@ function DirItem(props) {
     }
 
     return (
-        <div className={props.posItem.selected ? 'block selected' : 'block'} ref={blockEl} style={{transform: props.posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
+        <div className={props.posItem.selected || (props.item.type === 'folder' && props.posItem.goal) ? 'block selected' : 'block'} ref={blockEl} style={{transform: props.posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
             {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 

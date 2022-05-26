@@ -48,4 +48,22 @@ const checkIntersectSelection = (pos, selection) => {
     return intersects(rect1, rect2)
 }
 
-export {checkIntersectSelection}
+const checkIntersectDragElem = (pos, posX, posY) => {
+  const rect1 = {
+    x: pos.left, 
+    y: pos.top, 
+    x1: pos.left + pos.width, 
+    y1: pos.top + pos.height
+  }
+
+  const rect2 = {
+    x: posX, 
+    y: posY, 
+    x1: posX, 
+    y1: posY
+  }
+
+  return intersects(rect1, rect2)
+}
+
+export {checkIntersectSelection, checkIntersectDragElem}

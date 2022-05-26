@@ -4,7 +4,7 @@ import DirItem from "./DirItem";
 
 import '../styles/DirContent.css'
 
-import {checkIntersectSelection} from '../utils/intersects'
+import {checkIntersectSelection, checkIntersectDragElem} from '../utils/intersects'
 
 function DirContent(props) {
     const [contextMenu, setContextMenu] = useState(0)
@@ -34,6 +34,7 @@ function DirContent(props) {
             height: 0,
             changed: false,
             selected: false,
+            goal: false,
             transform: ''
         }]
     }, []))
@@ -120,6 +121,17 @@ function DirContent(props) {
                 item.transform = 'translate(' + coordX + 'px, ' + coordY + 'px)'
             })
 
+            // проверка над каким элементом перетаскиваются
+            notSelected.forEach(item => {
+                const intersect = checkIntersectDragElem(item, e.pageX, e.pageY)
+
+                if (intersect) {
+                    item.goal = true
+                    return
+                }
+                item.goal = false
+            })
+
             setDirItemsPos([...notSelected, ...selectedItemsPos])
         }
     }
@@ -152,6 +164,9 @@ function DirContent(props) {
             selectedItemsPos.forEach(item => {
                 item.transform = 'translate(' + 0 + 'px, ' + 0 + 'px)'
             })
+
+            // убрать цель
+            notSelected.forEach(item => item.goal = false)
 
             setDirItemsPos([...notSelected, ...selectedItemsPos])
             setElemDrag({...elemDrag, dragstart: false})

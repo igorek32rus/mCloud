@@ -17,40 +17,14 @@ import Rename from '../components/modalwindows/Rename';
 import Share from '../components/modalwindows/Share';
 import Delete from '../components/modalwindows/Delete';
 
+import getData from '../data/mock_dir';
+
 function MainPage() {
   const [modal, setModal] = useState(false)
   const [typeModal, setTypeModal] = useState('createFolder')
   const [dataModal, setDataModal] = useState(null)
 
-  const [dir, setDir] = useState([
-    {
-      id: 111,
-      type: 'folder',
-      name: 'test',
-      parent: 'root',
-      date: new Date(),
-      link: 'https://igorek.xyz',
-      size: 252
-    },
-    {
-      id: 121,
-      type: 'file',
-      name: 'testFile.txt',
-      parent: 'root',
-      date: new Date(),
-      link: 'https://igorek.xyz',
-      size: 252
-    },
-    {
-      id: 122,
-      type: 'file',
-      name: 'test test',
-      parent: 'root',
-      date: new Date(),
-      link: 'https://igorek.xyz',
-      size: 252
-    }
-  ])
+  const [dir, setDir] = useState(getData(5, 30))
 
   const createFolder = (name) => {
     const folder = {
