@@ -184,7 +184,7 @@ function DirContent(props) {
     }
 
     const updatePos = (itemPos) => {
-        let posItems = dirItemsPos.filter(item => item.id !== itemPos.id)
+        const posItems = dirItemsPos.filter(item => item.id !== itemPos.id)
         posItems.push(itemPos)
         setDirItemsPos(posItems)
     }

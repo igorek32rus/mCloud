@@ -27,6 +27,7 @@ function DirItem(props) {
         props.contextCallback(0)
     }
 
+    // инициализация позиционирования элемента
     useEffect(() => {
         const params = {...props.posItem,
             left: blockEl.current.offsetLeft,
@@ -36,6 +37,20 @@ function DirItem(props) {
         }
         props.collectPos(params)
     }, [])
+
+    // при изменении положения элемента (пример - изменение размеров экрана) - обновление позиционирования
+    useEffect(() => {
+        const elem = blockEl.current
+        const currentPos = props.posItem
+
+        if (!currentPos.selected && (elem.offsetLeft !== currentPos.left || elem.offsetTop !== currentPos.top)) {
+            const params = {...props.posItem,
+                left: blockEl.current.offsetLeft,
+                top: blockEl.current.offsetTop
+            }
+            props.updatePos(params)
+        }   
+    })
 
     const handleMouseDown = (e) => {
         e.stopPropagation()

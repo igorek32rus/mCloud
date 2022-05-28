@@ -3,7 +3,9 @@
     display: flex;
     flex-wrap: wrap;
     flex-grow: 3;
+    align-content: baseline;
     user-select: none;
+    overflow-x: hidden;
 }
 
 .selection {
