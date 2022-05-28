@@ -189,6 +189,7 @@ function DirContent(props) {
         setDirItemsPos(posItems)
     }
 
+    // при открытии инициализация положения элементов
     useEffect(() => {
         setDirItemsPos(storePos)
     }, [])

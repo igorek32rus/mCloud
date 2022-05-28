@@ -8,6 +8,14 @@ function DirItem(props) {
     const [checked, setChecked] = useState(false)
     const blockEl = useRef(null);
 
+    const posItem = props.posItem ? props.posItem
+        : {
+            id: props.item.id,
+            selected: false,
+            goal: false,
+            transform: ''
+        }
+
     const getExtension = (fileName) => {
         const ext = fileName.split('.').pop()
         if (ext.length > 4 || ext.length === 0) {
@@ -29,11 +37,13 @@ function DirItem(props) {
 
     // инициализация позиционирования элемента
     useEffect(() => {
-        const params = {...props.posItem,
-            left: blockEl.current.offsetLeft,
-            top: blockEl.current.offsetTop,
-            width: blockEl.current.offsetWidth,
-            height: blockEl.current.offsetHeight
+        const elem = blockEl.current
+
+        const params = {...posItem,
+            left: elem.offsetLeft,
+            top: elem.offsetTop,
+            width: elem.offsetWidth,
+            height: elem.offsetHeight
         }
         props.collectPos(params)
     }, [])
@@ -41,12 +51,13 @@ function DirItem(props) {
     // при изменении положения элемента (пример - изменение размеров экрана) - обновление позиционирования
     useEffect(() => {
         const elem = blockEl.current
-        const currentPos = props.posItem
 
-        if (!currentPos.selected && (elem.offsetLeft !== currentPos.left || elem.offsetTop !== currentPos.top)) {
-            const params = {...props.posItem,
-                left: blockEl.current.offsetLeft,
-                top: blockEl.current.offsetTop
+        if (!posItem.selected && (elem.offsetLeft !== posItem.left || elem.offsetTop !== posItem.top)) {
+            const params = {...posItem,
+                left: elem.offsetLeft,
+                top: elem.offsetTop,
+                width: elem.offsetWidth,
+                height: elem.offsetHeight
             }
             props.updatePos(params)
         }   
@@ -62,7 +73,7 @@ function DirItem(props) {
             dragstart: false
         }
 
-        const tempElem = {...props.posItem}
+        const tempElem = {...posItem}
         const elemSelected = tempElem.selected    // начальное состояние
 
         if (e.ctrlKey) {
@@ -83,7 +94,7 @@ function DirItem(props) {
     }
 
     return (
-        <div className={props.posItem.selected || (props.item.type === 'folder' && props.posItem.goal) ? 'block selected' : 'block'} ref={blockEl} style={{transform: props.posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
+        <div className={posItem.selected || (props.item.type === 'folder' && posItem.goal) ? 'block selected' : 'block'} ref={blockEl} style={{transform: posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
             {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
