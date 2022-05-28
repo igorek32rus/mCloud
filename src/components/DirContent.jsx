@@ -195,10 +195,55 @@ function DirContent(props) {
     }, [])
 
     return (
-        <div className="dirContent" onContextMenu={(e) => handleContextMenu(e)} onClick={() => handleClick()} onMouseDown={(e) => handleMouseDown(e)} onMouseMove={(e) => handleMouseMove(e)} onMouseUp={(e) => handleMouseUp(e)} onDragStart={() => handleDragStart() } >
-            { selection.dragstart ? <div className="selection" style={{width: selection.width, height: selection.height, top: selection.top + 'px', left: selection.left + 'px'}}></div> : '' }
-            { props.dir.map((item) => item.type === 'folder' && <DirItem item={item} key={item.id} context={contextMenu} contextCallback={contextCallback} posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} collectPos={collectPos} setElemDrag={setElemDrag} resetSelectedItems={resetSelectedItems} updatePos={updatePos} />) }
-            { props.dir.map((item) => item.type === 'file' && <DirItem item={item}  key={item.id} context={contextMenu} contextCallback={contextCallback} posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} collectPos={collectPos} setElemDrag={setElemDrag} resetSelectedItems={resetSelectedItems} updatePos={updatePos} />) }
+        <div className="dirContent" 
+            onContextMenu={(e) => handleContextMenu(e)} 
+            onClick={() => handleClick()} 
+            onMouseDown={(e) => handleMouseDown(e)} 
+            onMouseMove={(e) => handleMouseMove(e)} 
+            onMouseUp={(e) => handleMouseUp(e)} 
+            onDragStart={() => handleDragStart() } 
+        >
+            { selection.dragstart ? 
+                <div className="selection" 
+                    style={{
+                        width: selection.width, 
+                        height: selection.height, 
+                        top: selection.top + 'px', 
+                        left: selection.left + 'px'
+                    }}>
+                </div> 
+                : '' }
+            { props.dir.map((item) => 
+                item.parent === props.currentDir.link
+                && item.type === 'folder' 
+                && <DirItem 
+                    item={item} 
+                    key={item.id} 
+                    context={contextMenu} 
+                    contextCallback={contextCallback} 
+                    posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
+                    collectPos={collectPos} 
+                    setElemDrag={setElemDrag} 
+                    resetSelectedItems={resetSelectedItems} 
+                    updatePos={updatePos} 
+                    updateDir={props.updateDir}
+                />) 
+            }
+            { props.dir.map((item) => 
+                item.parent === props.currentDir.link
+                && item.type === 'file' 
+                && <DirItem 
+                    item={item} 
+                    key={item.id} 
+                    context={contextMenu} 
+                    contextCallback={contextCallback} 
+                    posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
+                    collectPos={collectPos} 
+                    setElemDrag={setElemDrag} 
+                    resetSelectedItems={resetSelectedItems} 
+                    updatePos={updatePos}
+                />) 
+            }
         
         </div>
     )

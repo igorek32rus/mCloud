@@ -24,16 +24,18 @@ function MainPage() {
   const [typeModal, setTypeModal] = useState('createFolder')
   const [dataModal, setDataModal] = useState(null)
 
-  const [dir, setDir] = useState(getData(5, 30))
+  const [currentDir, setCurrentDir] = useState({ name: 'Главная', link: 'root' })
+
+  const [dir, setDir] = useState(getData(currentDir.link, 5, 30))
 
   const createFolder = (name) => {
     const folder = {
       id: new Date(),
       type: 'folder',
       name: name,
-      parent: 'root',
+      parent: currentDir.link,
       date: new Date(),
-      link: 'https://igorek.xyz',
+      link: 'folder_hash',
       size: 0
     }
     const newDir = [...dir, folder]
@@ -53,6 +55,16 @@ function MainPage() {
     setDir(dir.filter((item) => item.id !== id))
   }
 
+  const updateDir = (link) => {
+    if (link !== 'root') {
+      setCurrentDir({ name: 'Папка', link })
+      setDir(getData(link, 3, 10))
+      return
+    }
+    setCurrentDir({ name: 'Главная', link })
+    setDir(getData(link, 5, 30))
+  }
+
   return (
     <div className="pageBody">
       <ModalContext.Provider value={{setModal, setTypeModal, setDataModal}}>
@@ -66,9 +78,9 @@ function MainPage() {
             </Modal>
         }
         <Header />
-        <TopPanel />
-        <TitlePage />
-        <DirContent dir={dir} />
+        <TopPanel currentDir={currentDir} updateDir={updateDir} />
+        <TitlePage currentDir={currentDir} />
+        <DirContent dir={dir} currentDir={currentDir} updateDir={updateDir} />
         <Notify />
         <Footer />
       </ModalContext.Provider>

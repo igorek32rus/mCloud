@@ -66,31 +66,41 @@ function DirItem(props) {
     const handleMouseDown = (e) => {
         e.stopPropagation()
 
-        const dragParams = {
-            startX: e.pageX,
-            startY: e.pageY,
-            id: props.item.id,
-            dragstart: false
+        if (e.detail === 1) {
+            const dragParams = {
+                startX: e.pageX,
+                startY: e.pageY,
+                id: props.item.id,
+                dragstart: false
+            }
+    
+            const tempElem = {...posItem}
+            const elemSelected = tempElem.selected    // начальное состояние
+    
+            if (e.ctrlKey) {
+                tempElem.selected = !tempElem.selected
+            }
+    
+            if (!e.ctrlKey && !elemSelected) {
+                props.resetSelectedItems()
+                tempElem.selected = true
+            }
+    
+            if (!e.ctrlKey) {
+                dragParams.dragstart = true
+            }
+    
+            props.setElemDrag(dragParams)
+            props.updatePos(tempElem)
+
+            return
         }
 
-        const tempElem = {...posItem}
-        const elemSelected = tempElem.selected    // начальное состояние
-
-        if (e.ctrlKey) {
-            tempElem.selected = !tempElem.selected
+        if (e.detail > 1) {
+            if (props.item.type === 'folder') {
+                props.updateDir(props.item.link)
+            }
         }
-
-        if (!e.ctrlKey && !elemSelected) {
-            props.resetSelectedItems()
-            tempElem.selected = true
-        }
-
-        if (!e.ctrlKey) {
-            dragParams.dragstart = true
-        }
-
-        props.setElemDrag(dragParams)
-        props.updatePos(tempElem)
     }
 
     return (
