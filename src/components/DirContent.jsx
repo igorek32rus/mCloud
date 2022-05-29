@@ -178,10 +178,10 @@ function DirContent(props) {
         return false
     }
 
-    let storePos = []
-    const collectPos = (itemPos) => {
-        storePos.push(itemPos)
-    }
+    // let storePos = []
+    // const collectPos = (itemPos) => {
+    //     storePos.push(itemPos)
+    // }
 
     const updatePos = (itemPos) => {
         const posItems = dirItemsPos.filter(item => item.id !== itemPos.id)
@@ -190,9 +190,9 @@ function DirContent(props) {
     }
 
     // при открытии инициализация положения элементов
-    useEffect(() => {
-        setDirItemsPos(storePos)
-    }, [])
+    // useEffect(() => {
+    //     setDirItemsPos(storePos)
+    // }, [])
 
     useEffect(() => {
         const resetPos = props.dir.reduce((prev, cur) => {
@@ -240,7 +240,7 @@ function DirContent(props) {
                     context={contextMenu} 
                     contextCallback={contextCallback} 
                     posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
-                    collectPos={collectPos} 
+                    // collectPos={collectPos} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos} 
@@ -256,7 +256,7 @@ function DirContent(props) {
                     context={contextMenu} 
                     contextCallback={contextCallback} 
                     posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
-                    collectPos={collectPos} 
+                    // collectPos={collectPos} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos}

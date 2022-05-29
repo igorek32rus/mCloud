@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 
 import ContextMenu from "./ContextMenu";
 
-import Checkbox from "./UI/checkbox/Checkbox";
+// import Checkbox from "./UI/checkbox/Checkbox";
 
 function DirItem(props) {
-    const [checked, setChecked] = useState(false)
+    // const [checked, setChecked] = useState(false)
     const blockEl = useRef(null);
+
+    const updatePos = props.updatePos
 
     const posItem = props.posItem ? props.posItem
         : {
@@ -30,23 +32,10 @@ function DirItem(props) {
         event.stopPropagation()
     }
 
-    const handleClick = () => {
-        setChecked(!checked)
-        props.contextCallback(0)
-    }
-
-    // инициализация позиционирования элемента
-    useEffect(() => {
-        const elem = blockEl.current
-
-        const params = {...posItem,
-            left: elem.offsetLeft,
-            top: elem.offsetTop,
-            width: elem.offsetWidth,
-            height: elem.offsetHeight
-        }
-        props.collectPos(params)
-    }, [])
+    // const handleClick = () => {
+    //     setChecked(!checked)
+    //     props.contextCallback(0)
+    // }
 
     // при изменении положения элемента (пример - изменение размеров экрана) - обновление позиционирования
     useEffect(() => {
@@ -59,7 +48,7 @@ function DirItem(props) {
                 width: elem.offsetWidth,
                 height: elem.offsetHeight
             }
-            props.updatePos(params)
+            updatePos(params)
         }   
     })
 
