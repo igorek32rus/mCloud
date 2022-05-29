@@ -194,6 +194,24 @@ function DirContent(props) {
         setDirItemsPos(storePos)
     }, [])
 
+    useEffect(() => {
+        const resetPos = props.dir.reduce((prev, cur) => {
+            return [...prev, {
+                id: cur.id,
+                left: 0,
+                top: 0,
+                width: 0,
+                height: 0,
+                changed: false,
+                selected: false,
+                goal: false,
+                transform: ''
+            }]
+        }, [])
+
+        setDirItemsPos(resetPos)
+    }, [props.dir])
+
     return (
         <div className="dirContent" 
             onContextMenu={(e) => handleContextMenu(e)} 
