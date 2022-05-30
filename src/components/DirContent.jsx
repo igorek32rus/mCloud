@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 
 import DirItem from "./DirItem";
+import ContextMenu from "./ContextMenu";
 
 import '../styles/DirContent.css'
 
 import {checkIntersectSelection, checkIntersectDragElem} from '../utils/intersects'
 
 function DirContent(props) {
-    const [contextMenu, setContextMenu] = useState(0)
+    const [contextMenu, setContextMenu] = useState(false)
+    const [contextMenuParams, setContextMenuParams] = useState({items: [], left: 0, top: 0, type: 'workspace'})
+
     const [selection, setSelection] = useState({
         dragstart: false,
         startX: 0,
@@ -40,34 +43,35 @@ function DirContent(props) {
     }, []))
 
     const handleContextMenu = (event) => {
-        setContextMenu(0)
         event.preventDefault()
     }
 
-    const contextCallback = (id) => {
-        setContextMenu(id)
-    }
-
-    const handleClick = () => {
-        setContextMenu(0)
-    }
-
     const handleMouseDown = (e) => {
-        setSelection({...selection,
-            dragstart: true, 
-            startX: e.pageX,
-            startY: e.pageY,
-            left: e.pageX,
-            top: e.pageY,
-            width: 0,
-            height: 0
-        })
+        setContextMenu(false)
 
-        const changesReset = dirItemsPos.reduce((prev, cur) => {
-            cur.changed = false
-            return [...prev, cur]
-        }, [])
-        setDirItemsPos(changesReset)
+        if (e.button === 0) {   // ЛКМ
+            setSelection({...selection,
+                dragstart: true, 
+                startX: e.pageX,
+                startY: e.pageY,
+                left: e.pageX,
+                top: e.pageY,
+                width: 0,
+                height: 0
+            })
+    
+            const changesReset = dirItemsPos.reduce((prev, cur) => {
+                cur.changed = false
+                return [...prev, cur]
+            }, [])
+            setDirItemsPos(changesReset)
+            return
+        }
+        
+        if (e.button === 2) {   // ПКМ
+            openContextMenu(-1, e.pageX, e.pageY, true)
+            resetSelectedItems()
+        }
     }
 
     const handleMouseMove = (e) => {
@@ -178,21 +182,11 @@ function DirContent(props) {
         return false
     }
 
-    // let storePos = []
-    // const collectPos = (itemPos) => {
-    //     storePos.push(itemPos)
-    // }
-
     const updatePos = (itemPos) => {
         const posItems = dirItemsPos.filter(item => item.id !== itemPos.id)
         posItems.push(itemPos)
         setDirItemsPos(posItems)
     }
-
-    // при открытии инициализация положения элементов
-    // useEffect(() => {
-    //     setDirItemsPos(storePos)
-    // }, [])
 
     useEffect(() => {
         const resetPos = props.dir.reduce((prev, cur) => {
@@ -211,11 +205,26 @@ function DirContent(props) {
 
         setDirItemsPos(resetPos)
     }, [props.dir])
+    
+    const openContextMenu = (id, mouseX, mouseY, state = false) => {
+        if (state) {
+            const itemsContext = dirItemsPos.reduce((prev, cur) => {
+                if (cur.selected || cur.id === id) {
+                    const item = props.dir.find(itemDir => itemDir.id === cur.id)
+                    if (item) return [...prev, item]
+                }
+                return [...prev]
+            }, [])
+            setContextMenuParams({items: itemsContext, left: mouseX, top: mouseY, type: id === -1 ? 'workspace' : 'item' })
+            setContextMenu(true)
+            return
+        }
+        setContextMenu(false)
+    }
 
     return (
         <div className="dirContent" 
             onContextMenu={(e) => handleContextMenu(e)} 
-            onClick={() => handleClick()} 
             onMouseDown={(e) => handleMouseDown(e)} 
             onMouseMove={(e) => handleMouseMove(e)} 
             onMouseUp={(e) => handleMouseUp(e)} 
@@ -231,38 +240,44 @@ function DirContent(props) {
                     }}>
                 </div> 
                 : '' }
+
             { props.dir.map((item) => 
                 item.parent === props.currentDir.link
                 && item.type === 'folder' 
                 && <DirItem 
                     item={item} 
                     key={item.id} 
-                    context={contextMenu} 
-                    contextCallback={contextCallback} 
                     posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
-                    // collectPos={collectPos} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos} 
                     updateDir={props.updateDir}
+                    openContextMenu={openContextMenu}
                 />) 
             }
+
             { props.dir.map((item) => 
                 item.parent === props.currentDir.link
                 && item.type === 'file' 
                 && <DirItem 
                     item={item} 
                     key={item.id} 
-                    context={contextMenu} 
-                    contextCallback={contextCallback} 
                     posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
-                    // collectPos={collectPos} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos}
+                    openContextMenu={openContextMenu}
                 />) 
             }
-        
+
+            { contextMenu && <ContextMenu 
+                style={{left: contextMenuParams.left + 'px', top: contextMenuParams.top + 'px'}}
+                items={contextMenuParams.items}
+                openContextMenu={openContextMenu}
+                contextType={contextMenuParams.type}
+                currentDir={props.currentDir}
+            /> }
+            
         </div>
     )
 }

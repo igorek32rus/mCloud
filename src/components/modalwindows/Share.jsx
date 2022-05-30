@@ -9,7 +9,7 @@ function Share(props) {
     return (
         <div className="modal_content" style={{display: 'flex', flexDirection: 'column'}}>
             <h1>Поделиться</h1>
-            <input type="text" value={"link for " + props.item.name} onChange={(e) => e.preventDefault()} />
+            <input type="text" value={"link for " + props.items[0].name} onChange={(e) => e.preventDefault()} />
             <Button click={handleShareBtn} style={{margin: 0}}>Скопировать ссылку</Button>
         </div>
     )

@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import ContextMenu from "./ContextMenu";
+// import ContextMenu from "./ContextMenu";
 
 // import Checkbox from "./UI/checkbox/Checkbox";
 
 function DirItem(props) {
-    // const [checked, setChecked] = useState(false)
     const blockEl = useRef(null);
 
     const updatePos = props.updatePos
@@ -26,16 +25,9 @@ function DirItem(props) {
         return ext
     }
 
-    const handleContextMenu = (event) => {
-        event.preventDefault()
-        props.contextCallback(props.item.id)
-        event.stopPropagation()
+    const handleContextMenu = (e) => {
+        e.preventDefault()
     }
-
-    // const handleClick = () => {
-    //     setChecked(!checked)
-    //     props.contextCallback(0)
-    // }
 
     // при изменении положения элемента (пример - изменение размеров экрана) - обновление позиционирования
     useEffect(() => {
@@ -54,46 +46,67 @@ function DirItem(props) {
 
     const handleMouseDown = (e) => {
         e.stopPropagation()
+        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
 
-        if (e.detail === 1) {
-            const dragParams = {
-                startX: e.pageX,
-                startY: e.pageY,
-                id: props.item.id,
-                dragstart: false
+        if (e.button === 0) {       // ЛКМ
+            if (e.detail === 1) {    // 1 клик
+                const dragParams = {
+                    startX: e.pageX,
+                    startY: e.pageY,
+                    id: props.item.id,
+                    dragstart: false
+                }
+        
+                const tempElem = {...posItem}
+                const elemSelected = tempElem.selected    // начальное состояние
+        
+                if (e.ctrlKey) {
+                    tempElem.selected = !tempElem.selected
+                }
+        
+                if (!e.ctrlKey && !elemSelected) {
+                    props.resetSelectedItems()
+                    tempElem.selected = true
+                }
+        
+                if (!e.ctrlKey) {
+                    dragParams.dragstart = true
+                }
+        
+                props.setElemDrag(dragParams)
+                props.updatePos(tempElem)
+    
+                return
             }
     
+            if (e.detail > 1) {     // 2 клика
+                if (props.item.type === 'folder') {
+                    props.updateDir(props.item.link)
+                }
+                return
+            }
+        }
+        
+        if (e.button === 2) {    // ПКМ
             const tempElem = {...posItem}
-            const elemSelected = tempElem.selected    // начальное состояние
-    
-            if (e.ctrlKey) {
-                tempElem.selected = !tempElem.selected
-            }
-    
-            if (!e.ctrlKey && !elemSelected) {
+
+            if (!tempElem.selected) {
                 props.resetSelectedItems()
                 tempElem.selected = true
+                props.updatePos(tempElem)
             }
-    
-            if (!e.ctrlKey) {
-                dragParams.dragstart = true
-            }
-    
-            props.setElemDrag(dragParams)
-            props.updatePos(tempElem)
 
-            return
-        }
-
-        if (e.detail > 1) {
-            if (props.item.type === 'folder') {
-                props.updateDir(props.item.link)
-            }
+            props.openContextMenu(props.item.id, e.pageX, e.pageY, true)
         }
     }
 
     return (
-        <div className={posItem.selected || (props.item.type === 'folder' && posItem.goal) ? 'block selected' : 'block'} ref={blockEl} style={{transform: posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
+        <div className={
+                posItem.selected 
+                || (props.item.type === 'folder' && posItem.goal) ? 
+                'block selected' 
+                : 'block'
+            } ref={blockEl} style={{transform: posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
             {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
@@ -103,7 +116,6 @@ function DirItem(props) {
             }
             <div className="name">{props.item.name}</div>
             <div className="date">{props.item.date.toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
-            { props.context === props.item.id && <ContextMenu contextMenu={props.contextCallback} item={props.item} /> }
         </div>
     )
 }

@@ -22,7 +22,7 @@ import getData from '../data/mock_dir';
 function MainPage() {
   const [modal, setModal] = useState(false)
   const [typeModal, setTypeModal] = useState('createFolder')
-  const [dataModal, setDataModal] = useState(null)
+  const [dataModal, setDataModal] = useState([])
 
   const [currentDir, setCurrentDir] = useState({ name: 'Главная', link: 'root' })
 
@@ -51,8 +51,8 @@ function MainPage() {
     setDir([...tempDir, tempItem])
   }
 
-  const deleteItem = (id) => {
-    setDir(dir.filter((item) => item.id !== id))
+  const deleteItems = (itemsId) => {
+    setDir(dir.filter((item) => !itemsId.includes(item.id)))
   }
 
   const updateDir = (link) => {
@@ -72,9 +72,9 @@ function MainPage() {
             <Modal>
               {typeModal === 'createFolder' && <CreateFolder createFolder={createFolder} /> }
               {typeModal === 'uploadFiles' && <UploadFiles files={dataModal} /> }
-              {typeModal === 'rename' && <Rename item={dataModal} renameItem={renameItem} /> }
-              {typeModal === 'share' && <Share item={dataModal} /> }
-              {typeModal === 'delete' && <Delete item={dataModal} deleteItem={deleteItem} /> }
+              {typeModal === 'rename' && <Rename items={dataModal} renameItem={renameItem} /> }
+              {typeModal === 'share' && <Share items={dataModal} /> }
+              {typeModal === 'delete' && <Delete items={dataModal} deleteItems={deleteItems} /> }
             </Modal>
         }
         <Header />

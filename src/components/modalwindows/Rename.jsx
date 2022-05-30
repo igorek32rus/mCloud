@@ -3,12 +3,12 @@ import { ModalContext } from "../../Context";
 import Button from "../UI/button/Button";
 
 function Rename(props) {
-    const [newName, setNewName] = useState(props.item.name)
+    const [newName, setNewName] = useState(props.items[0].name)
 
     const {setModal} = useContext(ModalContext)
 
     const handleRenameBtn = () => {
-        props.renameItem(props.item.id, newName)
+        props.renameItem(props.items[0].id, newName)
         setModal(false)
     }
 
