@@ -241,6 +241,10 @@ function DirContent(props) {
                 </div> 
                 : '' }
 
+            { props.dir.length === 0 ? 
+                <div className="message">Папка пуста. Загрузите файлы или создайте новую папку</div>
+            : '' }
+
             { props.dir.map((item) => 
                 item.parent === props.currentDir.link
                 && item.type === 'folder' 
