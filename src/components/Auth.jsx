@@ -36,7 +36,8 @@ function Auth() {
 
         if (res.status === 'error') {
             const {errors} = {...res.errors}
-            console.log(errors[0].msg);
+            const message = errors ? errors[0].msg : res.message
+            console.log(message);
             return
         }
 
@@ -44,11 +45,10 @@ function Auth() {
         setReg(false)
     }
 
-    const confirmPass = (e) => {
-        setConfirmPassword(e.target.value)
-        if (password !== confirmPassword) {
-
-        }
+    const confirmPassStyle = {
+        width: '100%',
+        borderColor: password !== confirmPassword && confirmPassword.length > 0 ? 'rgba(255, 0, 0, .3)' : 'rgba(255, 255, 255, .3)',
+        color: password !== confirmPassword && confirmPassword.length > 0 ? 'rgba(255, 0, 0, .8)' : '#fff'
     }
 
     return (
@@ -59,7 +59,7 @@ function Auth() {
             </div>
             <input type="text" placeholder={reg ? 'E-mail' : "Логин/E-mail"} style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} />
             <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password}  />
-            { reg && <input type="password" placeholder="Повтротие пароль" style={{width: '100%'}} onChange={(e) => confirmPass(e)} value={confirmPassword}  /> }
+            { reg && <input type="password" placeholder="Повтротие пароль" style={confirmPassStyle} onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword}  /> }
             <Button style={{minWidth: 100, alignSelf: 'flex-end'}} click={reg ? registration : login}>{reg ? 'Зарегистрироваться' : 'Войти'}</Button>
         </div>
     )

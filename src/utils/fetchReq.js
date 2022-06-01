@@ -11,6 +11,7 @@ const fetchReq = async ({url = '', method = 'GET', data = {}, headers = {
         return await response.json()   
     } catch (error) {
         console.log(error);
+        return {status: 'error', message: 'Ошибка подключения к серверу'}
     }
 }
 
