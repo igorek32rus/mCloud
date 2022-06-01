@@ -18,24 +18,24 @@ router.post('/registration', [
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
-            return res.status(400).json({message: "Ошибка запроса", errors})
+            return res.status(400).json({status: 'error', message: "Ошибка запроса", errors})
         }
 
         const {email, pass} = req.body
         const candidate = await User.findOne({email})
 
         if (candidate) {
-            return res.status(400).json({message: "Пользователь с таким e-mail уже существует"})
+            return res.status(400).json({status: 'error', message: "Пользователь с таким e-mail уже существует"})
         }
 
         const passHash = await bcrypt.hash(pass, 5)
         const user = new User({email, pass: passHash})
         await user.save()
 
-        return res.json({message: "Пользователь успешно создан"})
+        return res.json({status: 'success', message: "Пользователь успешно создан"})
     } catch (error) {
         console.log("Ошибка сервера");
-        res.send({message: "Ошибка сервера"})
+        res.send({status: 'error', message: "Ошибка сервера"})
     }
 })
 
@@ -45,12 +45,12 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({email})
 
         if (!user) {
-            return res.status(404).json({message: "Пользователь не найден"})
+            return res.status(404).json({status: 'error', message: "Пользователь не найден"})
         }
 
         const isPassValid = await bcrypt.compare(pass, user.pass)
         if (!isPassValid) {
-            return res.status(404).json({message: "Неверный пароль"})
+            return res.status(404).json({status: 'error', message: "Неверный пароль"})
         }
 
         const token = jwt.sign({id: user.id}, config.get("jwtSecretKey"), {expiresIn: "1h"})
@@ -67,7 +67,7 @@ router.post('/login', async (req, res) => {
         })
     } catch (error) {
         console.log("Ошибка сервера");
-        res.send({message: "Ошибка сервера"})
+        res.send({status: 'error', message: "Ошибка сервера"})
     }
 })
 
