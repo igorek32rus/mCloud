@@ -6,6 +6,8 @@ const config = require("config")
 
 const User = require("../models/User")
 
+const authMiddleware = require('../middleware/auth.middleware')
+
 const router = new Router()
 
 router.post('/registration', [
@@ -52,6 +54,28 @@ router.post('/login', async (req, res) => {
         if (!isPassValid) {
             return res.status(404).json({status: 'error', message: "Неверный пароль"})
         }
+
+        const token = jwt.sign({id: user.id}, config.get("jwtSecretKey"), {expiresIn: "1h"})
+
+        return res.json({
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                plan: user.plan,
+                usedSpace: user.usedSpace,
+                avatar: user.avatar
+            }
+        })
+    } catch (error) {
+        console.log("Ошибка сервера");
+        res.send({status: 'error', message: "Ошибка сервера"})
+    }
+})
+
+router.get('/auth', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.user.id})
 
         const token = jwt.sign({id: user.id}, config.get("jwtSecretKey"), {expiresIn: "1h"})
 

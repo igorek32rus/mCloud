@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import Header from "../components/Header";
 import TopPanel from '../components/TopPanel';
@@ -12,7 +12,7 @@ import '../styles/App.css'
 import CreateFolder from '../components/modalwindows/CreateFolder';
 import UploadFiles from '../components/modalwindows/UploadFiles';
 
-import { ModalContext } from '../Context'
+import { ModalContext, AuthContext } from '../Context'
 import Rename from '../components/modalwindows/Rename';
 import Share from '../components/modalwindows/Share';
 import Delete from '../components/modalwindows/Delete';
@@ -20,6 +20,8 @@ import Delete from '../components/modalwindows/Delete';
 import getData from '../data/mock_dir';
 
 function MainPage() {
+  const {userData} = useContext(AuthContext)
+
   const [modal, setModal] = useState(false)
   const [typeModal, setTypeModal] = useState('createFolder')
   const [dataModal, setDataModal] = useState([])

@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../Context';
 
 function ProfileMenu(props) {
-    const {setIsAuth} = useContext(AuthContext)
+    const {setIsAuth, setUserData} = useContext(AuthContext)
 
     const handleLogout = () => {
+        setUserData({})
+        localStorage.removeItem('token')
         setIsAuth(false)
     }
 

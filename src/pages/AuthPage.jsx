@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Footer from '../components/Footer';
 
 import '../styles/App.css'
-import Auth from '../components/Auth';
+import Auth from '../components/Auth/Auth';
 import { RegistrationContext } from '../Context';
 
 function AuthPage() {
