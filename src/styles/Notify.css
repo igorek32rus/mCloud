@@ -1,11 +1,20 @@
-.notify-block {
+#notifications {
     position: fixed;
     bottom: 50px;
     right: 20px;
     width: 300px;
-    height: 80px;
+}
+
+.notify-block {
+    display: flex;
+    flex-direction: column;
     background-color: rgba(30, 36, 68, .95);
     border-radius: 7px;
+    padding: 10px;
+    margin: 10px 0;
+    animation: fadeIn .2s linear;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
   
 .loading-circle {
@@ -20,14 +29,13 @@
 }
   
 .notify-title {
-    margin: 10px 10px 5px 10px;
-    font-weight: 600;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
   
 .notify-message {
     font-style: italic;
     font-weight: 300;
-    margin: 0 10px;
 }
   
 @keyframes animLoadingCircle {
@@ -44,5 +52,25 @@
         -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         background-color: rgba(30, 36, 68, .85);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        transform: translateY(50px);
+        opacity: 0; 
+    }
+    100% { 
+        transform: translateY(0);
+        opacity: 1; 
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }

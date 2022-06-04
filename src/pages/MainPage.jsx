@@ -12,7 +12,7 @@ import '../styles/App.css'
 import CreateFolder from '../components/modalwindows/CreateFolder';
 import UploadFiles from '../components/modalwindows/UploadFiles';
 
-import { ModalContext, AuthContext } from '../Context'
+import { ModalContext, AuthContext, NotifyContext } from '../Context'
 import Rename from '../components/modalwindows/Rename';
 import Share from '../components/modalwindows/Share';
 import Delete from '../components/modalwindows/Delete';
@@ -21,6 +21,7 @@ import getData from '../data/mock_dir';
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
+  const {createNotification} = useContext(NotifyContext)
 
   const [modal, setModal] = useState(false)
   const [typeModal, setTypeModal] = useState('createFolder')
@@ -43,6 +44,7 @@ function MainPage() {
     const newDir = [...dir, folder]
 
     setDir(newDir)
+    createNotification({title: 'Создание папки', message: `Новая папка (${folder.name}) успешно создана`})
   }
 
   const renameItem = (id, newName) => {
