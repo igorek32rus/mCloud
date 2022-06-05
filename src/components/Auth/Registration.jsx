@@ -1,8 +1,8 @@
-import React, {useState} from "react"
+import React, {useState, useContext} from "react"
 
 import Button from "../UI/button/Button"
-
 import fetchReq from "../../utils/fetchReq"
+import { NotifyContext } from "../../Context"
 
 import '../../styles/Auth.css'
 
@@ -10,6 +10,8 @@ const Registration = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+
+    const {createNotification} = useContext(NotifyContext)
 
     const registration = async () => {
         if (password !== confirmPassword) return
@@ -23,11 +25,11 @@ const Registration = (props) => {
         if (res.status === 'error') {
             const {errors} = {...res.errors}
             const message = errors ? errors[0].msg : res.message
-            console.log(message);
+            createNotification({title: 'Ошибка', message})
             return
         }
 
-        console.log(res.message);
+        createNotification({title: 'Регистрация', message: res.message})
         props.setReg(false)
     }
 

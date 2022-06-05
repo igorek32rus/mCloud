@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react"
-import { AuthContext } from "../../Context"
+import { AuthContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
 import fetchReq from '../../utils/fetchReq'
 import '../../styles/Auth.css'
@@ -9,6 +9,7 @@ const Login = (props) => {
     const [password, setPassword] = useState('')
 
     const {setIsAuth, setUserData} = useContext(AuthContext)
+    const {createNotification} = useContext(NotifyContext)
 
     const login = async () => {
         const res = await fetchReq({
@@ -21,8 +22,10 @@ const Login = (props) => {
             setUserData(res.user)
             localStorage.setItem('token', res.token)
             setIsAuth(true)
+            return
         }
 
+        createNotification({title: 'Ошибка', message: res.message})
     }
 
     return (

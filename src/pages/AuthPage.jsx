@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Header from "../components/Header";
 import Footer from '../components/Footer';
+import Notify from '../components/Notify';
 
 import '../styles/App.css'
 import Auth from '../components/Auth/Auth';
@@ -12,11 +13,12 @@ function AuthPage() {
 
   return (
     <div className="pageBody">
-        <RegistrationContext.Provider value={{reg, setReg}}>
-          <Header />
-          <Auth />
-        </RegistrationContext.Provider>
-        <Footer />
+      <RegistrationContext.Provider value={{reg, setReg}}>
+        <Header />
+        <Auth />
+        <Notify />
+      </RegistrationContext.Provider>
+      <Footer />
     </div>
   );
 }
