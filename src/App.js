@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './AppRouter'
 import { AuthContext, NotifyContext } from './Context'
@@ -8,6 +8,9 @@ function App() {
   const [isAuth, setIsAuth] = useState(false)
   const [userData, setUserData] = useState(null)
   const [notifications, setNotifications] = useState([])
+
+  const notificationsRef = useRef()
+  notificationsRef.current = notifications
 
   const auth = async () => {
     const res = await fetchReq({
@@ -31,19 +34,29 @@ function App() {
       title,
       message,
       time,
-      show: true
+      fadeOut: false,
+      delete: false
     }
+
     setNotifications([...notifications, newNotification])
+
+    if (time > 0) {
+      setTimeout(() => {
+        removeNotification(newNotification.key)
+      }, time * 1000);
+    }
   }
 
   const removeNotification = (key) => {
-    // const notification = notifications.find(item => item.key === key)
-    // notification.show = false
-    // setNotifications([...notifications.filter(item => item.key !== key), notification])
-    // setTimeout(() => {
-      setNotifications(notifications.filter(item => item.key !== key))
-    //   console.log(notifications);
-    // }, 150);
+    const notification = notificationsRef.current.find(item => item.key === key)
+    notification.fadeOut = true
+    setNotifications([
+      ...notificationsRef.current.filter(item => item.key !== key),
+      notification
+    ])
+    setTimeout(() => {
+      setNotifications(notificationsRef.current.filter(item => item.key !== key))
+    }, 150);
   }
 
   useEffect(() => {

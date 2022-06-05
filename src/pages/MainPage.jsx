@@ -53,10 +53,20 @@ function MainPage() {
 
     tempItem.name = newName
     setDir([...tempDir, tempItem])
+    createNotification({
+      title: `Переименование ${ tempItem.type === 'folder' ? 'папки' : 'файла'}`, 
+      message: `Новое имя ${ tempItem.type === 'folder' ? 'папки' : 'файла'} - ${newName}`
+    })
   }
 
   const deleteItems = (itemsId) => {
-    setDir(dir.filter((item) => !itemsId.includes(item.id)))
+    const countBefore = dir.length
+    const newDir = dir.filter((item) => !itemsId.includes(item.id))
+    setDir(newDir)
+    createNotification({
+      title: `Удаление объектов`, 
+      message: `Количество удалённых объектов - ${countBefore - newDir.length}`
+    })
   }
 
   const updateDir = (link) => {
