@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from 'react-router-dom';
 import { AuthContext, RegistrationContext } from "../Context";
 import ProfileMenu from "./ProfileMenu";
 
-function MainMenu() {
+function MainMenu(props) {
+    const {registration, setRegistration} = {...props}
     const [profileMenu, setProfileMenu] = useState(false)
     const {isAuth} = useContext(AuthContext)
-    const {reg, setReg} = useContext(RegistrationContext)
+    const history = useHistory();
 
     const handleClickProfile = () => {
         setProfileMenu(!profileMenu)
@@ -13,7 +15,8 @@ function MainMenu() {
 
     const handleRegLoginClick = (event) => {
         event.preventDefault()
-        setReg(!reg)
+        !props.registration ? history.push('/registration') : history.push('/login')
+        setRegistration(!registration)
     }
 
     return (
@@ -35,7 +38,7 @@ function MainMenu() {
                 </div>
                 :
                 <ul>
-                    <a href="/" onClick={(e) => handleRegLoginClick(e)}><li>{ reg ? 'Войти' : 'Зарегистрироваться' }</li></a>
+                    <a href="/" onClick={(e) => handleRegLoginClick(e)}><li>{ registration ? 'Войти' : 'Зарегистрироваться' }</li></a>
                 </ul>
             }
             { isAuth && profileMenu ? <ProfileMenu /> : '' }

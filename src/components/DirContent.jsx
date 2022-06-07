@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react"
 
-import DirItem from "./DirItem";
-import ContextMenu from "./ContextMenu";
+import DirItem from "./DirItem"
+import ContextMenu from "./ContextMenu"
 
 import '../styles/DirContent.css'
 
@@ -10,6 +10,7 @@ import {checkIntersectSelection, checkIntersectDragElem} from '../utils/intersec
 function DirContent(props) {
     const [contextMenu, setContextMenu] = useState(false)
     const [contextMenuParams, setContextMenuParams] = useState({items: [], left: 0, top: 0, type: 'workspace'})
+
 
     const [selection, setSelection] = useState({
         dragstart: false,

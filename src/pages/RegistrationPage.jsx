@@ -1,12 +1,10 @@
 import React, {useState, useContext} from "react"
+import { NotifyContext, LoaderContext } from "../Context"
+import Button from "../components/UI/button/Button"
+import fetchReq from "../utils/fetchReq"
+import '../styles/Auth.css'
 
-import Button from "../UI/button/Button"
-import fetchReq from "../../utils/fetchReq"
-import { NotifyContext, LoaderContext } from "../../Context"
-
-import '../../styles/Auth.css'
-
-const Registration = (props) => {
+const RegistrationPage = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -44,13 +42,19 @@ const Registration = (props) => {
     }
 
     return (
-        <>
-            <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} />
-            <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password}  />
-            <input type="password" placeholder="Повтротие пароль" style={confirmPassStyle} onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword}  />
-            <Button style={{minWidth: 100, alignSelf: 'flex-end'}} click={registration}>Зарегистрироваться</Button>
-        </>
+        <div className="pageBodyAuth">
+            <div className="reg-block">
+                <div className="reg-logo"></div>
+                <div className="reg-title">
+                    <span className="thin">micro</span><span className="bold">Cloud</span>
+                </div>
+                <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} />
+                <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password}  />
+                <input type="password" placeholder="Повтротие пароль" style={confirmPassStyle} onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword}  />
+                <Button style={{minWidth: 100, alignSelf: 'flex-end'}} click={registration}>Зарегистрироваться</Button>
+            </div>
+        </div>
     )
 }
 
-export default Registration
+export default RegistrationPage

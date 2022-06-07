@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router";
 import { AuthContext } from './Context'
 import { privateRoutes, publicRoutes } from "./router";
 
-function AppRouter(props) {
+function AppRouter() {
     const {isAuth} = useContext(AuthContext)
 
     return (
@@ -19,7 +19,7 @@ function AppRouter(props) {
             { publicRoutes.map((route) => {
             return (<Route path={route.path} component={route.component} exact={route.exact} key={route.component.name} />)
             }) }
-            <Redirect to="/auth" />
+            <Redirect to="/login" />
         </Switch>
     )
 }

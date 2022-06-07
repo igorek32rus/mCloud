@@ -80,7 +80,7 @@ function MainPage() {
   }
 
   return (
-    <div className="pageBody">
+    <div className="pageBodyMain">
       <ModalContext.Provider value={{setModal, setTypeModal, setDataModal}}>
         { modal &&
             <Modal>
@@ -91,12 +91,9 @@ function MainPage() {
               {typeModal === 'delete' && <Delete items={dataModal} deleteItems={deleteItems} /> }
             </Modal>
         }
-        <Header />
         <TopPanel currentDir={currentDir} updateDir={updateDir} />
         <TitlePage currentDir={currentDir} />
         <DirContent dir={dir} currentDir={currentDir} updateDir={updateDir} />
-        <Notify />
-        <Footer />
       </ModalContext.Provider>
     </div>
   );
