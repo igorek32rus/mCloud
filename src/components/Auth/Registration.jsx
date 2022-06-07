@@ -2,7 +2,7 @@ import React, {useState, useContext} from "react"
 
 import Button from "../UI/button/Button"
 import fetchReq from "../../utils/fetchReq"
-import { NotifyContext } from "../../Context"
+import { NotifyContext, LoaderContext } from "../../Context"
 
 import '../../styles/Auth.css'
 
@@ -12,8 +12,10 @@ const Registration = (props) => {
     const [confirmPassword, setConfirmPassword] = useState('')
 
     const {createNotification} = useContext(NotifyContext)
+    const {setLoading} = useContext(LoaderContext)
 
     const registration = async () => {
+        setLoading(true)
         if (password !== confirmPassword) return
 
         const res = await fetchReq({
@@ -21,6 +23,8 @@ const Registration = (props) => {
             method: 'POST', 
             data: {email, pass: password}
         })
+
+        setLoading(false)
 
         if (res.status === 'error') {
             const {errors} = {...res.errors}

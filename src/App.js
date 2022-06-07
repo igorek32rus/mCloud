@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './AppRouter'
-import { AuthContext, NotifyContext } from './Context'
+import { AuthContext, NotifyContext, LoaderContext } from './Context'
 import fetchReq from './utils/fetchReq'
 
 function App() {
   const [isAuth, setIsAuth] = useState(false)
   const [userData, setUserData] = useState(null)
   const [notifications, setNotifications] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const notificationsRef = useRef()
   notificationsRef.current = notifications
@@ -19,6 +20,8 @@ function App() {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
+
+    setLoading(false)
 
     if (res.token) {
       setUserData(res.user)
@@ -60,15 +63,18 @@ function App() {
   }
 
   useEffect(() => {
+    setLoading(true)
     auth()
   }, [])
 
   return (
     <AuthContext.Provider value={{isAuth, setIsAuth, userData, setUserData}}>
       <NotifyContext.Provider value={{notifications, createNotification, removeNotification}}>
-        <BrowserRouter>
-          <AppRouter />
-        </BrowserRouter>
+        <LoaderContext.Provider value={{loading, setLoading}} >
+          <BrowserRouter>
+            <AppRouter />
+          </BrowserRouter>
+        </LoaderContext.Provider>
       </NotifyContext.Provider>
     </AuthContext.Provider>
   );

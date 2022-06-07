@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react"
-import { AuthContext, NotifyContext } from "../../Context"
+import { AuthContext, NotifyContext, LoaderContext } from "../../Context"
 import Button from "../UI/button/Button"
 import fetchReq from '../../utils/fetchReq'
 import '../../styles/Auth.css'
@@ -10,13 +10,17 @@ const Login = (props) => {
 
     const {setIsAuth, setUserData} = useContext(AuthContext)
     const {createNotification} = useContext(NotifyContext)
+    const {setLoading} = useContext(LoaderContext)
 
     const login = async () => {
+        setLoading(true)
         const res = await fetchReq({
             url: 'http://localhost:5000/api/auth/login', 
             method: 'POST', 
             data: {email, pass: password}
         })
+
+        setLoading(false)
         
         if (res.token) {
             setUserData(res.user)
