@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { ModalContext } from "../../Context";
+import { ModalContext, NotifyContext } from "../../Context";
 import Button from "../UI/button/Button";
 
 function Rename(props) {
@@ -7,6 +7,7 @@ function Rename(props) {
     const inputRef = useRef()
 
     const {setModal} = useContext(ModalContext)
+    const {createNotification} = useContext(NotifyContext)
 
     useEffect(() => {
         const input = inputRef.current
@@ -16,6 +17,14 @@ function Rename(props) {
     }, [])
 
     const handleRenameBtn = () => {
+        if (newName.length > 127) {
+            createNotification({
+                title: `Переименование ${ props.items[0].type === 'folder' ? 'папки' : 'файла'}`, 
+                message: `Обшибка! Слишком длинное имя ${ props.items[0].type === 'folder' ? 'папки' : 'файла'}`
+            })
+            return
+        }
+
         props.renameItem(props.items[0].id, newName)
         setModal(false)
     }

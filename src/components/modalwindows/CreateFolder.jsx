@@ -1,10 +1,11 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { ModalContext } from "../../Context";
+import { ModalContext, NotifyContext } from "../../Context";
 import Button from "../UI/button/Button";
 
 function CreateFolder(props) {
     const [nameFolder, setNameFolder] = useState('')
     const {setModal} = useContext(ModalContext)
+    const {createNotification} = useContext(NotifyContext)
 
     const inputRef = useRef()
 
@@ -13,6 +14,14 @@ function CreateFolder(props) {
     }, [])
 
     const submit = () => {
+        if (nameFolder.length > 127) {
+            createNotification({
+                title: `Создание папки`, 
+                message: `Обшибка! Слишком длинное имя папки`
+            })
+            return
+        }
+
         props.createFolder(nameFolder)
         setModal(false)
     }
