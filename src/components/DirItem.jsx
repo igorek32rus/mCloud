@@ -5,6 +5,8 @@ import React, { useState, useRef, useEffect } from "react";
 // import Checkbox from "./UI/checkbox/Checkbox";
 
 function DirItem(props) {
+    const [description, setDescription] = useState(false)
+
     const blockEl = useRef(null);
 
     const updatePos = props.updatePos
@@ -47,6 +49,7 @@ function DirItem(props) {
     const handleMouseDown = (e) => {
         e.stopPropagation()
         props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        setDescription(false)   // отключить описание
 
         if (e.button === 0) {       // ЛКМ
             if (e.detail === 1) {    // 1 клик
@@ -100,13 +103,26 @@ function DirItem(props) {
         }
     }
 
+    const handlerMouseEnter = (e) => {
+        if (!props.contextMenu && !e.buttons) setDescription(true)
+    }
+
+    const handlerMouseLeave = () => {
+        setDescription(false)
+    }
+
     return (
         <div className={
                 posItem.selected 
                 || (props.item.type === 'folder' && posItem.goal) ? 
                 'block selected' 
                 : 'block'
-            } ref={blockEl} style={{transform: posItem.transform}} onContextMenu={(e) => handleContextMenu(e)} onMouseDown={handleMouseDown} >
+            } ref={blockEl} style={{transform: posItem.transform}}
+            onContextMenu={(e) => handleContextMenu(e)} 
+            onMouseDown={handleMouseDown} 
+            onMouseEnter={handlerMouseEnter} 
+            onMouseLeave={handlerMouseLeave}
+        >
             {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
@@ -116,6 +132,14 @@ function DirItem(props) {
             }
             <div className="name">{props.item.name}</div>
             <div className="date">{props.item.date.toLocaleString("ru", {year: 'numeric', month: 'short', day: 'numeric'})}</div>
+            { description ? (
+                <div className="description">
+                    <div className="text">Имя: {props.item.name}</div>
+                    <div className="text">Размер: {props.item.size} Кб</div>
+                    <div className="text">Дата загрузки: {props.item.date.toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
+                </div>
+            ) : '' }
+            
         </div>
     )
 }

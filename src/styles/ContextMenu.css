@@ -1,10 +1,11 @@
 .dropMenu {
     position: absolute;
-    background-color: rgba(30, 36, 68, .95);
+    background-color: rgba(30, 36, 68, .85);
     border-radius: 7px;
     border-top-left-radius: 0px;
     /* visibility: hidden; */
     z-index: 5;
+    backdrop-filter: blur(5px);
 }
   
 .dropMenu.contextMenu {

@@ -258,6 +258,7 @@ function DirContent(props) {
                     updatePos={updatePos} 
                     updateDir={props.updateDir}
                     openContextMenu={openContextMenu}
+                    contextMenu={contextMenu}
                 />) 
             }
 
@@ -272,6 +273,7 @@ function DirContent(props) {
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos}
                     openContextMenu={openContextMenu}
+                    contextMenu={contextMenu}
                 />) 
             }
 
