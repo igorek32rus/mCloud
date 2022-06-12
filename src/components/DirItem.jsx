@@ -21,7 +21,7 @@ function DirItem(props) {
 
     const getExtension = (fileName) => {
         const ext = fileName.split('.').pop()
-        if (ext.length > 4 || ext.length === 0) {
+        if (ext.length > 5 || ext.length === 0) {
             return ''
         }
         return ext
