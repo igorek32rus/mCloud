@@ -32,6 +32,10 @@ const LoginPage = (props) => {
         createNotification({title: 'Ошибка', message: res.message})
     }
 
+    const handlerKeyDown = (e) => {
+        if (e.key === 'Enter') login()
+    }
+
     return (
         <div className="pageBodyAuth">
             <div className="reg-block">
@@ -39,8 +43,8 @@ const LoginPage = (props) => {
                 <div className="reg-title">
                     <span className="thin">micro</span><span className="bold">Cloud</span>
                 </div>
-                <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} />
-                <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password}  />
+                <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
+                <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
                 <Button style={{minWidth: 100, alignSelf: 'flex-end'}} click={login}>Войти</Button>
             </div>
         </div>

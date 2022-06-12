@@ -14,7 +14,7 @@ function Header(props) {
         <header>
             <Logo />
             { isAuth ? <Search /> : '' }
-            <MainMenu registration={props.registration} setRegistration={props.setRegistration} />
+            <MainMenu />
         </header>
     )
 }

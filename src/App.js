@@ -86,12 +86,12 @@ function App() {
   }, [])
 
   return (
-    <AuthContext.Provider value={{isAuth, setIsAuth, userData, setUserData}}>
+    <AuthContext.Provider value={{isAuth, setIsAuth, userData, setUserData, registration, setRegistration}}>
       <NotifyContext.Provider value={{notifications, createNotification, removeNotification}}>
         <LoaderContext.Provider value={{loading, setLoading}} >
           <BrowserRouter>
-            <Header registration={registration} setRegistration={setRegistration} />
-            { loading ? <Loader /> : <AppRouter registration={registration} /> }
+            <Header />
+            { loading ? <Loader /> : <AppRouter /> }
             <Notify />
             <Footer />
           </BrowserRouter>
