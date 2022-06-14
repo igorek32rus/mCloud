@@ -82,3 +82,13 @@ ul.menu li:hover {
     cursor: pointer;
     background-color: rgba(255, 255, 255, .1);
 }
+
+ul.menu.context li:first-child {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+ul.menu.context li:last-child {
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
