@@ -8,6 +8,7 @@
 # dependencies server
 /server/node_modules
 /server/config/*.json
+!/server/config/default-SAMPLE.json
 
 # testing
 /coverage
