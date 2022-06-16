@@ -246,7 +246,9 @@ function DirContent(props) {
                 <div className="message">Папка пуста. Загрузите файлы или создайте новую папку</div>
             : '' }
 
-            { props.dir.map((item) => 
+            { props.dir
+                .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
+                .map((item) => 
                 item.parent === props.currentDir.link
                 && item.type === 'folder' 
                 && <DirItem 
@@ -262,7 +264,9 @@ function DirContent(props) {
                 />) 
             }
 
-            { props.dir.map((item) => 
+            { props.dir
+                .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
+                .map((item) => 
                 item.parent === props.currentDir.link
                 && item.type === 'file' 
                 && <DirItem 
