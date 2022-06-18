@@ -16,7 +16,7 @@ function UploadFiles(props) {
                         <th>Размер</th>
                         <th></th>
                     </tr>
-                    {Array.from(props.files).map((file) => <tr key={new Date() - file.size}><td>{file.name}</td><td>{file.size}</td><td>&times;</td></tr>)}
+                    {Array.from(props.files).map((file) => <tr key={new Date() - file.size}><td>{file.name}</td><td>{file.size}</td><td className="removeUpload">&times;</td></tr>)}
                 </tbody>
             </table>
             <Button click={handleUploadFilesBtn} style={{margin: 0}}>Загрузить</Button>
