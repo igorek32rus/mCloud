@@ -16,7 +16,7 @@ function Delete(props) {
             <h1>Удалить</h1>
             <p style={{margin: '10px 0'}}>Вы действительно хотите удалить выбранные файлы?</p>
             <div style={{display: 'flex'}}>
-                <Button click={handleDeleteBtn} style={{margin: 0, width: '100%', marginRight: 5}}>Удалить</Button>
+                <Button click={handleDeleteBtn} className={"btn red"} style={{margin: 0, width: '100%', marginRight: 5}}>Удалить</Button>
                 <Button click={() => setModal(false)} style={{margin: 0, width: '100%'}}>Отмена</Button>
             </div>
         </div>
