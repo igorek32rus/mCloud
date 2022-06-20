@@ -1,9 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 
-// import ContextMenu from "./ContextMenu";
-
-// import Checkbox from "./UI/checkbox/Checkbox";
-
 function DirItem(props) {
     const [description, setDescription] = useState(false)
 
@@ -123,7 +119,6 @@ function DirItem(props) {
             onMouseEnter={handlerMouseEnter} 
             onMouseLeave={handlerMouseLeave}
         >
-            {/* <Checkbox checked={checked} /> */}
             
             { props.item.type === 'folder' ? <div className="image folder" /> : 
                 <div className="image file">
