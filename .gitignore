@@ -10,6 +10,8 @@
 /server/config/*.json
 !/server/config/default-SAMPLE.json
 
+/server/files
+
 # testing
 /coverage
 

@@ -42,7 +42,6 @@ const RegistrationPage = (props) => {
         }
 
         createNotification({title: 'Регистрация', message: res.message})
-        props.setReg(false)
     }
 
     const handlerKeyDown = (e) => {

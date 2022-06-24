@@ -8,7 +8,7 @@ const User = require("../models/User")
 const File = require("../models/File")
 
 const authMiddleware = require('../middleware/auth.middleware')
-const FileService = require("../services/fileService")
+const FileController = require("../controllers/fileController")
 
 const router = new Router()
 
@@ -36,7 +36,7 @@ router.post('/registration', [
         const user = new User({email, pass: passHash})
         await user.save()
 
-        await FileService.createDir(new File({user: user.id, name: user.id}))
+        await FileController.createUserRootDir(req, res, user._id)
 
         return res.json({status: 'success', message: "Пользователь успешно создан"})
     } catch (error) {
