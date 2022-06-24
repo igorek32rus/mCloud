@@ -36,7 +36,7 @@ router.post('/registration', [
         const user = new User({email, pass: passHash})
         await user.save()
 
-        await FileController.createUserRootDir(req, res, user._id)
+        await FileController.createUserRootDir(user._id)
 
         return res.json({status: 'success', message: "Пользователь успешно создан"})
     } catch (error) {

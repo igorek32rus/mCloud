@@ -3,7 +3,7 @@ const User = require("../models/User")
 const File = require("../models/File")
 
 class FileController {
-    async createUserRootDir(req, res, userId) {
+    async createUserRootDir(userId) {
         try {
             // const {name, type, parent} = req.body
             const file = new File({
