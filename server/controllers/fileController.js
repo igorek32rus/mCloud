@@ -26,6 +26,30 @@ class FileController {
             return
         }
     }
+
+    async createDir(req, res) {
+        try {
+            const {name, parent} = req.body
+            const file = new File({
+                name,
+                type: 'folder',
+                parent,
+                user: req.user.id
+            })
+            const parentFile = File.findOne({_id: parent})
+
+            if (parentFile) {
+                parentFile.childs.push(file._id)
+                await parentFile.save()
+            }
+
+            await file.save()
+            return res.json(file)
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({error})
+        }
+    }
 }
 
 module.exports = new FileController()
