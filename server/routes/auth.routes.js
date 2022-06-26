@@ -60,6 +60,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({id: user.id}, config.get("jwtSecretKey"), {expiresIn: "1h"})
+        const root = await File.findOne({user: user.id, parent: null})
 
         return res.json({
             token,
@@ -68,7 +69,8 @@ router.post('/login', async (req, res) => {
                 email: user.email,
                 plan: user.plan,
                 usedSpace: user.usedSpace,
-                avatar: user.avatar
+                avatar: user.avatar,
+                rootId: root.id.toString()
             }
         })
     } catch (error) {
@@ -82,6 +84,7 @@ router.get('/auth', authMiddleware, async (req, res) => {
         const user = await User.findOne({_id: req.user.id})
 
         const token = jwt.sign({id: user.id}, config.get("jwtSecretKey"), {expiresIn: "1h"})
+        const root = await File.findOne({user: user.id, parent: null})
 
         return res.json({
             token,
@@ -90,7 +93,8 @@ router.get('/auth', authMiddleware, async (req, res) => {
                 email: user.email,
                 plan: user.plan,
                 usedSpace: user.usedSpace,
-                avatar: user.avatar
+                avatar: user.avatar,
+                rootId: root.id.toString()
             }
         })
     } catch (error) {

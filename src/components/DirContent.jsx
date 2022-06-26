@@ -189,23 +189,23 @@ function DirContent(props) {
         setDirItemsPos(posItems)
     }
 
-    useEffect(() => {
-        const resetPos = props.dir.reduce((prev, cur) => {
-            return [...prev, {
-                id: cur.id,
-                left: 0,
-                top: 0,
-                width: 0,
-                height: 0,
-                changed: false,
-                selected: false,
-                goal: false,
-                transform: ''
-            }]
-        }, [])
+    // useEffect(() => {
+    //     const resetPos = props.dir.reduce((prev, cur) => {
+    //         return [...prev, {
+    //             id: cur.id,
+    //             left: 0,
+    //             top: 0,
+    //             width: 0,
+    //             height: 0,
+    //             changed: false,
+    //             selected: false,
+    //             goal: false,
+    //             transform: ''
+    //         }]
+    //     }, [])
 
-        setDirItemsPos(resetPos)
-    }, [props.dir])
+    //     setDirItemsPos(resetPos)
+    // }, [props.dir])
     
     const openContextMenu = (id, mouseX, mouseY, state = false) => {
         if (state) {
@@ -249,11 +249,11 @@ function DirContent(props) {
             { props.dir
                 .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
                 .map((item) => 
-                item.parent === props.currentDir.link
-                && item.type === 'folder' 
+                // item.parent === props.currentDir.link && 
+                item.type === 'folder' 
                 && <DirItem 
                     item={item} 
-                    key={item.id} 
+                    key={item._id} 
                     posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
@@ -267,11 +267,11 @@ function DirContent(props) {
             { props.dir
                 .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
                 .map((item) => 
-                item.parent === props.currentDir.link
-                && item.type === 'file' 
+                // item.parent === props.currentDir.link && 
+                item.type === 'file' 
                 && <DirItem 
                     item={item} 
-                    key={item.id} 
+                    key={item._id} 
                     posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 

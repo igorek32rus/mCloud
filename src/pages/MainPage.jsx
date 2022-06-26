@@ -1,23 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react'
 
-import Header from "../components/Header";
-import TopPanel from '../components/TopPanel';
-import TitlePage from '../components/TitlePage';
-import DirContent from '../components/DirContent';
-import Notify from '../components/Notify';
-import Footer from '../components/Footer';
-import Modal from '../components/UI/modal/Modal';
+import Header from "../components/Header"
+import TopPanel from '../components/TopPanel'
+import TitlePage from '../components/TitlePage'
+import DirContent from '../components/DirContent'
+import Notify from '../components/Notify'
+import Footer from '../components/Footer'
+import Modal from '../components/UI/modal/Modal'
 
 import '../styles/App.css'
-import CreateFolder from '../components/modalwindows/CreateFolder';
-import UploadFiles from '../components/modalwindows/UploadFiles';
+import CreateFolder from '../components/modalwindows/CreateFolder'
+import UploadFiles from '../components/modalwindows/UploadFiles'
 
 import { ModalContext, AuthContext, NotifyContext } from '../Context'
-import Rename from '../components/modalwindows/Rename';
-import Share from '../components/modalwindows/Share';
-import Delete from '../components/modalwindows/Delete';
+import Rename from '../components/modalwindows/Rename'
+import Share from '../components/modalwindows/Share'
+import Delete from '../components/modalwindows/Delete'
 
-import getData from '../data/mock_dir';
+import getData from '../data/mock_dir'
+import fetchReq from '../utils/fetchReq'
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
@@ -29,22 +30,49 @@ function MainPage() {
 
   const [currentDir, setCurrentDir] = useState({ name: 'Главная', link: 'root' })
 
-  const [dir, setDir] = useState(getData(currentDir.link, 5, 30))
+  // const [dir, setDir] = useState(getData(currentDir.link, 5, 30))
+  const [dir, setDir] = useState([])
+  const [path, setPath] = useState([])
 
-  const createFolder = (name) => {
-    const folder = {
-      id: new Date(),
-      type: 'folder',
-      name: name,
-      parent: currentDir.link,
-      date: new Date(),
-      link: 'folder_hash',
-      size: 0
+  useEffect(async () => {
+    const updateDir = await fetchReq({
+      url: `http://localhost:5000/api/files?parent=${userData.rootId}`
+    })
+    console.log(updateDir);
+    setDir(updateDir.files)
+  }, [])
+
+  const createFolder = async (name) => {
+    try {
+      const newFolder = await fetchReq({
+        url: 'http://localhost:5000/api/files/dir/create', 
+        method: 'POST', 
+        data: {name, parent: userData.rootId}
+      })
+      console.log(newFolder);
+      const newDir = [...dir, newFolder.file]
+
+      setDir(newDir)
+      createNotification({title: 'Создание папки', message: `Новая папка (${name}) успешно создана`})
+    
+    } catch (error) {
+      console.log(error);
     }
-    const newDir = [...dir, folder]
+    
 
-    setDir(newDir)
-    createNotification({title: 'Создание папки', message: `Новая папка (${folder.name}) успешно создана`})
+    // const folder = {
+    //   id: new Date(),
+    //   type: 'folder',
+    //   name: name,
+    //   parent: currentDir.link,
+    //   date: new Date(),
+    //   link: 'folder_hash',
+    //   size: 0
+    // }
+    // const newDir = [...dir, folder]
+
+    // setDir(newDir)
+    // createNotification({title: 'Создание папки', message: `Новая папка (${folder.name}) успешно создана`})
   }
 
   const renameItem = (id, newName) => {

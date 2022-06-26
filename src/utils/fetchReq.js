@@ -2,6 +2,10 @@ const fetchReq = async ({url = '', method = 'GET', data = {}, headers = {
     'Content-Type': 'application/json'
 }}) => {
     try {
+        const token = localStorage.getItem('token')
+        if (token) {
+            headers['Authorization'] = 'Bearer ' + token
+        }
         const params = {method, headers}
         if (method === 'POST') params.body = JSON.stringify(data)
 

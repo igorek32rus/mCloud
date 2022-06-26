@@ -2,6 +2,19 @@ const FileService = require("../services/fileService")
 const User = require("../models/User")
 const File = require("../models/File")
 
+const getPath = async (parent, userId) => {
+    let path = []
+    const _path = async (parent) => {
+        if (!parent) return
+
+        const newParent = await File.findOne({user: userId, _id: parent})
+        path.push(newParent)
+        await _path(newParent)
+    }
+    await _path(parent)
+    return path
+}
+
 class FileController {
     async createUserRootDir(userId) {
         try {
@@ -36,18 +49,31 @@ class FileController {
                 parent,
                 user: req.user.id
             })
-            const parentFile = File.findOne({_id: parent})
+            const parentFile = await File.findOne({_id: parent})
 
             if (parentFile) {
                 parentFile.childs.push(file._id)
                 await parentFile.save()
+                await file.save()
+                return res.json({file})
             }
+            return res.status(400).json({error: 'Parent not found'})
 
-            await file.save()
-            return res.json(file)
         } catch (error) {
             console.log(error);
             return res.status(400).json({error})
+        }
+    }
+
+    async getFiles(req, res) {
+        try {
+            const files = await File.find({user: req.user.id, parent: req.query.parent})
+            // const path = await getPath(req.query.parent, req.user.id)
+            const path = []
+            return res.json({path, files})
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({error: 'Can`t get files'})
         }
     }
 }
