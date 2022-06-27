@@ -43,23 +43,11 @@ function MainPage() {
     const updateDir = await fetchReq({
       url: `http://localhost:5000/api/files?parent=${userData.rootId}`
     })
-    console.log(updateDir);
     setDir(updateDir.files)
+    setPath(updateDir.path)
     setCurrentDir(updateDir.path[0])
     setLoading(false)
   }, [])
-
-  // const dir = useMemo(async () => {
-  //   const updateDir = await fetchReq({
-  //     url: `http://localhost:5000/api/files?parent=${userData.rootId}`
-  //   })
-  //   // console.log(updateDir);
-  //   // setCurrentDir(updateDir.path[0])
-  //   return updateDir.files
-  //   // setDir(updateDir.files)
-  // }, [currentDir])
-
-  // const setDir = () => {}
 
   const createFolder = async (name) => {
     try {
@@ -114,17 +102,35 @@ function MainPage() {
     // setDir(getData(link, 5, 30))
   }
 
+  const modalSelector = (type) => {
+    switch (type) {
+      case 'createFolder':
+        return <CreateFolder createFolder={createFolder} />
+      
+      case 'uploadFiles':
+        return <UploadFiles files={dataModal} />
+      
+      case 'rename':
+        return <Rename items={dataModal} renameItem={renameItem} />
+        
+      case 'share':
+        return <Share items={dataModal} />
+
+      case 'delete':
+        return <Delete items={dataModal} deleteItems={deleteItems} />
+
+      default:
+        break;
+    }
+  }
+
   return (
     <div className="pageBodyMain">
       <ModalContext.Provider value={{setModal, setTypeModal, setDataModal}}>
         { modal &&
-            <Modal>
-              {typeModal === 'createFolder' && <CreateFolder createFolder={createFolder} /> }
-              {typeModal === 'uploadFiles' && <UploadFiles files={dataModal} /> }
-              {typeModal === 'rename' && <Rename items={dataModal} renameItem={renameItem} /> }
-              {typeModal === 'share' && <Share items={dataModal} /> }
-              {typeModal === 'delete' && <Delete items={dataModal} deleteItems={deleteItems} /> }
-            </Modal>
+          <Modal>
+            {modalSelector(typeModal)}
+          </Modal>
         }
         {!loading && (
           <>
