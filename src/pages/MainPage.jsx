@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 
 import Header from "../components/Header"
 import TopPanel from '../components/TopPanel'
@@ -28,19 +28,38 @@ function MainPage() {
   const [typeModal, setTypeModal] = useState('createFolder')
   const [dataModal, setDataModal] = useState([])
 
-  const [currentDir, setCurrentDir] = useState({ name: 'Главная', link: 'root' })
+  const [currentDir, setCurrentDir] = useState(null)
+
+  const [loading, setLoading] = useState(true)
 
   // const [dir, setDir] = useState(getData(currentDir.link, 5, 30))
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
 
+
+
   useEffect(async () => {
+    setLoading(true)
     const updateDir = await fetchReq({
       url: `http://localhost:5000/api/files?parent=${userData.rootId}`
     })
     console.log(updateDir);
     setDir(updateDir.files)
+    setCurrentDir(updateDir.path[0])
+    setLoading(false)
   }, [])
+
+  // const dir = useMemo(async () => {
+  //   const updateDir = await fetchReq({
+  //     url: `http://localhost:5000/api/files?parent=${userData.rootId}`
+  //   })
+  //   // console.log(updateDir);
+  //   // setCurrentDir(updateDir.path[0])
+  //   return updateDir.files
+  //   // setDir(updateDir.files)
+  // }, [currentDir])
+
+  // const setDir = () => {}
 
   const createFolder = async (name) => {
     try {
@@ -100,11 +119,11 @@ function MainPage() {
   const updateDir = (link) => {
     if (link !== 'root') {
       setCurrentDir({ name: 'Папка', link })
-      setDir(getData(link, 3, 10))
+      // setDir(getData(link, 3, 10))
       return
     }
     setCurrentDir({ name: 'Главная', link })
-    setDir(getData(link, 5, 30))
+    // setDir(getData(link, 5, 30))
   }
 
   return (
@@ -119,9 +138,14 @@ function MainPage() {
               {typeModal === 'delete' && <Delete items={dataModal} deleteItems={deleteItems} /> }
             </Modal>
         }
-        <TopPanel currentDir={currentDir} updateDir={updateDir} />
-        <TitlePage currentDir={currentDir} />
-        <DirContent dir={dir} currentDir={currentDir} updateDir={updateDir} />
+        {!loading && (
+          <>
+            <TopPanel currentDir={currentDir} updateDir={updateDir} />
+            <TitlePage currentDir={currentDir} />
+            <DirContent dir={dir} currentDir={currentDir} updateDir={updateDir} />
+          </>
+        )}
+        
       </ModalContext.Provider>
     </div>
   );

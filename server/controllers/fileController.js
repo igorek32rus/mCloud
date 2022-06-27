@@ -4,14 +4,17 @@ const File = require("../models/File")
 
 const getPath = async (parent, userId) => {
     let path = []
-    const _path = async (parent) => {
-        if (!parent) return
+    const _path = async (cur) => {
+        if (!cur.parent) return
 
-        const newParent = await File.findOne({user: userId, _id: parent})
+        const newParent = await File.findOne({user: userId, _id: cur.parent})
         path.push(newParent)
         await _path(newParent)
     }
-    await _path(parent)
+
+    const current = await File.findOne({user: userId, _id: parent})
+    path.push(current)
+    await _path(current)
     return path
 }
 
@@ -68,8 +71,8 @@ class FileController {
     async getFiles(req, res) {
         try {
             const files = await File.find({user: req.user.id, parent: req.query.parent})
-            // const path = await getPath(req.query.parent, req.user.id)
-            const path = []
+            const path = await getPath(req.query.parent, req.user.id)
+            // const path = []
             return res.json({path, files})
         } catch (error) {
             console.log(error);

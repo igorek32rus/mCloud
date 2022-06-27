@@ -9,7 +9,7 @@ function DirItem(props) {
 
     const posItem = props.posItem ? props.posItem
         : {
-            id: props.item.id,
+            id: props.item._id,
             selected: false,
             goal: false,
             transform: ''
@@ -32,12 +32,15 @@ function DirItem(props) {
         const elem = blockEl.current
 
         if (!posItem.selected && (elem.offsetLeft !== posItem.left || elem.offsetTop !== posItem.top)) {
+            console.log(elem.offsetLeft, posItem.left);
+            
             const params = {...posItem,
                 left: elem.offsetLeft,
                 top: elem.offsetTop,
                 width: elem.offsetWidth,
                 height: elem.offsetHeight
             }
+
             updatePos(params)
         }   
     })
@@ -52,7 +55,7 @@ function DirItem(props) {
                 const dragParams = {
                     startX: e.pageX,
                     startY: e.pageY,
-                    id: props.item.id,
+                    id: props.item._id,
                     dragstart: false
                 }
         
@@ -126,12 +129,12 @@ function DirItem(props) {
                 </div>
             }
             <div className="name">{props.item.name}</div>
-            <div className="date">{props.item.date.toLocaleString("ru", {year: 'numeric', month: 'short', day: 'numeric'})}</div>
+            <div className="date">{new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'short', day: 'numeric'})}</div>
             { description ? (
                 <div className="description">
                     <div className="text">Имя: {props.item.name}</div>
                     <div className="text">Размер: {props.item.size} Кб</div>
-                    <div className="text">Дата загрузки: {props.item.date.toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
+                    <div className="text">Дата загрузки: {new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
                 </div>
             ) : '' }
             

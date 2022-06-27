@@ -31,7 +31,7 @@ function DirContent(props) {
 
     const [dirItemsPos, setDirItemsPos] = useState(props.dir.reduce((prev, cur) => {
         return [...prev, {
-            id: cur.id,
+            id: cur._id,
             left: 0,
             top: 0,
             width: 0,
@@ -189,29 +189,29 @@ function DirContent(props) {
         setDirItemsPos(posItems)
     }
 
-    // useEffect(() => {
-    //     const resetPos = props.dir.reduce((prev, cur) => {
-    //         return [...prev, {
-    //             id: cur.id,
-    //             left: 0,
-    //             top: 0,
-    //             width: 0,
-    //             height: 0,
-    //             changed: false,
-    //             selected: false,
-    //             goal: false,
-    //             transform: ''
-    //         }]
-    //     }, [])
+    useEffect(() => {
+        const resetPos = props.dir.reduce((prev, cur) => {
+            return [...prev, {
+                id: cur._id,
+                left: 0,
+                top: 0,
+                width: 0,
+                height: 0,
+                changed: false,
+                selected: false,
+                goal: false,
+                transform: ''
+            }]
+        }, [])
 
-    //     setDirItemsPos(resetPos)
-    // }, [props.dir])
+        setDirItemsPos(resetPos)
+    }, [props.dir])
     
     const openContextMenu = (id, mouseX, mouseY, state = false) => {
         if (state) {
             const itemsContext = dirItemsPos.reduce((prev, cur) => {
                 if (cur.selected || cur.id === id) {
-                    const item = props.dir.find(itemDir => itemDir.id === cur.id)
+                    const item = props.dir.find(itemDir => itemDir._id === cur.id)
                     if (item) return [...prev, item]
                 }
                 return [...prev]
@@ -254,7 +254,7 @@ function DirContent(props) {
                 && <DirItem 
                     item={item} 
                     key={item._id} 
-                    posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
+                    posItem={dirItemsPos.find(itemPos => itemPos.id === item._id)} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos} 
@@ -272,7 +272,7 @@ function DirContent(props) {
                 && <DirItem 
                     item={item} 
                     key={item._id} 
-                    posItem={dirItemsPos.find(itemPos => itemPos.id === item.id)} 
+                    posItem={dirItemsPos.find(itemPos => itemPos.id === item._id)} 
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos}

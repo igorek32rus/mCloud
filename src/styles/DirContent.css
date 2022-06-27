@@ -118,6 +118,8 @@ input[type='checkbox'].check-custom:checked ~ .check-toggle {
   
 .block .date {
     margin: 5px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .block .description {
