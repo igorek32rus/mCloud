@@ -66,32 +66,20 @@ function MainPage() {
       const newFolder = await fetchReq({
         url: 'http://localhost:5000/api/files/dir/create', 
         method: 'POST', 
-        data: {name, parent: userData.rootId}
+        data: {name, parent: currentDir._id}
       })
-      console.log(newFolder);
-      const newDir = [...dir, newFolder.file]
 
-      setDir(newDir)
-      createNotification({title: 'Создание папки', message: `Новая папка (${name}) успешно создана`})
-    
+      if (newFolder.file) {
+        const newDir = [...dir, newFolder.file]
+
+        setDir(newDir)
+        createNotification({title: 'Создание папки', message: `Папка (${name}) успешно создана`})  
+      }
+      
     } catch (error) {
       console.log(error);
     }
     
-
-    // const folder = {
-    //   id: new Date(),
-    //   type: 'folder',
-    //   name: name,
-    //   parent: currentDir.link,
-    //   date: new Date(),
-    //   link: 'folder_hash',
-    //   size: 0
-    // }
-    // const newDir = [...dir, folder]
-
-    // setDir(newDir)
-    // createNotification({title: 'Создание папки', message: `Новая папка (${folder.name}) успешно создана`})
   }
 
   const renameItem = (id, newName) => {
