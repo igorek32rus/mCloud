@@ -28,7 +28,7 @@ function TopPanel(props) {
 
     return (
         <div className="top-panel">
-            <Path currentDir={props.currentDir} updateDir={props.updateDir} />
+            <Path path={props.path} changeDir={props.changeDir} />
 
             <Button click={createFolder}>Создать папку</Button>
             <Button click={uploadFiles}>Загрузить</Button>

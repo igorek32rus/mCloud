@@ -258,7 +258,7 @@ function DirContent(props) {
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos} 
-                    updateDir={props.updateDir}
+                    changeDir={props.changeDir}
                     openContextMenu={openContextMenu}
                     contextMenu={contextMenu}
                 />) 

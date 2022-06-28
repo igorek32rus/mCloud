@@ -83,7 +83,7 @@ function DirItem(props) {
     
             if (e.detail > 1) {     // 2 клика
                 if (props.item.type === 'folder') {
-                    props.updateDir(props.item.link)
+                    props.changeDir(props.item._id)
                 }
                 return
             }

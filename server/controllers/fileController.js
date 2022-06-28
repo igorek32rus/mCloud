@@ -8,12 +8,12 @@ const getPath = async (parent, userId) => {
         if (!cur.parent) return
 
         const newParent = await File.findOne({user: userId, _id: cur.parent})
-        path.push(newParent)
+        path.unshift(newParent)
         await _path(newParent)
     }
 
     const current = await File.findOne({user: userId, _id: parent})
-    path.push(current)
+    path.unshift(current)
     await _path(current)
     return path
 }

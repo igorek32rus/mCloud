@@ -37,15 +37,25 @@ function MainPage() {
   const [path, setPath] = useState([])
 
 
-
-  useEffect(async () => {
-    setLoading(true)
+  const changeDir = async (idDir) => {
     const updateDir = await fetchReq({
-      url: `http://localhost:5000/api/files?parent=${userData.rootId}`
+      url: `http://localhost:5000/api/files?parent=${idDir}`
     })
+    console.log(updateDir.path);
     setDir(updateDir.files)
     setPath(updateDir.path)
     setCurrentDir(updateDir.path[0])
+  }
+
+  useEffect(async () => {
+    setLoading(true)
+    await changeDir(userData.rootId)
+    // const updateDir = await fetchReq({
+    //   url: `http://localhost:5000/api/files?parent=${userData.rootId}`
+    // })
+    // setDir(updateDir.files)
+    // setPath(updateDir.path)
+    // setCurrentDir(updateDir.path[0])
     setLoading(false)
   }, [])
 
@@ -134,9 +144,9 @@ function MainPage() {
         }
         {!loading && (
           <>
-            <TopPanel currentDir={currentDir} updateDir={updateDir} />
-            <TitlePage currentDir={currentDir} />
-            <DirContent dir={dir} currentDir={currentDir} updateDir={updateDir} />
+            <TopPanel path={path} changeDir={changeDir} />
+            <TitlePage currentDir={path[path.length - 1]} />
+            <DirContent dir={dir} currentDir={currentDir} changeDir={changeDir} />
           </>
         )}
         
