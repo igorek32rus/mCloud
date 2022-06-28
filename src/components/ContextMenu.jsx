@@ -27,10 +27,9 @@ function ContextMenu(props) {
         modal.setModal(true)
     }
 
-    const handlerShareFolder = () => {
+    const handlerShareCurrentDir = () => {
         props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
-        modal.setTypeModal('share')
-        modal.setDataModal([{name: props.currentDir.name, link: props.currentDir.link}])
+        modal.setTypeModal('share_current')
         modal.setModal(true)
     }
 
@@ -46,7 +45,7 @@ function ContextMenu(props) {
             { props.contextType === 'workspace' ? 
                 ( <ul className="menu context">
                     <li onClick={createFolder}><div className="icon edit"></div>Создать папку</li>
-                    <li className={props.currentDir.link === 'root' ? 'disabled' : ''} onClick={props.currentDir.link !== 'root' ? handlerShareFolder : undefined}><div className="icon share"></div>Поделиться</li>
+                    <li className={!props.currentDir.parent ? 'disabled' : ''} onClick={props.currentDir.parent ? handlerShareCurrentDir : undefined}><div className="icon share"></div>Поделиться</li>
                     <li><div className="icon copy"></div>Вставить</li>
                 </ul> ) 
                 : ( <ul className="menu context">
