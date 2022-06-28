@@ -34,7 +34,6 @@ function MainPage() {
     const updateDir = await fetchReq({
       url: `http://localhost:5000/api/files?parent=${idDir}`
     })
-    console.log(updateDir.path);
     setDir(updateDir.files)
     setPath(updateDir.path)
   }
@@ -66,16 +65,26 @@ function MainPage() {
     
   }
 
-  const renameItem = (id, newName) => {
-    const tempDir = dir.filter((item) => item.id !== id)
-    const tempItem = dir.find((item) => item.id === id)
+  const renameItem = async (id, name) => {
+    try {
+      const updatedFile = await fetchReq({
+        url: 'http://localhost:5000/api/files/rename', 
+        method: 'POST', 
+        data: {name, id}
+      })
 
-    tempItem.name = newName
-    setDir([...tempDir, tempItem])
-    createNotification({
-      title: `Переименование ${ tempItem.type === 'folder' ? 'папки' : 'файла'}`, 
-      message: `Новое имя ${ tempItem.type === 'folder' ? 'папки' : 'файла'} - ${newName}`
-    })
+      if (updatedFile.file) {
+        const tempDir = dir.filter((item) => item._id !== id)
+        setDir([...tempDir, updatedFile.file])
+        createNotification({
+          title: `Переименование ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'}`, 
+          message: `Новое имя ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'} - ${updatedFile.file.name}`
+        })
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const deleteItems = (itemsId) => {

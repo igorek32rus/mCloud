@@ -13,7 +13,7 @@ function Path({path, changeDir}) {
         <nav className="path">
             <ul>
                 { path.map(item => (
-                    <li onClick={() => handlerClick(item._id)}>
+                    <li key={item._id} onClick={() => handlerClick(item._id)}>
                         { item.parent ? (
                             <>
                                 <div className="delimiter">&#10140;</div>

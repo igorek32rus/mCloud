@@ -32,8 +32,6 @@ function DirItem(props) {
         const elem = blockEl.current
 
         if (!posItem.selected && (elem.offsetLeft !== posItem.left || elem.offsetTop !== posItem.top)) {
-            console.log(elem.offsetLeft, posItem.left);
-            
             const params = {...posItem,
                 left: elem.offsetLeft,
                 top: elem.offsetTop,
@@ -98,7 +96,7 @@ function DirItem(props) {
                 props.updatePos(tempElem)
             }
 
-            props.openContextMenu(props.item.id, e.pageX, e.pageY, true)
+            props.openContextMenu(props.item._id, e.pageX, e.pageY, true)
         }
     }
 

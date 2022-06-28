@@ -79,6 +79,23 @@ class FileController {
             return res.status(500).json({error: 'Can`t get files'})
         }
     }
+
+    async renameFile(req, res) {
+        try {
+            const {name, id} = req.body
+            const file = await File.findOne({user: req.user.id, _id: id})
+
+            if (file) {
+                file.name = name
+                await file.save()
+                return res.json({file})
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({error: 'Can`t rename file/folder'})
+        }
+    }
 }
 
 module.exports = new FileController()

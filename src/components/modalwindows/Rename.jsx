@@ -13,7 +13,10 @@ function Rename(props) {
         const input = inputRef.current
         input.focus()
         input.selectionStart = 0
-        input.selectionEnd = input.value.lastIndexOf('.')
+        input.selectionEnd = input.value.length
+
+        if (props.items[0].type === 'file') 
+            input.selectionEnd = input.value.lastIndexOf('.')
     }, [])
 
     const handleRenameBtn = () => {
@@ -25,7 +28,7 @@ function Rename(props) {
             return
         }
 
-        props.renameItem(props.items[0].id, newName)
+        props.renameItem(props.items[0]._id, newName)
         setModal(false)
     }
 
