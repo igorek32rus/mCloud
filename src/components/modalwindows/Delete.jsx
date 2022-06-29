@@ -6,8 +6,9 @@ function Delete(props) {
     const {setModal} = useContext(ModalContext)
 
     const handleDeleteBtn = () => {
-        const itemsId = props.items.reduce((prev, cur) => {return [...prev, cur.id]}, [])
-        props.deleteItems(itemsId)
+        // const itemsId = props.items.reduce((prev, cur) => {return [...prev, cur.id]}, [])
+        // props.deleteItems(itemsId)
+        props.deleteItems(props.items)
         setModal(false)
     }
 

@@ -18,6 +18,31 @@ const getPath = async (parent, userId) => {
     return path
 }
 
+const recursiveDeleteFiles = async (files) => {
+    if (!files.length) return 0
+
+    let count = 0
+
+    try {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type === 'file') {
+                await FileService.deleteFile(file)
+            }
+
+            if (file.type === 'folder') {
+                count += await recursiveDeleteFiles(await File.find({parent: file._id}))
+            }
+    
+            await File.deleteOne({_id: file._id})
+            count++
+        }
+        return count
+    } catch (error) {
+        console.log('Error delete files');
+    }
+}
+
 class FileController {
     async createUserRootDir(userId) {
         try {
@@ -94,6 +119,20 @@ class FileController {
         } catch (error) {
             console.log(error);
             return res.status(500).json({error: 'Can`t rename file/folder'})
+        }
+    }
+
+    async deleteFiles(req, res) {
+        try {
+            const {files} = req.body
+            const parent = files[0].parent
+            const countDeleted = await recursiveDeleteFiles(files)
+            const dirFiles = await File.find({user: req.user.id, parent})
+            console.log(countDeleted);
+            return res.json({count: countDeleted, files: dirFiles})
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({error: 'Can`t delete files'})
         }
     }
 }

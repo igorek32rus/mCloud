@@ -87,14 +87,27 @@ function MainPage() {
     }
   }
 
-  const deleteItems = (itemsId) => {
-    const countBefore = dir.length
-    const newDir = dir.filter((item) => !itemsId.includes(item.id))
-    setDir(newDir)
-    createNotification({
-      title: `Удаление объектов`, 
-      message: `Количество удалённых объектов - ${countBefore - newDir.length}`
-    })
+  const deleteItems = async (files) => {
+    // const files = dir.filter((item) => itemsId.includes(item._id))
+    // setDir(newDir)
+    try {
+      const updatedDir = await fetchReq({
+        url: 'http://localhost:5000/api/files/delete', 
+        method: 'POST', 
+        data: {files}
+      })
+
+      if (updatedDir.files) {
+        setDir(updatedDir.files)
+        createNotification({
+          title: `Удаление объектов`, 
+          message: `Количество удалённых объектов - ${updatedDir.count}`
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
 
   const modalSelector = (type) => {
