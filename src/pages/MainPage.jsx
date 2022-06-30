@@ -15,6 +15,7 @@ import Share from '../components/modalwindows/Share'
 import Delete from '../components/modalwindows/Delete'
 
 import fetchReq from '../utils/fetchReq'
+import axios from 'axios'
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
@@ -110,13 +111,32 @@ function MainPage() {
     
   }
 
+  const uploadFiles = async (file) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('parent', path[path.length - 1]._id)
+      const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
+        headers: {
+          Authorization: `Baerer ${localStorage.getItem('token')}`
+        },
+        onUploadProgress: progressEvent => {
+          console.log(progressEvent.loaded);
+        }
+      })
+      setDir([...dir, response.data.file])
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const modalSelector = (type) => {
     switch (type) {
       case 'createFolder':
         return <CreateFolder createFolder={createFolder} />
       
       case 'uploadFiles':
-        return <UploadFiles files={dataModal} />
+        return <UploadFiles files={dataModal} uploadFiles={uploadFiles} />
       
       case 'rename':
         return <Rename items={dataModal} renameItem={renameItem} />

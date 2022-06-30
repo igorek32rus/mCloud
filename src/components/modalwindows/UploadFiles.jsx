@@ -1,9 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import Button from "../UI/button/Button";
+import { ModalContext } from "../../Context";
 
 function UploadFiles(props) {
+    const {setModal} = useContext(ModalContext)
+
     const handleUploadFilesBtn = () => {
-        console.log(props.files);
+        Array.from(props.files).map(file => {
+            props.uploadFiles(file)
+        })
+        setModal(false)
     }
 
     return (
