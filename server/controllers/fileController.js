@@ -128,11 +128,43 @@ class FileController {
             const parent = files[0].parent
             const countDeleted = await recursiveDeleteFiles(files)
             const dirFiles = await File.find({user: req.user.id, parent})
-            console.log(countDeleted);
             return res.json({count: countDeleted, files: dirFiles})
         } catch (error) {
             console.log(error);
             return res.status(500).json({error: 'Can`t delete files'})
+        }
+    }
+
+    async uploadFile(req, res) {
+        try {
+            const {file} = req.files
+            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: file.name})
+            
+            if (fileExist) {
+                return res.status(400).json({message: 'Файл с таким именем уже существует в данной папке'})
+            }
+
+            const parent = await File.findOne({user: req.user.id, _id: req.body.parent})
+
+            if (!parent) {
+                return res.status(400).json({message: 'Неверная дирректория'})
+            }
+
+            const dbFile = new File({
+                name: file.name,
+                type: 'file',
+                size: file.size,
+                parent: parent._id,
+                user: req.user.id
+            })
+
+            await FileService.uploadFile(file, dbFile)
+            await dbFile.save()
+
+            return res.json({file: dbFile})
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({error: 'Upload error'})
         }
     }
 }

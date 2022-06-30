@@ -6,6 +6,8 @@ const FileController = require("../controllers/fileController")
 router.post('/dir/create', authMiddleware, FileController.createDir)
 router.post('/rename', authMiddleware, FileController.renameFile)
 router.post('/delete', authMiddleware, FileController.deleteFiles)
+router.post('/upload', authMiddleware, FileController.uploadFile)
+
 router.get('', authMiddleware, FileController.getFiles)
 
 module.exports = router
