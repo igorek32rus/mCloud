@@ -21,6 +21,8 @@ function TopPanel(props) {
     }
 
     const showFilesList = (list) => {
+        if (!list.length) return
+        
         modal.setTypeModal('uploadFiles')
         modal.setDataModal(list)
         modal.setModal(true)
@@ -32,7 +34,7 @@ function TopPanel(props) {
 
             <Button click={createFolder}>Создать папку</Button>
             <Button click={uploadFiles}>Загрузить</Button>
-            <input type="file" style={{display: 'none'}} ref={inputFile} onChange={(e) => showFilesList(e.target.files)} />
+            <input type="file" multiple style={{display: 'none'}} ref={inputFile} onChange={(e) => showFilesList(e.target.files)} />
         </div>
     )
 }

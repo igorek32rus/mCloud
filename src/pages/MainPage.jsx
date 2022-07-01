@@ -116,6 +116,7 @@ function MainPage() {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('parent', path[path.length - 1]._id)
+      formData.append('fileName', file.name)
       const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
         headers: {
           Authorization: `Baerer ${localStorage.getItem('token')}`

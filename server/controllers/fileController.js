@@ -138,7 +138,8 @@ class FileController {
     async uploadFile(req, res) {
         try {
             const {file} = req.files
-            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: file.name})
+            const {fileName} = req.body
+            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: fileName})
             
             if (fileExist) {
                 return res.status(400).json({message: 'Файл с таким именем уже существует в данной папке'})
@@ -151,7 +152,7 @@ class FileController {
             }
 
             const dbFile = new File({
-                name: file.name,
+                name: fileName,
                 type: 'file',
                 size: file.size,
                 parent: parent._id,
