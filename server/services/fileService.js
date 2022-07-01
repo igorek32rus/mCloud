@@ -24,10 +24,8 @@ class FileService {
             try {
                 if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath)
-                    return resolve({message: 'File deleted'})
                 }
-
-                return reject({message: 'File not exist'})
+                return resolve({message: 'File deleted'})       // не важно есть или нет файл
             } catch (error) {
                 return reject({message: 'Error delete file'})
             }
