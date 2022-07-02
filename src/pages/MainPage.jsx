@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect, useMemo, useRef } from 'react'
 
 import TopPanel from '../components/TopPanel'
 import TitlePage from '../components/TitlePage'
@@ -29,6 +29,8 @@ function MainPage() {
 
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
+
+  const dirRef = useRef(dir)
 
 
   const changeDir = async (idDir) => {
@@ -113,6 +115,7 @@ function MainPage() {
 
   const uploadFiles = async (file) => {
     try {
+      dirRef.current = dir
       const formData = new FormData()
       formData.append('file', file)
       formData.append('parent', path[path.length - 1]._id)
@@ -122,10 +125,11 @@ function MainPage() {
           Authorization: `Baerer ${localStorage.getItem('token')}`
         },
         onUploadProgress: progressEvent => {
-          console.log(progressEvent.loaded);
+          // console.log(progressEvent.loaded);
         }
       })
-      setDir([...dir, response.data.file])
+      dirRef.current = [...dirRef.current, response.data.file]
+      setDir(dirRef.current)
     } catch (error) {
       console.log(error);
     }
