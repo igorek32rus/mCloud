@@ -29,3 +29,13 @@
 .removeUpload:hover {
     opacity: 1;
 }
+
+.modal_window .list_upload {
+    max-height: 400px;
+    overflow: auto;
+    margin: 10px 0;
+}
+
+.modal_window .list_upload table {
+    margin-right: 10px;
+}
