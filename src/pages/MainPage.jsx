@@ -113,26 +113,46 @@ function MainPage() {
     
   }
 
-  const uploadFiles = async (file) => {
-    try {
-      dirRef.current = dir
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('parent', path[path.length - 1]._id)
-      formData.append('fileName', file.name)
-      const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
-        headers: {
-          Authorization: `Baerer ${localStorage.getItem('token')}`
-        },
-        onUploadProgress: progressEvent => {
-          // console.log(progressEvent.loaded);
-        }
-      })
-      dirRef.current = [...dirRef.current, response.data.file]
-      setDir(dirRef.current)
-    } catch (error) {
-      console.log(error);
+  const uploadFiles = async (files) => {
+    const errorFlag = false
+    dirRef.current = dir
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('parent', path[path.length - 1]._id)
+        formData.append('fileName', file.name)
+        const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
+          headers: {
+            Authorization: `Baerer ${localStorage.getItem('token')}`
+          },
+          onUploadProgress: progressEvent => {
+            // console.log(progressEvent.loaded);
+          }
+        })
+        dirRef.current = [...dirRef.current, response.data.file]
+
+      } catch (error) {
+        errorFlag = true
+        console.log(error);
+      }
     }
+    
+    if (errorFlag) {
+      createNotification({
+        title: `Загрузка файлов`, 
+        message: `Ошибка загрузки файлов`
+      })
+      return
+    }
+
+    setDir(dirRef.current)
+    createNotification({
+      title: `Загрузка файлов`, 
+      message: `Файлы успешно загружены`
+    })
   }
 
   const modalSelector = (type) => {

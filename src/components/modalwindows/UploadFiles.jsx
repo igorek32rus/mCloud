@@ -6,9 +6,7 @@ function UploadFiles(props) {
     const {setModal} = useContext(ModalContext)
 
     const handleUploadFilesBtn = () => {
-        Array.from(props.files).map(file => {
-            props.uploadFiles(file)
-        })
+        props.uploadFiles(props.files)
         setModal(false)
     }
 
