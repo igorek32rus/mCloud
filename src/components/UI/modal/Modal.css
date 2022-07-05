@@ -13,7 +13,7 @@
 
 .modal_window {
     padding: 10px;
-    min-width: 250px;
+    min-width: 430px;
     background: rgba(30, 36, 68, .85);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .5);
@@ -37,5 +37,6 @@
 }
 
 .modal_window .list_upload table {
-    margin-right: 10px;
+    /* margin-right: 10px; */
+    width: 100%;
 }
