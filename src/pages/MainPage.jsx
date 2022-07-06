@@ -104,7 +104,7 @@ function MainPage() {
         setDir(updatedDir.files)
         createNotification({
           title: `Удаление объектов`, 
-          message: `Количество удалённых объектов - ${updatedDir.count}`
+          message: `Объекты успешно удалены (${updatedDir.count})`
         })
       }
     } catch (error) {
