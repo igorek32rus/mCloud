@@ -6,7 +6,7 @@ const NotificationItem = (props) => {
 
     return (
         <div className="notify-block" style={notification.fadeOut ? {animation: 'fadeOut .2s linear'} : {}}>
-            { !notification.time ? <div className="loading-circle" /> : '' }
+            { !notification.time ? <div><div className="loading-circle" /></div> : '' }
             <div>
                 <div className="notify-title">{notification.title}</div>
                 <div className="notify-message">{notification.message}</div>

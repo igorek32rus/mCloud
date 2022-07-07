@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import {getFileSize} from '../utils/getFileSize'
 
 function DirItem(props) {
     const [description, setDescription] = useState(false)
@@ -131,7 +132,7 @@ function DirItem(props) {
             { description ? (
                 <div className="description">
                     <div className="text">Имя: {props.item.name}</div>
-                    <div className="text">Размер: {props.item.size} Кб</div>
+                    <div className="text">Размер: {getFileSize(props.item.size)}</div>
                     <div className="text">Дата загрузки: {new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
                 </div>
             ) : '' }

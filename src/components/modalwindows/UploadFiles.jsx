@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import Button from "../UI/button/Button";
 import { ModalContext } from "../../Context";
+import { getFileSize } from "../../utils/getFileSize";
 
 function UploadFiles(props) {
     const [uploadFiles, setUploadFiles] = useState(props.files)
@@ -32,7 +33,7 @@ function UploadFiles(props) {
                             <th>Размер</th>
                             <th></th>
                         </tr>
-                        {uploadFiles.map((file, i) => <tr key={i}><td>{file.name}</td><td>{file.size}</td><td onClick={() => handleRemoveFile(i)} className="removeUpload">&times;</td></tr> )}
+                        {uploadFiles.map((file, i) => <tr key={i}><td>{file.name}</td><td>{getFileSize(file.size)}</td><td onClick={() => handleRemoveFile(i)} className="removeUpload">&times;</td></tr> )}
                         {/* {Array.from(props.files).map((file) => <tr key={new Date() - file.size}><td>{file.name}</td><td>{file.size}</td><td className="removeUpload">&times;</td></tr>)} */}
                     </tbody>
                 </table>
