@@ -22,14 +22,6 @@ function App() {
   const notificationsRef = useRef()
   notificationsRef.current = notifications
 
-  const timoutPromise = () => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 3000)
-    })
-  } 
-
   const auth = async () => {
     setLoading(true)
     const res = await fetchReq({
@@ -50,7 +42,7 @@ function App() {
   }
 
   const createNotification = ({title = '', message = '', time = 3}) => {
-    const id = Date.now() + ''
+    const id = Date.now() - (Math.floor(Math.random() * 100)) + ''
     const newNotification = {
       key: id,
       title,
@@ -67,6 +59,8 @@ function App() {
         removeNotification(newNotification.key)
       }, time * 1000);
     }
+
+    return id
   }
 
   const removeNotification = (key) => {

@@ -19,7 +19,7 @@ import axios from 'axios'
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
-  const {createNotification} = useContext(NotifyContext)
+  const {createNotification, removeNotification} = useContext(NotifyContext)
 
   const [modal, setModal] = useState(false)
   const [typeModal, setTypeModal] = useState('createFolder')
@@ -114,6 +114,12 @@ function MainPage() {
   }
 
   const uploadFiles = async (files) => {
+    const idNotification = createNotification({
+      title: `Загрузка файлов`, 
+      message: `Подождите, выполняется загрузка файлов`,
+      time: 0
+    })
+
     const errorFlag = false
     dirRef.current = dir
     for (let i = 0; i < files.length; i++) {
@@ -139,6 +145,8 @@ function MainPage() {
         console.log(error);
       }
     }
+
+    removeNotification(idNotification)
     
     if (errorFlag) {
       createNotification({
