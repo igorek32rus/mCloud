@@ -141,20 +141,15 @@ function MainPage() {
         dirRef.current = [...dirRef.current, response.data.file]
 
       } catch (error) {
-        errorFlag = true
-        console.log(error);
+        createNotification({
+          title: `Ошибка загрузки файла`, 
+          message: `Файл: ${file.name}. ${error.response.data.message}`
+        })
+        return
       }
     }
 
     removeNotification(idNotification)
-    
-    if (errorFlag) {
-      createNotification({
-        title: `Загрузка файлов`, 
-        message: `Ошибка загрузки файлов`
-      })
-      return
-    }
 
     setDir(dirRef.current)
     createNotification({
