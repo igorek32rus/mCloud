@@ -71,6 +71,13 @@ class FileController {
     async createDir(req, res) {
         try {
             const {name, parent} = req.body
+
+            const fileExist = await File.findOne({user: req.user.id, parent, name})
+            
+            if (fileExist) {
+                return res.status(400).json({message: 'Папка с таким именем уже существует в данной директории'})
+            }
+
             const file = new File({
                 name,
                 type: 'folder',

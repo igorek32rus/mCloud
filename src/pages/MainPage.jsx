@@ -59,11 +59,16 @@ function MainPage() {
         const newDir = [...dir, newFolder.file]
 
         setDir(newDir)
-        createNotification({title: 'Создание папки', message: `Папка (${name}) успешно создана`})  
+        createNotification({title: 'Создание папки', message: `Папка (${name}) успешно создана`})
+        return
       }
-      
+
+      createNotification({
+        title: `Ошибка создания папки`, 
+        message: `${newFolder.message}`
+      })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
     
   }
