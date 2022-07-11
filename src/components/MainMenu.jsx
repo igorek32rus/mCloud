@@ -20,15 +20,6 @@ function MainMenu(props) {
 
     return (
         <div className="main-menu">
-            { isAuth ?
-                <ul>
-                    <a href="/"><li>Главная</li></a>
-                    <a href="/"><li>Последние</li></a>
-                    <a href="/"><li>Общие</li></a>
-                    <a href="/"><li>Корзина</li></a>
-                </ul>
-                : '' 
-            }
             { isAuth ? 
                 <div className="profile" onClick={handleClickProfile}>
                     <div style={{width: 32, height: 32, marginLeft: 10}}>

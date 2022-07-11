@@ -13,6 +13,10 @@ function ProfileMenu(props) {
     return (
         <div className="dropMenu profileMenu slideDown">
             <ul className="menu profile">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/">Последние</a></li>
+                <li><a href="/">Общие</a></li>
+                <li><a href="/">Корзина</a></li>
                 <li>Настройки</li>
                 <li onClick={handleLogout}>Выйти</li>
             </ul>
