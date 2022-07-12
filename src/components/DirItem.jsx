@@ -128,7 +128,7 @@ function DirItem(props) {
                 </div>
             }
             <div className="name">{props.item.name}</div>
-            <div className="date">{new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'short', day: 'numeric'})}</div>
+            {/* <div className="date">{new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'short', day: 'numeric'})}</div> */}
             { description ? (
                 <div className="description">
                     <div className="text">Имя: {props.item.name}</div>
