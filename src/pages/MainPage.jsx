@@ -48,6 +48,15 @@ function MainPage() {
   }, [])
 
   const createFolder = async (name) => {
+    name = name.trim()
+    if (!name) {
+      createNotification({
+        title: `Ошибка создания папки`, 
+        message: `Имя папки не может быть пустым`
+      })
+      return
+    }
+
     try {
       const newFolder = await fetchReq({
         url: 'http://localhost:5000/api/files/dir/create', 
@@ -74,6 +83,15 @@ function MainPage() {
   }
 
   const renameItem = async (id, name) => {
+    name = name.trim()
+    if (!name) {
+      createNotification({
+        title: `Ошибка переименования`, 
+        message: `Имя не может быть пустым`
+      })
+      return
+    }
+
     try {
       const updatedFile = await fetchReq({
         url: 'http://localhost:5000/api/files/rename', 
