@@ -181,6 +181,26 @@ function MainPage() {
     })
   }
 
+  const changeParent = async (idNewParent, files) => {
+    try {
+      const updatedDir = await fetchReq({
+        url: 'http://localhost:5000/api/files/move', 
+        method: 'POST', 
+        data: {idNewParent, files}
+      })
+
+      if (updatedDir.files) {
+        setDir(updatedDir.files)
+        createNotification({
+          title: `Перемещение объектов`, 
+          message: `Объекты успешно перемещены`
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const modalSelector = (type) => {
     switch (type) {
       case 'createFolder':
@@ -218,7 +238,7 @@ function MainPage() {
           <>
             <TopPanel path={path} changeDir={changeDir} />
             <TitlePage currentDir={path[path.length - 1]} />
-            <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} />
+            <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />
           </>
         )}
         

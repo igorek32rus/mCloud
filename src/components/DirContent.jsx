@@ -129,7 +129,6 @@ function DirContent(props) {
             // проверка над каким элементом перетаскиваются
             notSelected.forEach(item => {
                 const intersect = checkIntersectDragElem(item, e.pageX, e.pageY)
-
                 if (intersect) {
                     item.goal = true
                     return
@@ -170,11 +169,21 @@ function DirContent(props) {
                 item.transform = 'translate(' + 0 + 'px, ' + 0 + 'px)'
             })
 
+            const itemGoal = dirItemsPos.find(item => item.goal)
+            const idFiles = selectedItemsPos.reduce((prev, cur) => {
+                return [...prev, cur.id]
+            }, [])
+
+            if (itemGoal) {
+                props.changeParent(itemGoal.id, idFiles)
+            }
+
             // убрать цель
             notSelected.forEach(item => item.goal = false)
 
             setDirItemsPos([...notSelected, ...selectedItemsPos])
             setElemDrag({...elemDrag, dragstart: false})
+
             return
         }
     }
