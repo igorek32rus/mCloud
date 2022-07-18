@@ -193,6 +193,30 @@ class FileController {
             return res.status(500).json({error: 'Upload error'})
         }
     }
+
+    async changeParent(req, res) {
+        try {
+            const {idNewParent, files, curDir} = req.body
+
+            let sizeToParent = 0
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const dbFile = await File.findOne({ _id: file, user: req.user.id })
+                sizeToParent += dbFile.size
+                dbFile.parent = idNewParent
+                await dbFile.save()   
+            }
+
+            await recursiveUpdateSizeParent(req.user.id, idNewParent, sizeToParent)
+
+            const dirFiles = await File.find({user: req.user.id, parent: curDir })
+            return res.json({files: dirFiles})
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({error: 'Can`t delete files'})
+        }
+    }
 }
 
 module.exports = new FileController()

@@ -186,7 +186,7 @@ function MainPage() {
       const updatedDir = await fetchReq({
         url: 'http://localhost:5000/api/files/move', 
         method: 'POST', 
-        data: {idNewParent, files}
+        data: {idNewParent, files, curDir: path[path.length - 1]}
       })
 
       if (updatedDir.files) {
