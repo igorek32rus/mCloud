@@ -38,7 +38,11 @@ function UploadFiles(props) {
                     </tbody>
                 </table>
             </div>
-            <Button click={handleUploadFilesBtn} style={{margin: 0}}>Загрузить</Button>
+            
+            <div className="buttons">
+                <Button click={() => setModal(false)} style={{width: '100%'}} >Отмена</Button>
+                <Button click={handleUploadFilesBtn} className={"btn blue"} style={{width: '100%'}}>Загрузить</Button>
+            </div>
         </div>
     )
 }

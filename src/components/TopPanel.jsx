@@ -33,9 +33,10 @@ function TopPanel(props) {
     return (
         <div className="top-panel">
             <Path path={props.path} changeDir={props.changeDir} />
-
-            <Button click={createFolder}>Создать папку</Button>
-            <Button click={uploadFiles}>Загрузить</Button>
+            <div className="buttons">
+                <Button click={createFolder}>Создать папку</Button>
+                <Button click={uploadFiles}>Загрузить</Button>
+            </div>
             <input type="file" multiple style={{display: 'none'}} ref={inputFile} onChange={(e) => showFilesList(e)} />
         </div>
     )

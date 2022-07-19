@@ -42,7 +42,10 @@ function Rename(props) {
                 onChange={(e) => setNewName(e.target.value)} 
                 onKeyDown={(e) => e.key === 'Enter' ? handleRenameBtn() : false} 
             />
-            <Button click={handleRenameBtn} style={{margin: 0}}>Переименовать</Button>
+            <div className="buttons">
+                <Button click={() => setModal(false)} style={{width: '100%'}} >Отмена</Button>
+                <Button click={handleRenameBtn} className="btn blue" style={{width: '100%'}}>Переименовать</Button>
+            </div>
         </div>
     )
 }

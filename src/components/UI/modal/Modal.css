@@ -40,3 +40,8 @@
     /* margin-right: 10px; */
     width: 100%;
 }
+
+.modal_window .buttons {
+    display: flex;
+    justify-content: space-between;
+}
