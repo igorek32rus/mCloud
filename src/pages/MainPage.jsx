@@ -16,6 +16,8 @@ import Delete from '../components/modalwindows/Delete'
 
 import fetchReq from '../utils/fetchReq'
 import axios from 'axios'
+import useQuery from '../hooks/useQuery'
+import { useHistory } from 'react-router-dom'
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
@@ -32,6 +34,8 @@ function MainPage() {
 
   const dirRef = useRef(dir)
 
+  const queryParent = useQuery()
+  const history = useHistory()
 
   const changeDir = async (idDir) => {
     const updateDir = await fetchReq({
@@ -39,11 +43,21 @@ function MainPage() {
     })
     setDir(updateDir.files)
     setPath(updateDir.path)
+    if (idDir === userData.rootId) {
+      history.push(`/files`)
+      return
+    }
+    history.push(`/files?parent=${idDir}`)
   }
 
   useEffect(async () => {
     setLoading(true)
-    await changeDir(userData.rootId)
+    const parent = queryParent.get("parent")
+    if (!parent) {
+      await changeDir(userData.rootId)
+    } else {
+      await changeDir(parent)
+    }
     setLoading(false)
   }, [])
 

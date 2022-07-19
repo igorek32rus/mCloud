@@ -12,7 +12,7 @@ function AppRouter() {
             { privateRoutes.map((route) => {
             return (<Route path={route.path} component={route.component} exact={route.exact} key={route.component.name} />)
             }) }
-            <Redirect to="/" />
+            <Redirect to="/files" />
         </Switch>
         :
         <Switch>

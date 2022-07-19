@@ -4,7 +4,7 @@ import MainPage from "../pages/MainPage";
 import RegistrationPage from "../pages/RegistrationPage";
 
 export const privateRoutes = [
-    { path: '/', component: MainPage, exact: true }
+    { path: '/files', component: MainPage, exact: true }
 ]
 
 export const publicRoutes = [
