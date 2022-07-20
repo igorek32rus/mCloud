@@ -14,7 +14,7 @@ function App() {
   const [isAuth, setIsAuth] = useState(false)
   const [userData, setUserData] = useState(null)
   const [notifications, setNotifications] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [registration, setRegistration] = useState(false)   // если true - страница регистрации, иначе - логин
 
   const history = useHistory()
@@ -30,15 +30,14 @@ function App() {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-    setLoading(false)
 
     if (res.token) {
       setUserData(res.user)
       localStorage.setItem('token', res.token)
       setIsAuth(true)
-      return
     }
 
+    setLoading(false)
   }
 
   const createNotification = ({title = '', message = '', time = 3}) => {
