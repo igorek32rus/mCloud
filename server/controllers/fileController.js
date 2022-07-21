@@ -19,7 +19,7 @@ const getPath = async (parent, userId) => {
 }
 
 const recursiveDeleteFiles = async (files) => {
-    if (!files.length) return 0
+    if (!files.length) return {countDeleted: 0, sizeDeleted: 0}
 
     let count = 0
     let size = 0
@@ -27,12 +27,10 @@ const recursiveDeleteFiles = async (files) => {
     try {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            if (file.type === 'file') {
-                await FileService.deleteFile(file)
-            }
 
             if (file.type === 'folder') {
-                count += await recursiveDeleteFiles(await File.find({parent: file._id}))
+                const {countDeleted} = await recursiveDeleteFiles(await File.find({parent: file._id}))
+                count += countDeleted
             }
     
             const fileDB = await File.findOne({_id: file._id})
@@ -40,7 +38,7 @@ const recursiveDeleteFiles = async (files) => {
             size += fileDB.size
             count++
         }
-        return {count, size}
+        return {countDeleted: count, sizeDeleted: size}
     } catch (error) {
         console.log('Error delete files');
     }
@@ -149,10 +147,10 @@ class FileController {
         try {
             const {files} = req.body
             const parent = files[0].parent
-            const {count, size} = await recursiveDeleteFiles(files)
-            await recursiveUpdateSizeParent(req.user.id, parent, -size)
+            const {countDeleted, sizeDeleted} = await recursiveDeleteFiles(files)
+            await recursiveUpdateSizeParent(req.user.id, parent, -sizeDeleted)
             const dirFiles = await File.find({user: req.user.id, parent})
-            return res.json({count, files: dirFiles})
+            return res.json({count: countDeleted, files: dirFiles})
         } catch (error) {
             console.log(error);
             return res.status(500).json({error: 'Can`t delete files'})
