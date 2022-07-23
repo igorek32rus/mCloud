@@ -7,14 +7,15 @@ import fetchReq from './utils/fetchReq'
 import Header from './components/Header'
 import Notify from './components/Notify'
 import Footer from './components/Footer'
-import Loader from './components/UI/loader/Loader'
 import './styles/App.css'
+import Loader from './components/UI/loader/Loader'
 
 function App() {
   const [isAuth, setIsAuth] = useState(false)
   const [userData, setUserData] = useState(null)
   const [notifications, setNotifications] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [appLoading, setAppLoading] = useState(true)
   const [registration, setRegistration] = useState(false)   // если true - страница регистрации, иначе - логин
 
   const history = useHistory()
@@ -23,7 +24,7 @@ function App() {
   notificationsRef.current = notifications
 
   const auth = async () => {
-    setLoading(true)
+    setAppLoading(true)
     const res = await fetchReq({
       url: 'http://localhost:5000/api/auth/auth',
       headers: {
@@ -37,7 +38,7 @@ function App() {
       setIsAuth(true)
     }
 
-    setLoading(false)
+    setAppLoading(false)
   }
 
   const createNotification = ({title = '', message = '', time = 3}) => {
@@ -84,7 +85,7 @@ function App() {
         <LoaderContext.Provider value={{loading, setLoading}} >
           <BrowserRouter>
             <Header />
-            { loading ? <Loader /> : <AppRouter /> }
+            {appLoading ? <Loader /> : <AppRouter />}
             <Notify />
             <Footer />
           </BrowserRouter>

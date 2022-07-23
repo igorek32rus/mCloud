@@ -1,9 +1,13 @@
-import React from "react";
+import React from "react"
+import { useHistory } from "react-router-dom"
 
 import '../styles/Path.css'
 
 function Path({path, changeDir}) {
+    const history = useHistory()
+
     const handlerClick = (idDir) => {
+        history.push(`/files?parent=${idDir}`)
         changeDir(idDir)
     }
 

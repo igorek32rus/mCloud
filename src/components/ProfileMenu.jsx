@@ -1,8 +1,11 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../Context';
+import React, { useContext } from 'react'
+import { AuthContext } from '../Context'
+
+import { useHistory } from 'react-router-dom'
 
 function ProfileMenu(props) {
     const {setIsAuth, setUserData} = useContext(AuthContext)
+    const history = useHistory()
 
     const handleLogout = () => {
         setUserData({})
@@ -10,13 +13,17 @@ function ProfileMenu(props) {
         setIsAuth(false)
     }
 
+    const handleChangeCat = (cat) => {
+        history.push(`/files${cat !== 'main' ? `?category=${cat}` : ''}`)
+    }
+
     return (
         <div className="dropMenu profileMenu slideDown">
             <ul className="menu profile">
-                <li><a href="/">Главная</a></li>
-                <li><a href="/">Последние</a></li>
-                <li><a href="/">Общие</a></li>
-                <li><a href="/">Корзина</a></li>
+                <li onClick={() => handleChangeCat('main')}>Главная</li>
+                <li onClick={() => handleChangeCat('latest')}>Последние</li>
+                <li onClick={() => handleChangeCat('shared')}>Общие</li>
+                <li onClick={() => handleChangeCat('trash')}>Корзина</li>
                 <li>Настройки</li>
                 <li onClick={handleLogout}>Выйти</li>
             </ul>
