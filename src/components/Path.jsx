@@ -6,9 +6,9 @@ import '../styles/Path.css'
 function Path({path, changeDir}) {
     const history = useHistory()
 
-    const handlerClick = (idDir) => {
-        history.push(`/files?parent=${idDir}`)
-        changeDir(idDir)
+    const handlerClick = (dir) => {
+        history.push(`/files${dir.parent ? `?parent=${dir._id}` : ''}`)
+        // changeDir(idDir)
     }
 
     // написать функцию получения пути по текущей дирректории
@@ -17,7 +17,7 @@ function Path({path, changeDir}) {
         <nav className="path">
             <ul>
                 { path.map(item => (
-                    <li key={item._id} onClick={() => handlerClick(item._id)}>
+                    <li key={item._id} onClick={() => handlerClick(item)}>
                         { item.parent ? (
                             <>
                                 <div className="delimiter">&#10140;</div>
