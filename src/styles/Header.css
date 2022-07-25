@@ -17,7 +17,8 @@ header {
 }
   
 .logo-img {
-    background: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698868-icon-132-cloud-48.png');
+    background: url('../images/cloud.svg') no-repeat;
+    background-size: contain;
     height: 48px;
     width: 48px;
     margin-right: 5px;
