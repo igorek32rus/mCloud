@@ -19,7 +19,7 @@ function AppRouter() {
             { publicRoutes.map((route) => {
             return (<Route path={route.path} component={route.component} exact={route.exact} key={route.component.name} />)
             }) }
-            <Redirect to="/login" />
+            <Redirect to="/auth" />
         </Switch>
     )
 }

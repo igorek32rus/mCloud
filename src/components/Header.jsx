@@ -13,8 +13,8 @@ function Header(props) {
     return (
         <header>
             <Logo />
-            { isAuth ? <Search /> : '' }
-            <MainMenu />
+            { isAuth && <Search /> }
+            { isAuth && <MainMenu /> }
         </header>
     )
 }

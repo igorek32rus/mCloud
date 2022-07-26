@@ -28,7 +28,7 @@ body {
     min-height: 100vh;
 }
 
-.pageBodyAuth {
+.page-auth {
     display: flex;
     align-items: center;
     justify-content: center;

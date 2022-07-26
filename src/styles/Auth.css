@@ -1,15 +1,20 @@
-.reg-block {
+.rotate-window {
+    transform: perspective(1000px) rotateY(0deg);
+    transition: transform .5s linear;
+}
+
+.auth-window {
     width: 400px;
+    min-height: 355px;
     background-color: rgba(255, 255, 255, .1);
     margin: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 20px;
 }
   
-.reg-block .reg-logo {
+.auth-window .logo {
     background: url('../images/cloud.svg') no-repeat;
     background-size: contain;
     width: 128px;
@@ -17,11 +22,21 @@
     margin: -20px auto;
 }
   
-.reg-block .reg-title {
+.auth-window .title {
     font-size: 25px;
     margin: 0 auto;
 }
 
 input[type=text]::placeholder, input[type=password]::placeholder {
     color: #ddd;
+}
+
+.auth-window .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.auth-window .buttons button {
+    min-width: 100px;
 }

@@ -1,13 +1,10 @@
-// import AuthPage from "../pages/AuthPage";
-import LoginPage from "../pages/LoginPage";
-import MainPage from "../pages/MainPage";
-import RegistrationPage from "../pages/RegistrationPage";
+import AuthPage from "../pages/AuthPage"
+import MainPage from "../pages/MainPage"
 
 export const privateRoutes = [
     { path: '/files', component: MainPage, exact: true }
 ]
 
 export const publicRoutes = [
-    { path: '/login', component: LoginPage, exact: true },
-    { path: '/registration', component: RegistrationPage, exact: true }
+    { path: '/auth', component: AuthPage, exact: true }
 ]
