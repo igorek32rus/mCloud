@@ -1,9 +1,11 @@
-import React from "react"
-
 export * from './contexts/ModalContext/ModalContext'
 export * from './contexts/ModalContext/ModalContextProvider'
 
-export const AuthContext = React.createContext(false);
-export const RegistrationContext = React.createContext('reg');
-export const NotifyContext = React.createContext([]);
-export const LoaderContext = React.createContext(false);
+export * from './contexts/AuthContext/AuthContext'
+export * from './contexts/AuthContext/AuthContextProvider'
+
+export * from './contexts/NotifyContext/NotifyContext'
+export * from './contexts/NotifyContext/NotifyContextProvider'
+
+export * from './contexts/LoaderContext/LoaderContext'
+export * from './contexts/LoaderContext/LoaderContextProvider'

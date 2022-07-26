@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { NotifyContext } from "../Context";
+import React, { useContext } from "react"
+import { NotifyContext } from "../Context"
 import '../styles/Notify.css'
 import NotificationItem from "./NotificationItem"
 
@@ -8,7 +8,7 @@ function Notify() {
 
     return (
         <div id="notifications">
-            { notifications.map(item => <NotificationItem item={item} key={item.key} />) }
+            { notifications?.map(item => <NotificationItem item={item} key={item.key} />) }
         </div>
         
     )
