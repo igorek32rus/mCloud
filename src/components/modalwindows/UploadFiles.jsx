@@ -1,15 +1,57 @@
-import React, {useContext, useState} from "react";
-import Button from "../UI/button/Button";
-import { ModalContext } from "../../Context";
-import { getFileSize } from "../../utils/getFileSize";
+import React, {useContext, useState} from "react"
+import Button from "../UI/button/Button"
+import { ModalContext, NotifyContext } from "../../Context"
+import { getFileSize } from "../../utils/getFileSize"
 
-function UploadFiles(props) {
-    const [uploadFiles, setUploadFiles] = useState(props.files)
-    const {setModal} = useContext(ModalContext)
+import axios from 'axios'
 
-    const handleUploadFilesBtn = () => {
-        props.uploadFiles(uploadFiles)
-        setModal(false)
+function UploadFiles({files, currentDir, changeDir}) {
+    const [uploadFiles, setUploadFiles] = useState(files)
+    const {closeModal} = useContext(ModalContext)
+    const {createNotification, removeNotification} = useContext(NotifyContext)
+
+    const handleUploadFilesBtn = async () => {
+        closeModal()
+
+        const idNotification = createNotification({
+            title: `Загрузка файлов`, 
+            message: `Подождите, выполняется загрузка файлов`,
+            time: 0
+        })
+    
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            try {
+                const formData = new FormData()
+                formData.append('file', file)
+                formData.append('parent', currentDir._id)
+                formData.append('fileName', file.name)
+                const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
+                    headers: {
+                        Authorization: `Baerer ${localStorage.getItem('token')}`
+                    },
+                    onUploadProgress: progressEvent => {
+                    // console.log(progressEvent.loaded);
+                    }
+                })
+            } catch (error) {
+                createNotification({
+                    title: `Ошибка загрузки файла`, 
+                    message: `Файл: ${file.name}. ${error.response.data.message}`
+                })
+                return
+            }
+        }
+    
+        removeNotification(idNotification)
+    
+        changeDir(currentDir._id)
+        createNotification({
+            title: `Загрузка файлов`, 
+            message: `Файлы успешно загружены`
+        })
+            
     }
 
     const handleRemoveFile = (num) => {
@@ -17,14 +59,11 @@ function UploadFiles(props) {
         copyUploadFiles.splice(num, 1)
         setUploadFiles(copyUploadFiles)
 
-        if (copyUploadFiles.length === 0) {
-            setModal(false)
-        }
+        if (!copyUploadFiles.length) closeModal()
     }
 
     return (
-        <div className="modal_content" style={{display: 'flex', flexDirection: 'column'}}>
-            <h1>Список файлов для загрузки</h1>
+        <>
             <div className="list_upload">
                 <table>
                     <tbody>
@@ -34,16 +73,15 @@ function UploadFiles(props) {
                             <th></th>
                         </tr>
                         {uploadFiles.map((file, i) => <tr key={i}><td>{file.name}</td><td>{getFileSize(file.size)}</td><td onClick={() => handleRemoveFile(i)} className="removeUpload">&times;</td></tr> )}
-                        {/* {Array.from(props.files).map((file) => <tr key={new Date() - file.size}><td>{file.name}</td><td>{file.size}</td><td className="removeUpload">&times;</td></tr>)} */}
                     </tbody>
                 </table>
             </div>
             
             <div className="buttons">
-                <Button click={() => setModal(false)} style={{width: '100%'}} >Отмена</Button>
+                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleUploadFilesBtn} className={"btn blue"} style={{width: '100%'}}>Загрузить</Button>
             </div>
-        </div>
+        </>
     )
 }
 

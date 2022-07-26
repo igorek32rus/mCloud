@@ -296,6 +296,7 @@ function DirContent(props) {
                 openContextMenu={openContextMenu}
                 contextType={contextMenuParams.type}
                 currentDir={props.currentDir}
+                changeDir={props.changeDir}
             /> }
             
         </div>

@@ -18,8 +18,6 @@ function App() {
   const [appLoading, setAppLoading] = useState(true)
   const [registration, setRegistration] = useState(false)   // если true - страница регистрации, иначе - логин
 
-  const history = useHistory()
-
   const notificationsRef = useRef()
   notificationsRef.current = notifications
 

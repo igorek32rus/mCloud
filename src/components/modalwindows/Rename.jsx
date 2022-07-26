@@ -1,12 +1,13 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import { ModalContext, NotifyContext } from "../../Context";
-import Button from "../UI/button/Button";
+import React, { useContext, useState, useRef, useEffect } from "react"
+import { ModalContext, NotifyContext } from "../../Context"
+import Button from "../UI/button/Button"
+import fetchReq from "../../utils/fetchReq"
 
-function Rename(props) {
-    const [newName, setNewName] = useState(props.items[0].name)
+function Rename({items, changeDir}) {
+    const [newName, setNewName] = useState(items[0].name)
     const inputRef = useRef()
 
-    const {setModal} = useContext(ModalContext)
+    const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
 
     useEffect(() => {
@@ -15,26 +16,52 @@ function Rename(props) {
         input.selectionStart = 0
         input.selectionEnd = input.value.length
 
-        if (props.items[0].type === 'file') 
+        if (items[0].type === 'file') 
             input.selectionEnd = input.value.lastIndexOf('.')
     }, [])
 
-    const handleRenameBtn = () => {
-        if (newName.length > 127) {
+    const handleRenameBtn = async () => {
+        setNewName(newName.trim())
+        closeModal()
+
+        if (!newName) {
             createNotification({
-                title: `Переименование ${ props.items[0].type === 'folder' ? 'папки' : 'файла'}`, 
-                message: `Обшибка! Слишком длинное имя ${ props.items[0].type === 'folder' ? 'папки' : 'файла'}`
+              title: `Ошибка переименования`, 
+              message: `Имя не может быть пустым`
             })
             return
         }
 
-        props.renameItem(props.items[0]._id, newName)
-        setModal(false)
+        if (newName.length > 127) {
+            createNotification({
+                title: `Переименование ${ items[0].type === 'folder' ? 'папки' : 'файла'}`, 
+                message: `Обшибка! Слишком длинное имя ${ items[0].type === 'folder' ? 'папки' : 'файла'}`
+            })
+            return
+        }
+
+        try {
+            const updatedFile = await fetchReq({
+                url: 'http://localhost:5000/api/files/rename', 
+                method: 'POST', 
+                data: {name: newName, id: items[0]._id}
+            })
+            
+            if (updatedFile.file) {
+                changeDir(items[0].parent)
+                createNotification({
+                    title: `Переименование ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'}`, 
+                    message: `Новое имя ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'} - ${updatedFile.file.name}`
+                })
+            }
+              
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
-        <div className="modal_content" style={{display: 'flex', flexDirection: 'column'}}>
-            <h1>Переименовать</h1>
+        <>
             <input type="text" 
                 ref={inputRef} 
                 placeholder="Новое имя" 
@@ -43,10 +70,10 @@ function Rename(props) {
                 onKeyDown={(e) => e.key === 'Enter' ? handleRenameBtn() : false} 
             />
             <div className="buttons">
-                <Button click={() => setModal(false)} style={{width: '100%'}} >Отмена</Button>
+                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleRenameBtn} className="btn blue" style={{width: '100%'}}>Переименовать</Button>
             </div>
-        </div>
+        </>
     )
 }
 

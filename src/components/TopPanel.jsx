@@ -5,15 +5,21 @@ import Button from "./UI/button/Button";
 
 import Path from "./Path"
 
-import { ModalContext } from '../Context'
+import CreateFolder from './modalwindows/CreateFolder'
+import UploadFiles from './modalwindows/UploadFiles'
 
-function TopPanel(props) {
+// import { ModalContext } from '../Context'
+import { ModalContext } from "../contexts/ModalContext/ModalContext";
+
+function TopPanel({path, changeDir}) {
     const inputFile = React.createRef()
-    const modal = useContext(ModalContext)
+    const {openModal} = useContext(ModalContext)
 
     const createFolder = () => {
-        modal.setTypeModal('createFolder')
-        modal.setModal(true)
+        openModal({
+            title: 'Создание папки',
+            children: <CreateFolder currentDir={path[path.length - 1]} changeDir={changeDir} />
+        })
     }
 
     const uploadFiles = () => {
@@ -21,18 +27,19 @@ function TopPanel(props) {
     }
 
     const showFilesList = (e) => {
-        const list = Array.from(e.target.files)
+        const listFiles = Array.from(e.target.files)
         e.target.value = null;
-        if (!list.length) return
+        if (!listFiles.length) return
         
-        modal.setTypeModal('uploadFiles')
-        modal.setDataModal(list)
-        modal.setModal(true)
+        openModal({
+            title: 'Загрузка файлов',
+            children: <UploadFiles files={listFiles} currentDir={path[path.length - 1]} changeDir={changeDir} />
+        })
     }
 
     return (
         <div className="top-panel">
-            <Path path={props.path} changeDir={props.changeDir} />
+            <Path path={path} changeDir={changeDir} />
             <div className="buttons">
                 <Button click={createFolder}>Создать папку</Button>
                 <Button click={uploadFiles}>Загрузить</Button>

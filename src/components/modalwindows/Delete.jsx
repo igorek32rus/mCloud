@@ -1,26 +1,41 @@
-import React, { useContext } from "react";
-import { ModalContext } from "../../Context";
-import Button from "../UI/button/Button";
+import React, { useContext } from "react"
+import { ModalContext, NotifyContext } from "../../Context"
+import Button from "../UI/button/Button"
+import fetchReq from "../../utils/fetchReq"
 
-function Delete(props) {
-    const {setModal} = useContext(ModalContext)
+function Delete({items, changeDir, currentDir}) {
+    const {closeModal} = useContext(ModalContext)
+    const {createNotification} = useContext(NotifyContext)
 
-    const handleDeleteBtn = () => {
-        // const itemsId = props.items.reduce((prev, cur) => {return [...prev, cur.id]}, [])
-        // props.deleteItems(itemsId)
-        props.deleteItems(props.items)
-        setModal(false)
+    const handleDeleteBtn = async () => {
+        closeModal()
+        try {
+            const updatedDir = await fetchReq({
+                url: 'http://localhost:5000/api/files/delete', 
+                method: 'POST', 
+                data: {files: items}
+            })
+      
+            if (updatedDir.files) {
+                changeDir(currentDir._id)
+                createNotification({
+                    title: `Удаление объектов`, 
+                    message: `Объекты успешно удалены (${updatedDir.count})`
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
-        <div className="modal_content" style={{display: 'flex', flexDirection: 'column'}}>
-            <h1>Удалить</h1>
+        <>
             <p style={{margin: '10px 0'}}>Вы действительно хотите удалить выбранные файлы?</p>
             <div className="buttons">
-                <Button click={() => setModal(false)} style={{width: '100%'}} >Отмена</Button>
+                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleDeleteBtn} className={"btn red"} style={{width: '100%'}} >Удалить</Button>
             </div>
-        </div>
+        </>
     )
 }
 

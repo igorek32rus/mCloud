@@ -1,55 +1,66 @@
-import React, { useContext } from "react";
+import React, { useContext } from "react"
 
 import '../styles/ContextMenu.css'
 
 import { ModalContext } from '../Context'
+import CreateFolder from "./modalwindows/CreateFolder"
+import Rename from "./modalwindows/Rename"
+import Share from './modalwindows/Share'
+import Delete from "./modalwindows/Delete"
 
-function ContextMenu(props) {
-    const modal = useContext(ModalContext)
+function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType, style }) {
+    const {openModal} = useContext(ModalContext)
 
     const createFolder = () => {
-        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
-        modal.setTypeModal('createFolder')
-        modal.setModal(true)
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Создание папки',
+            children: <CreateFolder currentDir={currentDir} changeDir={changeDir} />
+        })
     }
 
     const handlerRename = () => {
-        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
-        modal.setTypeModal('rename')
-        modal.setDataModal(props.items)
-        modal.setModal(true)
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Переименовать',
+            children: <Rename items={items} changeDir={changeDir} />
+        })
     }
 
     const handlerShare = () => {
-        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
-        modal.setTypeModal('share')
-        modal.setDataModal(props.items)
-        modal.setModal(true)
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Поделиться',
+            children: <Share items={items} />
+        })
     }
 
     const handlerShareCurrentDir = () => {
-        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
-        modal.setTypeModal('share_current')
-        modal.setModal(true)
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Поделиться',
+            children: <Share items={[...currentDir]} />
+        })
     }
 
     const handlerDelete = () => {
-        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
-        modal.setTypeModal('delete')
-        modal.setDataModal(props.items)
-        modal.setModal(true)
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Удалить',
+            children: <Delete items={items} changeDir={changeDir} currentDir={currentDir} />
+        })
     }
 
     return (
-        <div className="dropMenu contextMenu slideRight" style={props.style} onMouseDown={(e) => e.stopPropagation()}>
-            { props.contextType === 'workspace' ? 
+        <div className="dropMenu contextMenu slideRight" style={style} onMouseDown={(e) => e.stopPropagation()}>
+            { contextType === 'workspace' ? 
                 ( <ul className="menu context">
                     <li onClick={createFolder}><div className="icon edit"></div>Создать папку</li>
-                    <li className={!props.currentDir.parent ? 'disabled' : ''} onClick={props.currentDir.parent ? handlerShareCurrentDir : undefined}><div className="icon share"></div>Поделиться</li>
+                    <li className={!currentDir.parent ? 'disabled' : ''} onClick={currentDir.parent ? handlerShareCurrentDir : undefined}><div className="icon share"></div>Поделиться</li>
                     <li><div className="icon copy"></div>Вставить</li>
                 </ul> ) 
                 : ( <ul className="menu context">
-                    <li className={props.items.length > 1 ? 'disabled' : ''} onClick={props.items.length === 1 ? handlerRename : undefined}><div className="icon edit"></div>Переименовать</li>
+                    <li className={items.length > 1 ? 'disabled' : ''} onClick={items.length === 1 ? handlerRename : undefined}><div className="icon edit"></div>Переименовать</li>
                     <li><div className="icon download"></div>Скачать</li>
                     <li onClick={handlerShare}><div className="icon share"></div>Поделиться</li>
                     <li><div className="icon copy"></div>Копировать</li>

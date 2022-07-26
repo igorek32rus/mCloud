@@ -1,10 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { ModalContext, NotifyContext } from "../../Context";
+import { NotifyContext } from "../../Context";
 import Button from "../UI/button/Button";
 
-function CreateFolder(props) {
+import { ModalContext } from "../../Context";
+import fetchReq from "../../utils/fetchReq";
+
+function CreateFolder({currentDir, changeDir}) {
     const [nameFolder, setNameFolder] = useState('')
-    const {setModal} = useContext(ModalContext)
+    const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
 
     const inputRef = useRef()
@@ -13,7 +16,18 @@ function CreateFolder(props) {
         inputRef.current.focus()
     }, [])
 
-    const submit = () => {
+    const handleCreateFolder = async () => {
+        setNameFolder(nameFolder.trim())
+        closeModal()
+
+        if (!nameFolder) {
+            createNotification({
+              title: `Ошибка создания папки`, 
+              message: `Имя папки не может быть пустым`
+            })
+            return
+        }
+
         if (nameFolder.length > 127) {
             createNotification({
                 title: `Создание папки`, 
@@ -22,19 +36,37 @@ function CreateFolder(props) {
             return
         }
 
-        props.createFolder(nameFolder)
-        setModal(false)
+        try {
+            const newFolder = await fetchReq({
+                url: 'http://localhost:5000/api/files/dir/create', 
+                method: 'POST', 
+                data: {name: nameFolder, parent: currentDir._id}
+            })
+        
+            if (newFolder.file) {
+                changeDir(currentDir._id)
+                createNotification({title: 'Создание папки', message: `Папка (${nameFolder}) успешно создана`})
+                return
+            }
+        
+            createNotification({
+                title: `Ошибка создания папки`, 
+                message: `${newFolder.message}`
+            })
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
 
     return (
-        <div className="modal_content" style={{display: 'flex', flexDirection: 'column'}}>
-            <h1>Имя новой папки</h1>
-            <input type="text" ref={inputRef} placeholder="Новая папка" value={nameFolder} onChange={(e) => setNameFolder(e.target.value)} onKeyDown={(e) => e.key === 'Enter' ? submit() : false} />
+        <>
+            <input type="text" ref={inputRef} placeholder="Новая папка" value={nameFolder} onChange={(e) => setNameFolder(e.target.value)} onKeyDown={(e) => e.key === 'Enter' ? handleCreateFolder() : false} />
             <div className="buttons">
-                <Button click={() => setModal(false)} style={{width: '100%'}} >Отмена</Button>
-                <Button click={submit} className={"btn blue"} style={{width: '100%'}} >Создать папку</Button>
+                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
+                <Button click={handleCreateFolder} className={"btn blue"} style={{width: '100%'}} >Создать папку</Button>
             </div>
-        </div>
+        </> 
     )
 }
 

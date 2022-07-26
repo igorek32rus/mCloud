@@ -4,13 +4,18 @@ import './Modal.css'
 
 import { ModalContext } from '../../../Context'
 
-function Modal(props) {
-    const modal = useContext(ModalContext)
+function Modal({title, children}) {
+    const {closeModal} = useContext(ModalContext)
 
     return (
-        <div className="modal" onClick={() => modal.setModal(false)}>
-            <div className="modal_window" onClick={(e) => e.stopPropagation() }>
-                {props.children}
+        <div className="modal-backdrop" onClick={closeModal}>
+            <div className="modal" onClick={(e) => e.stopPropagation() }>
+                <div className="modal-header">
+                    <h1>{title}</h1>
+                </div>
+                <div className="modal-body">
+                    {children}
+                </div>
             </div>
         </div>
     )

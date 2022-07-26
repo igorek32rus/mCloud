@@ -1,4 +1,4 @@
-.modal {
+.modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,9 @@
     z-index: 999;
 }
 
-.modal_window {
+.modal {
+    display: flex;
+    flex-direction: column;
     padding: 10px;
     min-width: 430px;
     background: rgba(30, 36, 68, .85);
@@ -30,18 +32,18 @@
     opacity: 1;
 }
 
-.modal_window .list_upload {
+.modal .list_upload {
     max-height: 400px;
     overflow: auto;
     margin: 10px 0;
 }
 
-.modal_window .list_upload table {
+.modal .list_upload table {
     /* margin-right: 10px; */
     width: 100%;
 }
 
-.modal_window .buttons {
+.modal .buttons {
     display: flex;
     justify-content: space-between;
 }
