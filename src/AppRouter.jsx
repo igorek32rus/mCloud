@@ -8,19 +8,29 @@ function AppRouter() {
 
     return (
         isAuth ? 
-        <Switch>
-            { privateRoutes.map((route) => {
-            return (<Route path={route.path} component={route.component} exact={route.exact} key={route.component.name} />)
-            }) }
-            <Redirect to="/files" />
-        </Switch>
+            <Switch>
+                { privateRoutes.map((route) => {
+                    return (<Route 
+                        path={route.path} 
+                        component={route.component} 
+                        exact={route.exact} 
+                        key={route.component.name} />
+                    )
+                }) }
+                <Redirect to="/files" />
+            </Switch>
         :
-        <Switch>
-            { publicRoutes.map((route) => {
-            return (<Route path={route.path} component={route.component} exact={route.exact} key={route.component.name} />)
-            }) }
-            <Redirect to="/auth" />
-        </Switch>
+            <Switch>
+                { publicRoutes.map((route) => {
+                    return (<Route 
+                        path={route.path} 
+                        component={route.component} 
+                        exact={route.exact} 
+                        key={route.component.name} />
+                    )
+                }) }
+                <Redirect to="/auth" />
+            </Switch>
     )
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 
 import Header from '../components/Header'
 import Notify from '../components/Notify'
@@ -17,7 +17,7 @@ import useQuery from '../hooks/useQuery'
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
-  const {createNotification, removeNotification} = useContext(NotifyContext)
+  const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
 
   const [dir, setDir] = useState([])
@@ -26,9 +26,10 @@ function MainPage() {
   const queryParams = useQuery()
 
   let category = queryParams.get("category") ? queryParams.get("category") : 'main'
+  const categoryRef = useRef(category)
 
   const changeDir = async (idDir) => {
-    let cat = category !== 'main' ? '/' + category : ''
+    let cat = categoryRef.current !== 'main' ? '/' + categoryRef.current : ''
     const updateDir = await fetchReq({
       url: `http://localhost:5000/api/files${cat}?parent=${idDir}`
     })
@@ -39,17 +40,20 @@ function MainPage() {
     }
   }
 
-  useEffect(async () => {
-    setLoading(true)
-    const parent = queryParams.get("parent")
-    category = queryParams.get("category") ? queryParams.get("category") : 'main'
+  useEffect(() => {
+    async function getQueryParams() {
+      setLoading(true)
+      const parent = queryParams.get("parent")
+      categoryRef.current = queryParams.get("category") ? queryParams.get("category") : 'main'
 
-    if (!parent) {
-      await changeDir(userData.rootId)
-    } else {
-      await changeDir(parent)
+      if (!parent) {
+        await changeDir(userData.rootId)
+      } else {
+        await changeDir(parent)
+      }
+      setLoading(false)
     }
-    setLoading(false)
+    getQueryParams()
   }, [queryParams])
 
   const changeParent = async (idNewParent, files) => {
@@ -78,7 +82,7 @@ function MainPage() {
       <Header />
       <div className="pageBodyMain">
         <ModalProvider>
-          {category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
+          {categoryRef.current === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
           <TitlePage currentDir={path[path.length - 1]} />
           <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />
         </ModalProvider>
