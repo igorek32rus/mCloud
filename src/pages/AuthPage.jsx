@@ -3,6 +3,7 @@ import React, {useState, useContext, useEffect} from "react"
 import { AuthContext, LoaderContext } from "../Context"
 import Login from "../components/Auth/Login"
 import Registration from "../components/Auth/Registration"
+import Notify from "../components/Notify"
 import '../styles/Auth.css'
 import Loader from "../components/UI/loader/Loader"
 import fetchReq from "../utils/fetchReq"
@@ -46,13 +47,16 @@ const AuthPage = () => {
 
     return (
         <>
-            { loading ? <Loader /> : 
-                <div className="page-auth">
-                    <div className="rotate-window" style={{transform: `perspective(1000px) rotateY(${degRotate}deg)`}}>
-                        {isLoginWindow ? <Login setLoginWindow={setLoginWindow} /> : <Registration setLoginWindow={setLoginWindow} /> }
+            { loading ? <Loader /> : (
+                <>
+                    <div className="page-auth">
+                        <div className="rotate-window" style={{transform: `perspective(1000px) rotateY(${degRotate}deg)`}}>
+                            {isLoginWindow ? <Login setLoginWindow={setLoginWindow} /> : <Registration setLoginWindow={setLoginWindow} /> }
+                        </div>
                     </div>
-                </div>
-            }
+                    <Notify />
+                </>
+            )}
         </>
     )
 }

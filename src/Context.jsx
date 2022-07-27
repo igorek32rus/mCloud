@@ -1,3 +1,20 @@
+import React from 'react'
+import { AuthProvider } from './Context'
+import { NotifyProvider } from './Context'
+import { LoaderProvider } from './Context'
+
+export const GeneralProvider = ({children}) => {
+    return (
+        <AuthProvider>
+            <NotifyProvider>
+                <LoaderProvider>
+                    { children }
+                </LoaderProvider>
+            </NotifyProvider>
+        </AuthProvider>
+    )
+}
+
 export * from './contexts/ModalContext/ModalContext'
 export * from './contexts/ModalContext/ModalContextProvider'
 

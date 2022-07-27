@@ -1,5 +1,8 @@
 import React, { useState, useContext, useEffect, useMemo, useRef } from 'react'
 
+import Header from '../components/Header'
+import Notify from '../components/Notify'
+import Footer from '../components/Footer'
 import TopPanel from '../components/TopPanel'
 import TitlePage from '../components/TitlePage'
 import DirContent from '../components/DirContent'
@@ -71,14 +74,18 @@ function MainPage() {
 
   return (
     loading ? <Loader /> : 
-
-    <div className="pageBodyMain">
-      <ModalProvider>
-        {category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
-        <TitlePage currentDir={path[path.length - 1]} />
-        <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />
-      </ModalProvider>
-    </div>
+    <>
+      <Header />
+      <div className="pageBodyMain">
+        <ModalProvider>
+          {category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
+          <TitlePage currentDir={path[path.length - 1]} />
+          <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />
+        </ModalProvider>
+      </div>
+      <Notify />
+      <Footer />
+    </>
   );
 }
 
