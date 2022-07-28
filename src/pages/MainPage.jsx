@@ -77,14 +77,13 @@ function MainPage() {
   }
 
   return (
-    loading ? <Loader /> : 
     <>
       <Header />
       <div className="pageBodyMain">
         <ModalProvider>
           {categoryRef.current === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
           <TitlePage currentDir={path[path.length - 1]} />
-          <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />
+          {loading ? <Loader /> : <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />}
         </ModalProvider>
       </div>
       <Notify />
