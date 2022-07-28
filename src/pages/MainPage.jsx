@@ -29,13 +29,18 @@ function MainPage() {
   const categoryRef = useRef(category)
 
   const changeDir = async (idDir) => {
-    let cat = categoryRef.current !== 'main' ? '/' + categoryRef.current : ''
+    let cat = categoryRef.current !== 'main' ? '&category=' + categoryRef.current : ''
     const updateDir = await fetchReq({
-      url: `http://localhost:5000/api/files${cat}?parent=${idDir}`
+      url: `http://localhost:5000/api/files?parent=${idDir}${cat}`
     })
 
-    if (updateDir.files && updateDir.path) {
+    console.log(updateDir);
+
+    if (updateDir.files) {
       setDir(updateDir.files)
+    }
+
+    if (updateDir.path) {
       setPath(updateDir.path)
     }
   }
@@ -82,8 +87,16 @@ function MainPage() {
       <div className="pageBodyMain">
         <ModalProvider>
           {categoryRef.current === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
-          <TitlePage currentDir={path[path.length - 1]} />
-          {loading ? <Loader /> : <DirContent dir={dir} currentDir={path[path.length - 1]} changeDir={changeDir} changeParent={changeParent} />}
+          <TitlePage currentDir={path[path.length - 1]} category={category} />
+          {loading 
+            ? <Loader /> 
+            : <DirContent 
+                dir={dir} 
+                currentDir={path[path.length - 1]} 
+                changeDir={changeDir} 
+                changeParent={changeParent}
+                category={category} />
+          }
         </ModalProvider>
       </div>
       <Notify />

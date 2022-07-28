@@ -32,6 +32,11 @@ ul.menu.context li div.icon.edit {
     background-size: contain;
 }
   
+ul.menu.context li div.icon.restore {
+    background: url('../images/restore.svg') no-repeat;
+    background-size: contain;
+}
+  
 ul.menu.context li div.icon.download {
     background: url('../images/download.svg') no-repeat;
     background-size: contain;

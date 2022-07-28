@@ -19,6 +19,26 @@ const getPath = async (parent, userId) => {
 }
 
 const recursiveDeleteFiles = async (files) => {
+    if (!files.length) return
+
+
+    try {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (file.type === 'folder') {
+                await recursiveDeleteFiles(await File.find({parent: file._id}))
+            }
+    
+            await File.deleteOne({_id: file._id})
+        }
+        return 
+    } catch (error) {
+        console.log('Error delete files');
+    }
+}
+
+const recursiveMarkDeleteFiles = async (files) => {
     if (!files.length) return {countDeleted: 0, sizeDeleted: 0}
 
     let count = 0
@@ -34,7 +54,8 @@ const recursiveDeleteFiles = async (files) => {
             }
     
             const fileDB = await File.findOne({_id: file._id})
-            await File.deleteOne({_id: file._id})
+            fileDB.deleted = new Date()
+            await fileDB.save()
             size += fileDB.size
             count++
         }
@@ -116,8 +137,31 @@ class FileController {
 
     async getFiles(req, res) {
         try {
-            const files = await File.find({user: req.user.id, parent: req.query.parent})
-            const path = await getPath(req.query.parent, req.user.id)
+            const {category, parent} = req.query
+
+            if (!parent) {
+                return res.status(500).json({error: 'Can`t get files'})
+            }
+
+            let files = []
+
+            if (category === 'latest') {
+                files = await File.find({user: req.user.id, parent: {$ne: null}, type: {$ne: 'folder'}, deleted: null }).sort({date: -1}).limit(50)
+                return res.json({files})
+            }
+
+            if (category === 'shared') {
+                files = await File.find({user: req.user.id, accessLink: {$ne: null}, parent: {$ne: null}, deleted: null })
+                return res.json({files})
+            }
+
+            if (category === 'trash') {
+                files = await File.find({user: req.user.id, deleted: {$ne: null}, parent: {$ne: null} })
+                return res.json({files})
+            }
+
+            files = await File.find({user: req.user.id, parent, deleted: null})
+            const path = await getPath(parent, req.user.id)
             // const path = []
             return res.json({path, files})
         } catch (error) {
@@ -147,9 +191,9 @@ class FileController {
         try {
             const {files} = req.body
             const parent = files[0].parent
-            const {countDeleted, sizeDeleted} = await recursiveDeleteFiles(files)
+            const {countDeleted, sizeDeleted} = await recursiveMarkDeleteFiles(files)
             await recursiveUpdateSizeParent(req.user.id, parent, -sizeDeleted)
-            const dirFiles = await File.find({user: req.user.id, parent})
+            const dirFiles = await File.find({user: req.user.id, parent, deleted: null})
             return res.json({count: countDeleted, files: dirFiles})
         } catch (error) {
             console.log(error);

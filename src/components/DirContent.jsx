@@ -7,6 +7,20 @@ import '../styles/DirContent.css'
 
 import {checkIntersectSelection, checkIntersectDragElem} from '../utils/intersects'
 
+const nullMessage = (cat) => {
+    if (cat === 'main')
+        return 'Папка пуста. Загрузите файлы или создайте новую папку'
+
+    if (cat === 'latest')
+        return 'Вы пока ничего не загрузили'
+    
+    if (cat === 'shared')
+        return 'Вы пока не открыли общий доступ к файлам'
+
+    if (cat === 'trash')
+        return 'В корзине нет удалённых файлов'
+}
+
 function DirContent(props) {
     const [contextMenu, setContextMenu] = useState(false)
     const [contextMenuParams, setContextMenuParams] = useState({items: [], left: 0, top: 0, type: 'workspace'})
@@ -252,7 +266,7 @@ function DirContent(props) {
                 : '' }
 
             { props.dir.length === 0 ? 
-                <div className="message">Папка пуста. Загрузите файлы или создайте новую папку</div>
+                <div className="message">{nullMessage(props.category)}</div>
             : '' }
 
             { props.dir
@@ -297,6 +311,7 @@ function DirContent(props) {
                 contextType={contextMenuParams.type}
                 currentDir={props.currentDir}
                 changeDir={props.changeDir}
+                category={props.category}
             /> }
             
         </div>
