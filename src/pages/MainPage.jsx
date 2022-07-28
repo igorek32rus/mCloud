@@ -34,8 +34,6 @@ function MainPage() {
       url: `http://localhost:5000/api/files?parent=${idDir}${cat}`
     })
 
-    console.log(updateDir);
-
     if (updateDir.files) {
       setDir(updateDir.files)
     }
@@ -74,6 +72,13 @@ function MainPage() {
         createNotification({
           title: `Перемещение объектов`, 
           message: `Объекты успешно перемещены`
+        })
+      }
+
+      if (updatedDir.error) {
+        createNotification({
+          title: `Перемещение объектов`, 
+          message: updatedDir.error
         })
       }
     } catch (error) {

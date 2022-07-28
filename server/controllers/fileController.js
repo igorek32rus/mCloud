@@ -245,14 +245,20 @@ class FileController {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const dbFile = await File.findOne({ _id: file, user: req.user.id })
+                const dbFileExist = await File.findOne({ name: dbFile.name, user: req.user.id, parent: idNewParent })
+
+                if (dbFileExist) {
+                    return res.status(500).json({error: `Файл с именем ${dbFileExist.name} уже существует в дирректории для перемещения`})
+                }
+
                 sizeToParent += dbFile.size
                 dbFile.parent = idNewParent
-                await dbFile.save()   
+                await dbFile.save()
             }
 
             await recursiveUpdateSizeParent(req.user.id, idNewParent, sizeToParent)
 
-            const dirFiles = await File.find({user: req.user.id, parent: curDir })
+            const dirFiles = await File.find({user: req.user.id, parent: curDir, deleted: null })
             return res.json({files: dirFiles})
         } catch (error) {
             console.log(error);
