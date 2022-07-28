@@ -7,6 +7,7 @@ import CreateFolder from "./modalwindows/CreateFolder"
 import Rename from "./modalwindows/Rename"
 import Share from './modalwindows/Share'
 import Delete from "./modalwindows/Delete"
+import Restore from "./modalwindows/Restore"
 
 function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType, style, category }) {
     const {openModal} = useContext(ModalContext)
@@ -51,6 +52,14 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
         })
     }
 
+    const handlerRestore = () => {
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Восстановить',
+            children: <Restore items={items} changeDir={changeDir} currentDir={currentDir} />
+        })
+    }
+
     return (
         <div className="dropMenu contextMenu slideRight" style={style} onMouseDown={(e) => e.stopPropagation()}>
             { contextType === 'workspace' && category === 'main' 
@@ -69,7 +78,7 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
             }
             { category === 'trash' && contextType === 'item' &&
                 ( <ul className="menu context">
-                    <li><div className="icon restore"></div>Восстановить</li>
+                    <li onClick={handlerRestore}><div className="icon restore"></div>Восстановить</li>
                 </ul> )
             }
         </div>
