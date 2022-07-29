@@ -34,7 +34,7 @@ const recursiveDeleteFiles = async (files) => {
         }
         return 
     } catch (error) {
-        console.log('Error delete files');
+        console.log('Error delete files')
     }
 }
 
@@ -49,7 +49,7 @@ const recursiveMarkDeleteFiles = async (files) => {
             const file = files[i];
 
             if (file.type === 'folder') {
-                const {countDeleted} = await recursiveDeleteFiles(await File.find({parent: file._id}))
+                const {countDeleted} = await recursiveMarkDeleteFiles(await File.find({parent: file._id}))
                 count += countDeleted
             }
     
@@ -61,7 +61,7 @@ const recursiveMarkDeleteFiles = async (files) => {
         }
         return {countDeleted: count, sizeDeleted: size}
     } catch (error) {
-        console.log('Error delete files');
+        console.log('Error delete files')
     }
 }
 
@@ -74,8 +74,33 @@ const recursiveUpdateSizeParent = async (userId, parent, size) => {
         await parentDB.save()
         await recursiveUpdateSizeParent(userId, parentDB.parent, size)
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
+}
+
+const recursiveGetTree = async (user, parent) => {
+    let tree = {}
+    if (!parent) return {}
+
+    tree = {
+        _id: parent._id,
+        name: parent.parent ? parent.name : 'Главная',
+        childs: []
+    }
+
+    try {
+        const childFolders = await File.find({user, parent: parent._id, type: 'folder', deleted: null})
+        if (!childFolders) return
+
+        for (let i = 0; i < childFolders.length; i++) {
+            const childFolder = childFolders[i]
+            tree.childs.push(await recursiveGetTree(user, childFolder))
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+    return tree
 }
 
 class FileController {
@@ -107,7 +132,7 @@ class FileController {
         try {
             const {name, parent} = req.body
 
-            const fileExist = await File.findOne({user: req.user.id, parent, name})
+            const fileExist = await File.findOne({user: req.user.id, parent, name, type: 'folder'})
             
             if (fileExist) {
                 return res.status(400).json({message: 'Папка с таким именем уже существует в данной директории'})
@@ -130,7 +155,7 @@ class FileController {
             return res.status(400).json({error: 'Parent not found'})
 
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return res.status(400).json({error})
         }
     }
@@ -165,7 +190,7 @@ class FileController {
             // const path = []
             return res.json({path, files})
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return res.status(500).json({error: 'Can`t get files'})
         }
     }
@@ -182,7 +207,7 @@ class FileController {
             }
             
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return res.status(500).json({error: 'Can`t rename file/folder'})
         }
     }
@@ -196,7 +221,7 @@ class FileController {
             const dirFiles = await File.find({user: req.user.id, parent, deleted: null})
             return res.json({count: countDeleted, files: dirFiles})
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return res.status(500).json({error: 'Can`t delete files'})
         }
     }
@@ -205,7 +230,7 @@ class FileController {
         try {
             const {file} = req.files
             const {fileName} = req.body
-            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: fileName})
+            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: fileName, type: 'file'})
             
             if (fileExist) {
                 return res.status(400).json({message: 'Файл с таким именем уже существует в данной папке'})
@@ -231,7 +256,7 @@ class FileController {
 
             return res.json({file: dbFile})
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return res.status(500).json({error: 'Upload error'})
         }
     }
@@ -245,7 +270,7 @@ class FileController {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const dbFile = await File.findOne({ _id: file, user: req.user.id })
-                const dbFileExist = await File.findOne({ name: dbFile.name, user: req.user.id, parent: idNewParent })
+                const dbFileExist = await File.findOne({ name: dbFile.name, type: dbFile.type, user: req.user.id, parent: idNewParent })
 
                 if (dbFileExist) {
                     return res.status(500).json({error: `Файл с именем ${dbFileExist.name} уже существует в дирректории для перемещения`})
@@ -261,8 +286,50 @@ class FileController {
             const dirFiles = await File.find({user: req.user.id, parent: curDir, deleted: null })
             return res.json({files: dirFiles})
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return res.status(500).json({error: 'Can`t delete files'})
+        }
+    }
+
+    async getTree(req, res) {
+        try {
+            const root = await File.findOne({user: req.user.id, parent: null})
+            const tree = await recursiveGetTree(req.user.id, root)
+            
+            return res.json({tree})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async restoreFiles(req, res) {
+        try {
+            const {files, target} = req.body
+
+            const targetExist = await File.findOne({user: req.user.id, _id: target})
+            if (!targetExist) {
+                return res.status(400).json({message: 'Папка назначения не существует'})
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileDB = await File.findOne({user: req.user.id, _id: file})
+                const fileExist = await File.findOne({user: req.user.id, _id: {$ne: fileDB._id}, name: fileDB.name, type: fileDB.type, parent: target})
+
+                if (fileExist) {
+                    return res.status(400).json({message: `В папке назначения уже есть файл/папка с именем - ${fileDB.name}`})
+                }
+
+                fileDB.parent = targetExist._id
+                fileDB.deleted = null
+                await fileDB.save()
+
+                await recursiveUpdateSizeParent(req.user.id, fileDB.parent, fileDB.size)
+            }
+
+            return res.json({status: 'ok'})
+        } catch (error) {
+            console.log(error)
         }
     }
 }

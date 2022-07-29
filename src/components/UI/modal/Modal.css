@@ -47,3 +47,28 @@
     display: flex;
     justify-content: space-between;
 }
+
+.modal .tree {
+    margin: 10px 0;
+    background-color: rgba(255, 255, 255, .05);
+    border-radius: 3px;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.modal .tree ul {
+    list-style: none;
+}
+
+.modal .tree ul li {
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+.modal .tree ul li.selected {
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.modal .tree ul li:hover {
+    background-color: rgba(255, 255, 255, .1);
+}

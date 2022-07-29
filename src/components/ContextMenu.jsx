@@ -7,7 +7,7 @@ import CreateFolder from "./modalwindows/CreateFolder"
 import Rename from "./modalwindows/Rename"
 import Share from './modalwindows/Share'
 import Delete from "./modalwindows/Delete"
-import Restore from "./modalwindows/Restore"
+import Restore from "./modalwindows/Restore/Restore"
 
 function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType, style, category }) {
     const {openModal} = useContext(ModalContext)

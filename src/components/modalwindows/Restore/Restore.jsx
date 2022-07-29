@@ -1,28 +1,38 @@
-import React, { useContext, useEffect } from "react"
-import { ModalContext, NotifyContext } from "../../Context"
-import Button from "../UI/button/Button"
-import fetchReq from "../../utils/fetchReq"
+import React, { useContext, useEffect, useState } from "react"
+import { ModalContext, NotifyContext } from "../../../Context"
+import Button from "../../UI/button/Button"
+import fetchReq from "../../../utils/fetchReq"
+import Tree from "./Tree"
 
-function Delete({items, changeDir, currentDir}) {
+function Restore({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+
+    const [tree, setTree] = useState(null)
+    const [targetFolder, setTargetFolder] = useState(null)
 
     const handleRestoreBtn = async () => {
         closeModal()
         try {
-            const updatedDir = await fetchReq({
+            const restoreDir = await fetchReq({
                 url: 'http://localhost:5000/api/files/restore', 
                 method: 'POST', 
-                data: {files: items}
+                data: {files: items, target: targetFolder}
             })
       
-            if (updatedDir.files) {
-                changeDir(currentDir._id)
+            if (restoreDir.status === 'ok') {
+                changeDir()
                 createNotification({
                     title: `Восстановление файлов`, 
                     message: `Файлы успешно восстановлены`
                 })
+                return
             }
+
+            createNotification({
+                title: `Восстановление файлов`, 
+                message: restoreDir.message
+            })
         } catch (error) {
             console.log(error);
         }
@@ -35,7 +45,7 @@ function Delete({items, changeDir, currentDir}) {
             })
       
             if (treeFolders.tree) {
-                
+                setTree(treeFolders.tree)
             }
         } catch (error) {
             console.log(error);
@@ -49,6 +59,7 @@ function Delete({items, changeDir, currentDir}) {
     return (
         <>
             <p style={{margin: '10px 0'}}>Выберите папку назначения для восстановления</p>
+            {tree && <Tree tree={tree} setTargetFolder={setTargetFolder} />}
             <div className="buttons">
                 <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleRestoreBtn} className={"btn blue"} style={{width: '100%'}} >Восстановить</Button>
@@ -57,4 +68,4 @@ function Delete({items, changeDir, currentDir}) {
     )
 }
 
-export default Delete
+export default Restore

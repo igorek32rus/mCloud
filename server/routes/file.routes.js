@@ -8,7 +8,9 @@ router.post('/rename', authMiddleware, FileController.renameFile)
 router.post('/delete', authMiddleware, FileController.deleteFiles)
 router.post('/upload', authMiddleware, FileController.uploadFile)
 router.post('/move', authMiddleware, FileController.changeParent)
+router.post('/restore', authMiddleware, FileController.restoreFiles)
 
 router.get('', authMiddleware, FileController.getFiles)
+router.get('/tree', authMiddleware, FileController.getTree)
 
 module.exports = router
