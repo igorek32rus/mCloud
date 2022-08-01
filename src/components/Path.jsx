@@ -7,8 +7,8 @@ function Path({path, changeDir}) {
     const history = useHistory()
 
     const handlerClick = (dir) => {
-        history.push(`/files${dir.parent ? `?parent=${dir._id}` : ''}`)
-        // changeDir(idDir)
+        // history.push(`/files${dir.parent ? `?parent=${dir._id}` : ''}`)
+        changeDir(dir._id)
     }
 
     // написать функцию получения пути по текущей дирректории

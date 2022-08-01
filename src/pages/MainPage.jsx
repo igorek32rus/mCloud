@@ -46,14 +46,10 @@ function MainPage() {
   useEffect(() => {
     async function getQueryParams() {
       setLoading(true)
-      const parent = queryParams.get("parent")
+      const parent = queryParams.get("parent") ? queryParams.get("parent") : userData.rootId
       categoryRef.current = queryParams.get("category") ? queryParams.get("category") : 'main'
 
-      if (!parent) {
-        await changeDir(userData.rootId)
-      } else {
-        await changeDir(parent)
-      }
+      await changeDir(parent)
       setLoading(false)
     }
     getQueryParams()

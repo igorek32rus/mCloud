@@ -84,8 +84,8 @@ function DirItem(props) {
     
             if (e.detail > 1) {     // 2 клика
                 if (props.item.type === 'folder') {
-                    // props.changeDir(props.item._id)
-                    history.push('/files?parent=' + props.item._id)
+                    props.changeDir(props.item._id)
+                    // history.push('/files?parent=' + props.item._id)
                 }
                 return
             }
