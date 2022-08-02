@@ -103,6 +103,18 @@ const recursiveGetTree = async (user, parent) => {
     return tree
 }
 
+const getRootTrash = async (user) => {
+    const files = await File.find({user, deleted: {$ne: null}, parent: {$ne: null}})
+    let result = []
+    
+    for (let i = 0; i < files.length; i++) {
+        const parent = await File.findOne({user, _id: files[i].parent})
+        if (!parent.deleted) result.push(files[i])
+    }
+
+    return result
+}
+
 class FileController {
     async createUserRootDir(userId) {
         try {
@@ -181,8 +193,19 @@ class FileController {
             }
 
             if (category === 'trash') {
-                files = await File.find({user: req.user.id, deleted: {$ne: null}, parent: {$ne: null} })
-                return res.json({files})
+                const root = await File.findOne({user: req.user.id, parent: null})
+
+                if (root._id == parent) {
+                    const rootTrash = await getRootTrash(req.user.id)
+                    return res.json({files: rootTrash, path: [root]})
+                }
+
+                let parentFile = null
+                const tempParent = await File.findOne({user: req.user.id, _id: parent})
+                if (tempParent.deleted) parentFile = tempParent
+
+                files = await File.find({user: req.user.id, deleted: {$ne: null}, parent})
+                return res.json({files, path: [parentFile]})
             }
 
             files = await File.find({user: req.user.id, parent, deleted: null})

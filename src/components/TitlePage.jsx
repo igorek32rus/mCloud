@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useContext} from "react"
+import { AuthContext } from "../Context"
 
 const catToReadble = (cat) => {
     const allCat = {
@@ -10,9 +11,12 @@ const catToReadble = (cat) => {
     return allCat[cat]
 }
 
-function TitlePage({currentDir, category}) {
+function TitlePage({currentDir, category, changeDir}) {
+    const {userData} = useContext(AuthContext)
+
     return (
         <h1 className="title_page">
+            { currentDir?._id !== userData.rootId && category === 'trash' ? <div onClick={() => changeDir(currentDir.parent)}>Назад</div> : '' }
             { catToReadble(category) 
                 ? catToReadble(category) 
                 : (currentDir?.parent ? currentDir?.name : 'Главная')

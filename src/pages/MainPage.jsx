@@ -88,7 +88,7 @@ function MainPage() {
       <div className="pageBodyMain">
         <ModalProvider>
           {categoryRef.current === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
-          <TitlePage currentDir={path[path.length - 1]} category={category} />
+          <TitlePage currentDir={path[path.length - 1]} category={category} changeDir={changeDir} />
           {loading 
             ? <Loader /> 
             : <DirContent 
