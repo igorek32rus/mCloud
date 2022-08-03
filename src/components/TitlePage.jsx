@@ -1,5 +1,6 @@
 import React, {useContext} from "react"
 import { AuthContext } from "../Context"
+import '../styles/TitlePage.css'
 
 const catToReadble = (cat) => {
     const allCat = {
@@ -15,13 +16,17 @@ function TitlePage({currentDir, category, changeDir}) {
     const {userData} = useContext(AuthContext)
 
     return (
-        <h1 className="title_page">
-            { currentDir?._id !== userData.rootId && category === 'trash' ? <div onClick={() => changeDir(currentDir.parent)}>Назад</div> : '' }
-            { catToReadble(category) 
-                ? catToReadble(category) 
-                : (currentDir?.parent ? currentDir?.name : 'Главная')
-            }
-        </h1>
+        <div className="title_page">
+            {console.log(currentDir)}
+            { currentDir && currentDir?._id !== userData.rootId && category === 'trash' ? <div className="back_btn" onClick={() => changeDir(currentDir.parent)}>&laquo;</div> : '' }
+            <h1>
+                { catToReadble(category) 
+                    ? catToReadble(category) 
+                    : (currentDir?.parent ? currentDir?.name : 'Главная')
+                }
+            </h1>
+            
+        </div>
     )
 }
 
