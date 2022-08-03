@@ -18,7 +18,7 @@ function Path({path, changeDir}) {
             <ul>
                 { path.map(item => (
                     <li key={item._id} onClick={() => handlerClick(item)}>
-                        { item.parent ? (
+                        { item?.parent ? (
                             <>
                                 <div className="delimiter">&#10140;</div>
                                 <div className="link">{item.name}</div>

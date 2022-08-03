@@ -17,7 +17,6 @@ function TitlePage({currentDir, category, changeDir}) {
 
     return (
         <div className="title_page">
-            {console.log(currentDir)}
             { currentDir && currentDir?._id !== userData.rootId && category === 'trash' ? <div className="back_btn" onClick={() => changeDir(currentDir.parent)}>&laquo;</div> : '' }
             <h1>
                 { catToReadble(category) 
