@@ -1,11 +1,13 @@
 .dropMenu {
     position: absolute;
     background-color: rgba(30, 36, 68, .85);
-    border-radius: 7px;
-    border-top-left-radius: 0px;
-    /* visibility: hidden; */
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, .15);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .8);
     z-index: 5;
     backdrop-filter: blur(5px);
+
+    --size-icon: 17px;
 }
   
 .dropMenu.contextMenu {
@@ -13,13 +15,14 @@
     left: 0;
     width: 200px;
     display: block;
+    font-size: 12px;
 }
 
 ul.menu.context li .icon {
-    width: 20px;
-    height: 20px;
+    width: var(--size-icon);
+    height: var(--size-icon);
     filter: invert(1);
-    margin: -2px 5px -2px 0;
+    margin-right: 5px;
 }
   
 ul.menu.context li div.icon.share {
@@ -70,9 +73,9 @@ ul.menu.context {
 }
   
 ul.menu li {
-    /* display: list-item; */
     display: flex;
-    padding: 5px 15px;
+    align-items: center;
+    padding: 5px;
 }
 
 ul.menu li.disabled {
@@ -85,15 +88,15 @@ ul.menu li:not(:first-child) {
   
 ul.menu li:hover {
     cursor: pointer;
-    background-color: rgba(255, 255, 255, .1);
+    background-color: rgba(255, 255, 255, .07);
 }
 
 ul.menu.context li:first-child {
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 ul.menu.context li:last-child {
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
