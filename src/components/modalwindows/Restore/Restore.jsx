@@ -21,7 +21,7 @@ function Restore({items, changeDir, currentDir}) {
             })
       
             if (restoreDir.status === 'ok') {
-                changeDir()
+                changeDir(currentDir._id)
                 createNotification({
                     title: `Восстановление файлов`, 
                     message: `Файлы успешно восстановлены`
