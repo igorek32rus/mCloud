@@ -72,3 +72,7 @@
 .modal .tree ul li:hover {
     background-color: rgba(255, 255, 255, .1);
 }
+
+.modal input[type=text] {
+    width: 100%;
+}
