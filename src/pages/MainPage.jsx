@@ -29,6 +29,7 @@ function MainPage() {
   const categoryRef = useRef(category)
 
   const changeDir = async (idDir) => {
+    setLoading(true)
     let cat = categoryRef.current !== 'main' ? '&category=' + categoryRef.current : ''
     const updateDir = await fetchReq({
       url: `http://localhost:5000/api/files?parent=${idDir}${cat}`
@@ -41,16 +42,15 @@ function MainPage() {
     if (updateDir.path) {
       setPath(updateDir.path)
     }
+    setLoading(false)
   }
 
   useEffect(() => {
     async function getQueryParams() {
-      setLoading(true)
       const parent = queryParams.get("parent") ? queryParams.get("parent") : userData.rootId
       categoryRef.current = queryParams.get("category") ? queryParams.get("category") : 'main'
 
       await changeDir(parent)
-      setLoading(false)
     }
     getQueryParams()
   }, [queryParams])
