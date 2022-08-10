@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import React, { useState, useContext, useEffect, useMemo, useCallback } from 'react'
 
 import Header from '../components/Header'
 import Notify from '../components/Notify'
@@ -25,14 +25,13 @@ function MainPage() {
 
   const queryParams = useQuery()
 
-  let category = queryParams.get("category") ? queryParams.get("category") : 'main'
-  const categoryRef = useRef(category)
+  const category = useMemo(() => queryParams.get("category") ? queryParams.get("category") : 'main', [queryParams])
+  const parent = useMemo(() => queryParams.get("parent") ? queryParams.get("parent") : userData.rootId, [queryParams, userData.rootId])
 
-  const changeDir = async (idDir) => {
+  const changeDir = useCallback(async (idDir) => {
     setLoading(true)
-    let cat = categoryRef.current !== 'main' ? '&category=' + categoryRef.current : ''
     const updateDir = await fetchReq({
-      url: `http://localhost:5000/api/files?parent=${idDir}${cat}`
+      url: `http://localhost:5000/api/files?parent=${idDir}${category !== 'main' ? '&category=' + category : ''}`
     })
 
     if (updateDir.files) {
@@ -43,17 +42,12 @@ function MainPage() {
       setPath(updateDir.path)
     }
     setLoading(false)
-  }
+  }, [category, setLoading])
+
 
   useEffect(() => {
-    async function getQueryParams() {
-      const parent = queryParams.get("parent") ? queryParams.get("parent") : userData.rootId
-      categoryRef.current = queryParams.get("category") ? queryParams.get("category") : 'main'
-
-      await changeDir(parent)
-    }
-    getQueryParams()
-  }, [queryParams])
+    changeDir(parent)
+  }, [changeDir, category, parent])
 
   const changeParent = async (idNewParent, files) => {
     try {
@@ -87,7 +81,7 @@ function MainPage() {
       <Header />
       <div className="pageBodyMain">
         <ModalProvider>
-          {categoryRef.current === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
+          {category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
           <TitlePage currentDir={path[path.length - 1]} category={category} changeDir={changeDir} />
           {loading 
             ? <Loader /> 
