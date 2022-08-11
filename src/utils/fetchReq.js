@@ -1,4 +1,13 @@
-const fetchReq = async ({url = '', method = 'GET', data = {}, headers = {
+const stringRequestParams = (params) => {
+    if (!params.length) return ''
+
+    const result = params.reduce((prev, param, i) => {
+        return prev + (i === 0 ? param.name + '=' + param.value : '&' + param.name + '=' + param.value)
+    }, '?')
+    return result
+}
+
+const fetchReq = async ({url = '', reqParams = [], method = 'GET', data = {}, headers = {
     'Content-Type': 'application/json'
 }}) => {
     try {
@@ -9,7 +18,8 @@ const fetchReq = async ({url = '', method = 'GET', data = {}, headers = {
         const params = {method, headers}
         if (method === 'POST') params.body = JSON.stringify(data)
 
-        const response = await fetch(url, params)
+        const urlReqParams = stringRequestParams(reqParams)
+        const response = await fetch(url + urlReqParams, params)
         
         return await response.json()   
     } catch (error) {

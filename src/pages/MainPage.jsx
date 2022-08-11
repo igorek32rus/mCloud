@@ -30,8 +30,19 @@ function MainPage() {
 
   const changeDir = useCallback(async (idDir) => {
     setLoading(true)
+    let reqParams = [{
+      name: 'parent',
+      value: idDir
+    }]
+
+    if (category !== 'main') reqParams.push({
+      name: 'category',
+      value: category
+    })
+
     const updateDir = await fetchReq({
-      url: `http://localhost:5000/api/files?parent=${idDir}${category !== 'main' ? '&category=' + category : ''}`
+      url: `http://localhost:5000/api/files`,
+      reqParams
     })
 
     if (updateDir.files) {
