@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { ModalContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
 import fetchReq from "../../utils/fetchReq"
+import { URLS } from "../../constants"
 
 function Delete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
@@ -11,7 +12,7 @@ function Delete({items, changeDir, currentDir}) {
         closeModal()
         try {
             const updatedDir = await fetchReq({
-                url: 'http://localhost:5000/api/files/delete', 
+                url: URLS.DELETE_FILES, 
                 method: 'POST', 
                 data: {files: items}
             })

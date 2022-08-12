@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react"
 import Button from "../UI/button/Button"
 import { ModalContext, NotifyContext } from "../../Context"
 import { getFileSize } from "../../utils/getFileSize"
+import { URLS } from "../../constants"
 
 import axios from 'axios'
 
@@ -27,7 +28,7 @@ function UploadFiles({files, currentDir, changeDir}) {
                 formData.append('file', file)
                 formData.append('parent', currentDir._id)
                 formData.append('fileName', file.name)
-                const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
+                const response = await axios.post(URLS.UPLOAD_FILE, formData, {
                     headers: {
                         Authorization: `Baerer ${localStorage.getItem('token')}`
                     },

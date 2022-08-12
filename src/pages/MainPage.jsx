@@ -14,6 +14,7 @@ import { ModalProvider, AuthContext, NotifyContext, LoaderContext } from '../Con
 
 import fetchReq from '../utils/fetchReq'
 import useQuery from '../hooks/useQuery'
+import { URLS } from '../constants'
 
 function MainPage() {
   const {userData} = useContext(AuthContext)
@@ -41,7 +42,7 @@ function MainPage() {
     })
 
     const updateDir = await fetchReq({
-      url: `http://localhost:5000/api/files`,
+      url: URLS.GET_FILES,
       reqParams
     })
 
@@ -63,7 +64,7 @@ function MainPage() {
   const changeParent = async (idNewParent, files) => {
     try {
       const updatedDir = await fetchReq({
-        url: 'http://localhost:5000/api/files/move', 
+        url: URLS.MOVE_FILES, 
         method: 'POST', 
         data: {idNewParent, files, curDir: path[path.length - 1]}
       })

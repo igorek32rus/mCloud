@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from "react"
 import { ModalContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
 import fetchReq from "../../utils/fetchReq"
+import { URLS } from "../../constants"
 
 function Rename({items, changeDir}) {
     const [newName, setNewName] = useState(items[0].name)
@@ -42,7 +43,7 @@ function Rename({items, changeDir}) {
 
         try {
             const updatedFile = await fetchReq({
-                url: 'http://localhost:5000/api/files/rename', 
+                url: URLS.RENAME_FILE, 
                 method: 'POST', 
                 data: {name: newName, id: items[0]._id}
             })

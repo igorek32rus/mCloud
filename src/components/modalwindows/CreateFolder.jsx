@@ -4,6 +4,7 @@ import Button from "../UI/button/Button";
 
 import { ModalContext } from "../../Context";
 import fetchReq from "../../utils/fetchReq";
+import { URLS } from "../../constants";
 
 function CreateFolder({currentDir, changeDir}) {
     const [nameFolder, setNameFolder] = useState('')
@@ -38,7 +39,7 @@ function CreateFolder({currentDir, changeDir}) {
 
         try {
             const newFolder = await fetchReq({
-                url: 'http://localhost:5000/api/files/dir/create', 
+                url: URLS.CREATE_FOLDER, 
                 method: 'POST', 
                 data: {name: nameFolder, parent: currentDir._id}
             })

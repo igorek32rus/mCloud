@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { ModalContext, NotifyContext } from "../../../Context"
 import Button from "../../UI/button/Button"
 import fetchReq from "../../../utils/fetchReq"
+import { URLS } from "../../../constants"
 import Tree from "./Tree"
 
 function Restore({items, changeDir, currentDir}) {
@@ -15,7 +16,7 @@ function Restore({items, changeDir, currentDir}) {
         closeModal()
         try {
             const restoreDir = await fetchReq({
-                url: 'http://localhost:5000/api/files/restore', 
+                url: URLS.RESTORE_FILE, 
                 method: 'POST', 
                 data: {files: items, target: targetFolder}
             })
@@ -41,7 +42,7 @@ function Restore({items, changeDir, currentDir}) {
     const getTreeFolders = async () => {
         try {
             const treeFolders = await fetchReq({
-                url: 'http://localhost:5000/api/files/tree'
+                url: URLS.GET_TREE_FOLDERS
             })
       
             if (treeFolders.tree) {

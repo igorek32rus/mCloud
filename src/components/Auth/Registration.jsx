@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react"
 import { NotifyContext, LoaderContext } from "../../Context"
 import Button from "../UI/button/Button"
 import fetchReq from "../../utils/fetchReq"
+import { URLS } from "../../constants"
 import '../../styles/Auth.css'
 
 const Registration = ({setLoginWindow}) => {
@@ -21,7 +22,7 @@ const Registration = ({setLoginWindow}) => {
         setLoading(true)
 
         const res = await fetchReq({
-            url: 'http://localhost:5000/api/auth/registration', 
+            url: URLS.REGISTRATION, 
             method: 'POST', 
             data: {email, pass: password}
         })

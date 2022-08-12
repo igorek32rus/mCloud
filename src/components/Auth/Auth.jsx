@@ -2,6 +2,7 @@ import React, {useEffect, useContext, useCallback} from "react"
 import { AuthContext, LoaderContext } from "../../Context"
 import Loader from "../UI/loader/Loader"
 import fetchReq from "../../utils/fetchReq"
+import { URLS } from "../../constants"
 
 const Auth = ({setCheckAuth}) => {
     const {setIsAuth, setUserData} = useContext(AuthContext)
@@ -10,7 +11,7 @@ const Auth = ({setCheckAuth}) => {
     const auth = useCallback(async () => {
         setLoading(true)
         const res = await fetchReq({
-            url: 'http://localhost:5000/api/auth/auth',
+            url: URLS.AUTH,
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
