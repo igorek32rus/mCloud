@@ -1,10 +1,11 @@
-import { React, useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 import '../styles/Search.css'
 
 function Search() {
     const [searchValue, setSearchValue] = useState('')
     const [isSearchResult, setSearchResult] = useState(false)
+    const inputRef = useRef()
 
     const handleInputSearch = (event) => {
         setSearchValue(event.target.value)
@@ -21,10 +22,16 @@ function Search() {
         setSearchResult(false)
     }
 
+    const handleClearSearch = () => {
+        setSearchValue("")
+        inputRef.current.focus()
+    }
+
     return (
         <div className="search">
             <div className="icon-search"></div>
-            <input type="text" placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handleBlurSearch} />
+            <input type="text" ref={inputRef} placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handleBlurSearch} />
+            { !!searchValue.length && <div className='search-clear' onClick={handleClearSearch}>&times;</div> }
 
             { isSearchResult &&
                 <div className="search-result">
