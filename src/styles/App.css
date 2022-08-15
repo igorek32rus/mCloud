@@ -51,20 +51,20 @@ a {
 
 .imgBtn {
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: 70%;
     background-position: center center;
     filter: invert(100%);
-    border: 3px solid rgba(0, 0, 0, .4);
+    border: 2px solid rgba(0, 0, 0, .4);
     border-radius: 8px;
     height: 31px;
     width: 36px;
-    opacity: .8;
+    opacity: .7;
     transition: border-color .3s ease-in-out, opacity .3s ease-in-out;
     cursor: pointer;
 }
 
 .imgBtn:hover {
-    border: 3px solid rgba(0, 0, 0, .8);
+    border: 2px solid rgba(0, 0, 0, .8);
     opacity: 1;
 }
 
