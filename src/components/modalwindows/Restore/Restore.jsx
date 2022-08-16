@@ -4,12 +4,14 @@ import Button from "../../UI/button/Button"
 import fetchReq from "../../../utils/fetchReq"
 import { URLS } from "../../../constants"
 import Tree from "./Tree"
+import Loader from "../../UI/loader/Loader"
 
 function Restore({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
 
     const [tree, setTree] = useState(null)
+    const [loading, setLoading] = useState(true)
     const [targetFolder, setTargetFolder] = useState(null)
 
     const handleRestoreBtn = async () => {
@@ -40,6 +42,7 @@ function Restore({items, changeDir, currentDir}) {
     }
 
     const getTreeFolders = async () => {
+        setLoading(true)
         try {
             const treeFolders = await fetchReq({
                 url: URLS.GET_TREE_FOLDERS
@@ -50,6 +53,8 @@ function Restore({items, changeDir, currentDir}) {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -60,7 +65,12 @@ function Restore({items, changeDir, currentDir}) {
     return (
         <>
             <p style={{margin: '10px 0'}}>Выберите папку назначения для восстановления</p>
-            {tree && <Tree tree={tree} setTargetFolder={setTargetFolder} />}
+            {loading && (
+                <div style={{height: 150, position: 'relative'}}>
+                    <Loader />
+                </div>
+            ) }
+            {!loading && !!tree && <Tree tree={tree} setTargetFolder={setTargetFolder} />}
             <div className="buttons">
                 <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleRestoreBtn} className={"btn blue"} style={{width: '100%'}} >Восстановить</Button>
