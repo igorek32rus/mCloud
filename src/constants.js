@@ -3,7 +3,7 @@ const MAIN = {
 }
 
 export const URLS = {
-    AUTH: MAIN.SERVER + '/api/auth/auth',
+    AUTH: MAIN.SERVER + '/api/auth',
     LOGIN: MAIN.SERVER + '/api/auth/login',
     REGISTRATION: MAIN.SERVER + '/api/auth/registration',
 
