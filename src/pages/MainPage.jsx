@@ -7,6 +7,7 @@ import TopPanel from '../components/TopPanel'
 import TitlePage from '../components/TitlePage'
 import DirContent from '../components/DirContent'
 import Loader from '../components/UI/loader/Loader'
+import MainMenu from '../components/MainMenu'
 
 import '../styles/App.css'
 
@@ -20,6 +21,8 @@ function MainPage() {
   const {userData} = useContext(AuthContext)
   const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
@@ -90,7 +93,8 @@ function MainPage() {
 
   return (
     <>
-      <Header />
+      <Header setIsMenuOpen={setIsMenuOpen} />
+      {isMenuOpen && <MainMenu setIsMenuOpen={setIsMenuOpen} />}
       <div className="pageBodyMain">
         <ModalProvider>
           {category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }

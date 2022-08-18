@@ -61,14 +61,15 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
     }
 
     return (
-        <div className="dropMenu contextMenu slideRight" style={style} onMouseDown={(e) => e.stopPropagation()}>
+        <div className="context-menu slideRight" style={style} onMouseDown={(e) => e.stopPropagation()}>
             { contextType === 'workspace' && category === 'main' 
-                ? ( <ul className="menu context">
+                ? ( <ul>
                         <li onClick={createFolder}><div className="icon edit"></div>Создать папку</li>
                         <li className={!currentDir.parent ? 'disabled' : ''} onClick={currentDir.parent ? handlerShareCurrentDir : undefined}><div className="icon share"></div>Поделиться</li>
                         <li><div className="icon copy"></div>Вставить</li>
                     </ul> ) 
-                : contextType === 'item' && category !== 'trash' && ( <ul className="menu context">
+                : contextType === 'item' && category !== 'trash' && ( 
+                    <ul>
                         <li className={items.length > 1 ? 'disabled' : ''} onClick={items.length === 1 ? handlerRename : undefined}><div className="icon edit"></div>Переименовать</li>
                         <li><div className="icon download"></div>Скачать</li>
                         <li onClick={handlerShare}><div className="icon share"></div>Поделиться</li>
@@ -77,7 +78,7 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
                     </ul> )
             }
             { category === 'trash' && contextType === 'item' &&
-                ( <ul className="menu context">
+                ( <ul>
                     <li onClick={handlerRestore}><div className="icon restore"></div>Восстановить</li>
                 </ul> )
             }

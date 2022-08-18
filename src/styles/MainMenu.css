@@ -1,0 +1,66 @@
+menu.menu-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+menu .main-menu {
+    position: absolute;
+    background-color: rgba(30, 36, 68, .95);
+    border-radius: 5px;
+    visibility: hidden;
+    top: 55px;
+    right: 10px;
+    min-width: 150px;
+    border: 1px solid rgba(255, 255, 255, .2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .7);
+}
+
+menu .main-menu::after {
+    content: '';
+    position: absolute;
+    right: 20px; top: -10px;
+    border: 5px solid transparent;
+    border-bottom: 5px solid rgba(30, 36, 68, .95);
+}
+
+.main-menu ul {
+    height: auto;
+    list-style: none;
+}
+
+.main-menu ul li {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, .15);
+    cursor: pointer;
+}
+
+.main-menu ul li:hover {
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.main-menu ul li:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.main-menu ul li:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+@supports (backdrop-filter: blur(10px)) {
+    menu .main-menu {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        background-color: rgba(30, 36, 68, .85);
+    }
+
+    menu .main-menu::after {
+        border-bottom: 5px solid rgba(30, 36, 68, .85);
+    }
+}

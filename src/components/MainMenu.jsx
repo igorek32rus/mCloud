@@ -1,22 +1,40 @@
-import React, { useState } from "react"
-import ProfileMenu from "./ProfileMenu"
+import React, { useContext } from 'react'
+import { AuthContext } from '../Context'
+import '../styles/MainMenu.css'
+
+import { useHistory } from 'react-router-dom'
 
 function MainMenu(props) {
-    const [profileMenu, setProfileMenu] = useState(false)
+    const {setIsAuth, setUserData} = useContext(AuthContext)
+    const history = useHistory()
 
-    const handleClickProfile = () => {
-        setProfileMenu(!profileMenu)
+    const handleLogout = () => {
+        setUserData({})
+        localStorage.removeItem('token')
+        setIsAuth(false)
+    }
+
+    const handleChangeCat = (cat) => {
+        history.push(`/files${cat !== 'main' ? `?category=${cat}` : ''}`)
+    }
+
+    const handleClickBackdrop = () => {
+        props.setIsMenuOpen(false)
     }
 
     return (
-        <div className="main-menu">
-                <div className="profile" onClick={handleClickProfile}>
-                    <div style={{width: 32, height: 32, marginLeft: 10}}>
-                        <img className="profile" src="/photo.jpg" alt="profile" />
-                    </div>
-                </div>
-            { profileMenu && <ProfileMenu /> }
-        </div>
+        <menu class="menu-backdrop" onClick={handleClickBackdrop}>
+            <div className="main-menu slideDown">
+                <ul>
+                    <li onClick={() => handleChangeCat('main')}>Главная</li>
+                    <li onClick={() => handleChangeCat('latest')}>Последние</li>
+                    <li onClick={() => handleChangeCat('shared')}>Общие</li>
+                    <li onClick={() => handleChangeCat('trash')}>Корзина</li>
+                    <li>Настройки</li>
+                    <li onClick={handleLogout}>Выйти</li>
+                </ul>
+            </div>
+        </menu>
     )
 }
 

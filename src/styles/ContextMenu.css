@@ -1,56 +1,57 @@
-.dropMenu {
+.context-menu {
     position: absolute;
     background-color: rgba(30, 36, 68, .85);
     border-radius: 5px;
     border: 1px solid rgba(255, 255, 255, .15);
     box-shadow: 0 0 10px rgba(0, 0, 0, .8);
+    top: 0;
+    left: 0;
+    min-width: 200px;
+    display: block;
+    font-size: 12px;
     z-index: 5;
     backdrop-filter: blur(5px);
 
     --size-icon: 17px;
 }
-  
-.dropMenu.contextMenu {
-    top: 0;
-    left: 0;
-    width: 200px;
-    display: block;
-    font-size: 12px;
+
+.context-menu ul {
+    list-style: none;
 }
 
-ul.menu.context li .icon {
+.context-menu ul li .icon {
     width: var(--size-icon);
     height: var(--size-icon);
     filter: invert(1);
     margin-right: 5px;
 }
   
-ul.menu.context li div.icon.share {
+.context-menu ul li .icon.share {
     background: url('../images/share.svg') no-repeat;
     background-size: contain;
 }
   
-ul.menu.context li div.icon.edit {
+.context-menu ul li .icon.edit {
     background: url('../images/edit.svg') no-repeat;
     background-size: contain;
 }
   
-ul.menu.context li div.icon.restore {
+.context-menu ul li .icon.restore {
     background: url('../images/restore.svg') no-repeat;
     background-size: contain;
 }
   
-ul.menu.context li div.icon.download {
+.context-menu ul li div.icon.download {
     background: url('../images/download.svg') no-repeat;
     background-size: contain;
 }
   
-ul.menu.context li div.icon.copy {
+.context-menu ul li div.icon.copy {
     background: url('../images/copy.svg') no-repeat;
     background-size: contain;
 }
   
-ul.menu.context li div.icon.delete {
+.context-menu ul li div.icon.delete {
     background: url('../images/delete.svg') no-repeat;
     background-size: contain;
 }
@@ -63,40 +64,33 @@ ul.menu.context li div.icon.delete {
     /* border-right: 5px solid rgba(30, 36, 68, .95); */
 /* } */
 
-ul.menu {
-    height: auto;
-    list-style: none;
-}
   
-ul.menu.context {
-    text-align: left;
-}
   
-ul.menu li {
+.context-menu ul li {
     display: flex;
     align-items: center;
     padding: 5px;
 }
 
-ul.menu li.disabled {
+.context-menu ul li.disabled {
     opacity: .6;
 }
   
-ul.menu li:not(:first-child) {
+.context-menu ul li:not(:first-child) {
     border-top: 1px solid rgba(255, 255, 255, .1);
 }
   
-ul.menu li:hover {
+.context-menu ul li:hover {
     cursor: pointer;
     background-color: rgba(255, 255, 255, .07);
 }
 
-ul.menu.context li:first-child {
+.context-menu ul li:first-child {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-ul.menu.context li:last-child {
+.context-menu ul li:last-child {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }

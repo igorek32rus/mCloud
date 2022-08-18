@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext } from 'react'
 
-import Logo from './Logo';
-import Search from './Search';
-import MainMenu from './MainMenu';
+import Logo from './Logo'
+import Search from './Search'
 
 import '../styles/Header.css'
-import { AuthContext } from '../Context';
+import { AuthContext } from '../Context'
+import ProfileAvatar from './ProfileAvatar'
 
 function Header(props) {
     const {isAuth} = useContext(AuthContext)
@@ -13,8 +13,12 @@ function Header(props) {
     return (
         <header>
             <Logo />
-            { isAuth && <Search /> }
-            { isAuth && <MainMenu /> }
+            { isAuth && (
+                <>
+                    <Search />
+                    <ProfileAvatar setIsMenuOpen={props.setIsMenuOpen} />
+                </>
+            ) }
         </header>
     )
 }
