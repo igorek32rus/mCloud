@@ -39,7 +39,7 @@ function TopPanel({path, changeDir}) {
 
     return (
         <div className="top-panel">
-            <Path path={path} changeDir={changeDir} />
+            { !!path.length && <Path path={path} changeDir={changeDir} /> }
             <div className="buttons">
                 <Button click={createFolder}>Создать папку</Button>
                 <Button click={uploadFiles}>Загрузить</Button>
