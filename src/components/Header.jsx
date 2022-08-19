@@ -16,7 +16,7 @@ function Header(props) {
             { isAuth && (
                 <>
                     <Search />
-                    <ProfileAvatar setIsMenuOpen={props.setIsMenuOpen} />
+                    <ProfileAvatar />
                 </>
             ) }
         </header>

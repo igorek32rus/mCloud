@@ -65,6 +65,30 @@ const recursiveMarkDeleteFiles = async (files) => {
     }
 }
 
+const recursiveRestoreFiles = async (files) => {
+    if (!files.length) return 0
+
+    let size = 0
+
+    try {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (file.type === 'folder') {
+                size += await recursiveRestoreFiles(await File.find({parent: file._id}))
+            }
+    
+            const fileDB = await File.findOne({_id: file._id})
+            fileDB.deleted = null
+            await fileDB.save()
+            size += fileDB.size
+        }
+        return size
+    } catch (error) {
+        console.log('Error restore files')
+    }
+}
+
 const recursiveUpdateSizeParent = async (userId, parent, size) => {
     if (!parent) return
 
@@ -344,11 +368,11 @@ class FileController {
                 }
 
                 fileDB.parent = targetExist._id
-                fileDB.deleted = null
                 await fileDB.save()
-
-                await recursiveUpdateSizeParent(req.user.id, fileDB.parent, fileDB.size)
             }
+
+            const size = await recursiveRestoreFiles(files)
+            await recursiveUpdateSizeParent(req.user.id, targetExist._id, size)
 
             return res.json({status: 'ok'})
         } catch (error) {

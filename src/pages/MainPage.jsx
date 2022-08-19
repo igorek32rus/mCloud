@@ -11,7 +11,7 @@ import MainMenu from '../components/MainMenu'
 
 import '../styles/App.css'
 
-import { ModalProvider, AuthContext, NotifyContext, LoaderContext } from '../Context'
+import { ModalProvider, AuthContext, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
 
 import fetchReq from '../utils/fetchReq'
 import useQuery from '../hooks/useQuery'
@@ -21,8 +21,6 @@ function MainPage() {
   const {userData} = useContext(AuthContext)
   const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
@@ -93,12 +91,14 @@ function MainPage() {
 
   return (
     <>
-      <Header setIsMenuOpen={setIsMenuOpen} />
-      {isMenuOpen && <MainMenu setIsMenuOpen={setIsMenuOpen} />}
+      <MainMenuProvider>
+        <Header />
+        <MainMenu />
+      </MainMenuProvider>
       <div className="pageBodyMain">
         <ModalProvider>
-          {category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
-          <TitlePage currentDir={path[path.length - 1]} category={category} changeDir={changeDir} />
+          {!loading && category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
+          {!loading && <TitlePage currentDir={path[path.length - 1]} category={category} changeDir={changeDir} /> }
           {loading 
             ? <Loader /> 
             : <DirContent 

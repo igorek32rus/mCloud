@@ -1,8 +1,11 @@
-import React from "react"
+import React, {useContext} from "react"
+import { MainMenuContext } from "../Context"
 
 function ProfileAvatar(props) {
+    const {setIsMenuOpened} = useContext(MainMenuContext)
+
     const handleClickProfile = () => {
-        props.setIsMenuOpen((prev) => !prev)
+        setIsMenuOpened((prev) => !prev)
     }
 
     return (
