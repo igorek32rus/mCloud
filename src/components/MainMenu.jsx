@@ -30,7 +30,7 @@ function MainMenu(props) {
                     <li onClick={() => handleChangeCat('latest')}>Последние</li>
                     <li onClick={() => handleChangeCat('shared')}>Общие</li>
                     <li onClick={() => handleChangeCat('trash')}>Корзина</li>
-                    <li>Настройки</li>
+                    <li style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}>Настройки</li>
                     <li onClick={handleLogout}>Выйти</li>
                 </ul>
             </div>
