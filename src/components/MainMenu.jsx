@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { AuthContext, MainMenuContext } from '../Context'
+import React, { useContext } from 'react'
+import { AuthContext, MainMenuContext, LoaderContext } from '../Context'
 import '../styles/MainMenu.css'
 
 import { useHistory } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom'
 function MainMenu(props) {
     const {isMenuOpened, setIsMenuOpened} = useContext(MainMenuContext)
     const {setIsAuth, setUserData} = useContext(AuthContext)
+    const {setLoading} = useContext(LoaderContext)
     const history = useHistory()
 
     const handleLogout = () => {
@@ -16,6 +17,7 @@ function MainMenu(props) {
     }
 
     const handleChangeCat = (cat) => {
+        setLoading(true)
         history.push(`/files${cat !== 'main' ? `?category=${cat}` : ''}`)
     }
 
