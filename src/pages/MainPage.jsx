@@ -13,8 +13,9 @@ import '../styles/App.css'
 
 import { ModalProvider, AuthContext, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
 
-import fetchReq from '../utils/fetchReq'
+// import fetchReq from '../utils/fetchReq'
 import useQuery from '../hooks/useQuery'
+import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
 
 function MainPage() {
@@ -26,6 +27,7 @@ function MainPage() {
   const [path, setPath] = useState([])
 
   const queryParams = useQuery()
+  const fetch = useFetch()
 
   const category = useMemo(() => queryParams.get("category") ? queryParams.get("category") : 'main', [queryParams])
   const parent = useMemo(() => queryParams.get("parent") ? queryParams.get("parent") : userData.rootId, [queryParams, userData.rootId])
@@ -42,7 +44,7 @@ function MainPage() {
       value: category
     })
 
-    const updateDir = await fetchReq({
+    const updateDir = await fetch({
       url: URLS.GET_FILES,
       reqParams
     })
@@ -64,7 +66,7 @@ function MainPage() {
 
   const changeParent = async (idNewParent, files) => {
     try {
-      const updatedDir = await fetchReq({
+      const updatedDir = await fetch({
         url: URLS.MOVE_FILES, 
         method: 'POST', 
         data: {idNewParent, files, curDir: path[path.length - 1]}
@@ -116,4 +118,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default MainPage

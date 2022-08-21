@@ -1,12 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from "react"
 import { ModalContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
-import fetchReq from "../../utils/fetchReq"
+import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
 function Rename({items, changeDir}) {
     const [newName, setNewName] = useState(items[0].name)
     const inputRef = useRef()
+    const fetch = useFetch()
 
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
@@ -42,7 +43,7 @@ function Rename({items, changeDir}) {
         }
 
         try {
-            const updatedFile = await fetchReq({
+            const updatedFile = await fetch({
                 url: URLS.RENAME_FILE, 
                 method: 'POST', 
                 data: {name: newName, id: items[0]._id}

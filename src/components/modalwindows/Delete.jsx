@@ -1,17 +1,18 @@
 import React, { useContext } from "react"
 import { ModalContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
-import fetchReq from "../../utils/fetchReq"
+import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
 function Delete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+    const fetch = useFetch()
 
     const handleDeleteBtn = async () => {
         closeModal()
         try {
-            const updatedDir = await fetchReq({
+            const updatedDir = await fetch({
                 url: URLS.DELETE_FILES, 
                 method: 'POST', 
                 data: {files: items}

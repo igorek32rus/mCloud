@@ -1,15 +1,17 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import { NotifyContext } from "../../Context";
-import Button from "../UI/button/Button";
+import React, { useContext, useState, useRef, useEffect } from "react"
+import { NotifyContext } from "../../Context"
+import Button from "../UI/button/Button"
 
-import { ModalContext } from "../../Context";
-import fetchReq from "../../utils/fetchReq";
-import { URLS } from "../../constants";
+import { ModalContext } from "../../Context"
+import useFetch from "../../hooks/useFetch"
+import { URLS } from "../../constants"
 
 function CreateFolder({currentDir, changeDir}) {
     const [nameFolder, setNameFolder] = useState('')
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+
+    const fetch = useFetch()
 
     const inputRef = useRef()
 
@@ -38,7 +40,7 @@ function CreateFolder({currentDir, changeDir}) {
         }
 
         try {
-            const newFolder = await fetchReq({
+            const newFolder = await fetch({
                 url: URLS.CREATE_FOLDER, 
                 method: 'POST', 
                 data: {name: nameFolder, parent: currentDir._id}

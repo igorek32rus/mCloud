@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { ModalContext, NotifyContext } from "../../../Context"
 import Button from "../../UI/button/Button"
-import fetchReq from "../../../utils/fetchReq"
+import useFetch from "../../../hooks/useFetch"
 import { URLS } from "../../../constants"
 import Tree from "./Tree"
 import Loader from "../../UI/loader/Loader"
@@ -14,10 +14,12 @@ function Restore({items, changeDir, currentDir}) {
     const [loading, setLoading] = useState(true)
     const [targetFolder, setTargetFolder] = useState(null)
 
+    const fetch = useFetch()
+
     const handleRestoreBtn = async () => {
         closeModal()
         try {
-            const restoreDir = await fetchReq({
+            const restoreDir = await fetch({
                 url: URLS.RESTORE_FILE, 
                 method: 'POST', 
                 data: {files: items, target: targetFolder}
@@ -44,7 +46,7 @@ function Restore({items, changeDir, currentDir}) {
     const getTreeFolders = async () => {
         setLoading(true)
         try {
-            const treeFolders = await fetchReq({
+            const treeFolders = await fetch({
                 url: URLS.GET_TREE_FOLDERS
             })
       

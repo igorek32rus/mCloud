@@ -1,7 +1,7 @@
 import React, {useState, useContext} from "react"
 import { AuthContext, NotifyContext, LoaderContext } from "../../Context"
 import Button from "../UI/button/Button"
-import fetchReq from '../../utils/fetchReq'
+import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 import '../../styles/Auth.css'
 
@@ -12,10 +12,11 @@ const Login = ({setLoginWindow}) => {
     const {setIsAuth, setUserData} = useContext(AuthContext)
     const {createNotification} = useContext(NotifyContext)
     const {setLoading} = useContext(LoaderContext)
+    const fetch = useFetch()
 
     const login = async () => {
         setLoading(true)
-        const res = await fetchReq({
+        const res = await fetch({
             url: URLS.LOGIN, 
             method: 'POST', 
             data: {email, pass: password}
