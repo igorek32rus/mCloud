@@ -18,7 +18,7 @@ const nullMessage = (cat) => {
         return 'Вы пока не открыли общий доступ к файлам'
 
     if (cat === 'trash')
-        return 'В корзине нет удалённых файлов'
+        return 'Удалённых файлов нет'
 }
 
 function DirContent(props) {
@@ -254,6 +254,7 @@ function DirContent(props) {
             onMouseUp={(e) => handleMouseUp(e)} 
             onDragStart={() => handleDragStart() } 
         >
+            {console.log('dirContent updated')}
             { selection.dragstart ? 
                 <div className="selection" 
                     style={{

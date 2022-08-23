@@ -13,7 +13,6 @@ import '../styles/App.css'
 
 import { ModalProvider, AuthContext, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
 
-// import fetchReq from '../utils/fetchReq'
 import useQuery from '../hooks/useQuery'
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
