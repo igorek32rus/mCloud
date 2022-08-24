@@ -7,7 +7,7 @@ import TopPanel from '../components/TopPanel'
 import TitlePage from '../components/TitlePage'
 import DirContent from '../components/DirContent'
 import Loader from '../components/UI/loader/Loader'
-import MainMenu from '../components/MainMenu'
+import Sidebar from '../components/Sidebar'
 
 import '../styles/App.css'
 
@@ -94,7 +94,7 @@ function MainPage() {
     <>
       <MainMenuProvider>
         <Header />
-        <MainMenu />
+        <Sidebar />
       </MainMenuProvider>
       <div className="pageBodyMain">
         <ModalProvider>
