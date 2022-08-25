@@ -112,6 +112,7 @@ footer {
     justify-content: center;
     font-size: 14px;
     margin-top: auto;
+    z-index: 10;
 }
 
 

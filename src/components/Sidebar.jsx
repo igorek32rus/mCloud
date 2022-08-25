@@ -5,7 +5,7 @@ import '../styles/Sidebar.css'
 import { useHistory } from 'react-router-dom'
 
 function Sidebar(props) {
-    const {isMenuOpened, setIsMenuOpened} = useContext(MainMenuContext)
+    const {isMenuOpened, setIsMenuOpened, setIsMenuClosing, isMenuClosing} = useContext(MainMenuContext)
     const {setIsAuth, setUserData} = useContext(AuthContext)
     const {setLoading} = useContext(LoaderContext)
     const history = useHistory()
@@ -22,15 +22,18 @@ function Sidebar(props) {
     }
 
     const handleClickBackdrop = () => {
-        setIsMenuOpened(false)
+        setIsMenuClosing(true)
+        setTimeout(() => {
+            setIsMenuOpened(false)
+            setIsMenuClosing(false)
+        }, 200);
     }
 
     return (
         <>
             { isMenuOpened && 
                 <div className="sidebar-backdrop" onClick={handleClickBackdrop}>
-                    <div className="sidebar">
-                        <div className="sidebar-avatar"></div>
+                    <div className={isMenuClosing ? "sidebar hide" : "sidebar show"}>
                         <menu>
                             <ul>
                                 <li onClick={() => handleChangeCat('main')}>Главная</li>

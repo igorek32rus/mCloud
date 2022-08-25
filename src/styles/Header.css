@@ -35,7 +35,7 @@ header {
 .profile-avatar-block {
     display: flex;
     opacity: .8;
-    transition: opacity .2s ease-in-out;
+    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
     cursor: pointer;
 }
 
