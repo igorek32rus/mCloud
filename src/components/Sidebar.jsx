@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import { AuthContext, MainMenuContext, LoaderContext } from '../Context'
 import '../styles/Sidebar.css'
+import { getFileSize } from '../utils/getFileSize'
 
 import { useHistory } from 'react-router-dom'
 
 function Sidebar(props) {
     const {isMenuOpened, setIsMenuOpened, setIsMenuClosing, isMenuClosing} = useContext(MainMenuContext)
-    const {setIsAuth, setUserData} = useContext(AuthContext)
+    const {setIsAuth, setUserData, userData} = useContext(AuthContext)
     const {setLoading} = useContext(LoaderContext)
     const history = useHistory()
 
@@ -33,7 +34,7 @@ function Sidebar(props) {
         <>
             { isMenuOpened && 
                 <div className="sidebar-backdrop" onClick={handleClickBackdrop}>
-                    <div className={isMenuClosing ? "sidebar hide" : "sidebar show"}>
+                    <div className={isMenuClosing ? "sidebar hide" : "sidebar"}>
                         <menu>
                             <ul>
                                 <li onClick={() => handleChangeCat('main')}>Главная</li>
@@ -44,7 +45,7 @@ function Sidebar(props) {
                                 <li onClick={handleLogout}>Выйти</li>
                             </ul>
                         </menu>
-                        <div className="used-memory"></div>
+                        <div className="used-disk-space">Диск: {getFileSize(userData.usedSpace)}</div>
                     </div>
                 </div>
             }
