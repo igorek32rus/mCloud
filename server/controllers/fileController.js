@@ -263,6 +263,17 @@ class FileController {
         try {
             const {files} = req.body
             const parent = files[0].parent
+
+            const root = await File.findOne({user: req.user.id, parent: null})
+
+            // для 1 уровня вложенности изменить родителя на root
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i]
+                const fileDB = await File.findOne({_id: file._id})
+                fileDB.parent = root._id
+                await fileDB.save()
+            }
+
             const {countDeleted, sizeDeleted} = await recursiveMarkDeleteFiles(files)
             await recursiveUpdateSizeParent(req.user.id, parent, -sizeDeleted)
             const dirFiles = await File.find({user: req.user.id, parent, deleted: null})
