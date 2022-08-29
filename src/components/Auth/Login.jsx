@@ -44,11 +44,15 @@ const Login = ({setLoginWindow}) => {
             <div className="title">
                 <span className="thin">micro</span><span className="bold">Cloud</span>
             </div>
-            <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
-            <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
-            <div className="buttons">
-                <Button click={() => {setLoginWindow(false)}}>Регистрация</Button>
-                <Button click={login}>Войти</Button>
+            <div style={{margin: 'auto 0'}}>
+                <form>
+                    <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
+                    <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
+                    <div className="buttons">
+                        <Button click={() => {setLoginWindow(false)}}>Регистрация</Button>
+                        <Button click={login}>Войти</Button>
+                    </div>
+                </form>
             </div>
         </div>
     )

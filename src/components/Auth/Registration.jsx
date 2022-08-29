@@ -56,18 +56,21 @@ const Registration = ({setLoginWindow}) => {
             <div className="title">
                 <span className="thin">micro</span><span className="bold">Cloud</span>
             </div>
-            <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
-            <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
-            <input type="password" placeholder="Повтротие пароль"
-                style={(password === confirmPassword && confirmPassword.length > 0) ? confirmPassStyle : { width: '100%' }} 
-                onChange={(e) => setConfirmPassword(e.target.value)} 
-                value={confirmPassword} 
-                onKeyDown={(e) => handlerKeyDown(e)} />
-            <div className="buttons">
-                <Button click={() => setLoginWindow(true)}>Вход</Button>
-                <Button click={registration}>Зарегистрироваться</Button>
+            <div style={{margin: 'auto 0'}}>
+                <form>
+                    <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
+                    <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
+                    <input type="password" placeholder="Повтротие пароль"
+                        style={(password === confirmPassword && confirmPassword.length > 0) ? confirmPassStyle : { width: '100%' }} 
+                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                        value={confirmPassword} 
+                        onKeyDown={(e) => handlerKeyDown(e)} />
+                    <div className="buttons">
+                        <Button click={() => setLoginWindow(true)}>Вход</Button>
+                        <Button click={registration}>Зарегистрироваться</Button>
+                    </div>
+                </form>
             </div>
-                
         </div>
     )
 }
