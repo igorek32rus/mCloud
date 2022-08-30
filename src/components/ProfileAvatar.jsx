@@ -23,8 +23,9 @@ function ProfileAvatar(props) {
         }
 
         if (isMenuOpened) {
-            let widthSidebar = Math.round(document.documentElement.clientWidth * 0.2)
-            if (widthSidebar < 150) widthSidebar = 150
+            // let widthSidebar = Math.round(document.documentElement.clientWidth * 0.2)
+            // if (widthSidebar < 150) widthSidebar = 150
+            const widthSidebar = 200
 
             const center = Math.round(widthSidebar / 2)
             const scaleAvatar = 3

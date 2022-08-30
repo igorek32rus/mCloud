@@ -12,8 +12,7 @@
     top: 50px;
     right: 0;
     bottom: 30px;
-    width: 20%;
-    min-width: 150px;
+    width: 200px;
     border: 1px solid rgba(255, 255, 255, .2);
     box-shadow: 0 0 5px rgba(0, 0, 0, .7);
     z-index: 5;
