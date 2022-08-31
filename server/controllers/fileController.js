@@ -35,6 +35,7 @@ const recursiveDeleteFiles = async (files) => {
     
             const fileDB = await File.findOne({_id: file._id})
             if (file.type === 'file') {
+                await FileService.deleteFile(file)
                 sizeDel += fileDB.size
             }
             countDel++
@@ -296,9 +297,16 @@ class FileController {
     async permanentDeleteFiles(req, res) {
         try {
             const {files} = req.body
+
+            const user = await User.findOne({user: req.user.id})
+            if (!user) {
+                return res.status(500).json({error: 'Delete error'})
+            }
+
             const {count, size} = await recursiveDeleteFiles(files)
-            console.log(count, size);
-            return res.json({count, size})
+            user.usedSpace -= size
+            await user.save()
+            return res.json({count, size, usedSpace: user.usedSpace})
         } catch (error) {
             console.log(error)
             return res.status(500).json({error: 'Can`t delete files'})
@@ -345,7 +353,7 @@ class FileController {
             await dbFile.save()
             await recursiveUpdateSizeParent(req.user.id, dbFile.parent, dbFile.size)
 
-            return res.json({file: dbFile})
+            return res.json({file: dbFile, usedSpace: user.usedSpace})
         } catch (error) {
             console.log(error)
             return res.status(500).json({error: 'Upload error'})

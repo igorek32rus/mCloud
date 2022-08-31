@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { ModalContext, NotifyContext } from "../../Context"
+import { ModalContext, NotifyContext, AuthContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
@@ -8,6 +8,7 @@ import {getFileSize} from "../../utils/getFileSize"
 function PermanentDelete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+    const {setUserData} = useContext(AuthContext)
     const fetch = useFetch()
 
     const handleDeleteBtn = async () => {
@@ -21,6 +22,9 @@ function PermanentDelete({items, changeDir, currentDir}) {
       
             if (updatedDir.count >=0) {
                 changeDir(currentDir._id)
+                setUserData(prev => {
+                    return {...prev, usedSpace: updatedDir.usedSpace }
+                })
                 createNotification({
                     title: `Удаление объектов`, 
                     message: `Объекты успешно удалены (${updatedDir.count}). Освобождено ${getFileSize(updatedDir.size)}`

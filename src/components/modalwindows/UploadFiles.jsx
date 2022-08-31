@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react"
 import Button from "../UI/button/Button"
-import { ModalContext, NotifyContext } from "../../Context"
+import { ModalContext, NotifyContext, AuthContext } from "../../Context"
 import { getFileSize } from "../../utils/getFileSize"
 import { URLS } from "../../constants"
 
@@ -10,6 +10,7 @@ function UploadFiles({files, currentDir, changeDir}) {
     const [uploadFiles, setUploadFiles] = useState(files)
     const {closeModal} = useContext(ModalContext)
     const {createNotification, removeNotification} = useContext(NotifyContext)
+    const {setUserData} = useContext(AuthContext)
 
     const handleUploadFilesBtn = async () => {
         closeModal()
@@ -35,6 +36,9 @@ function UploadFiles({files, currentDir, changeDir}) {
                     onUploadProgress: progressEvent => {
                     // console.log(progressEvent.loaded);
                     }
+                })
+                setUserData((prev) => {
+                    return {...prev, usedSpace: response.data.usedSpace}
                 })
             } catch (error) {
                 createNotification({
