@@ -19,20 +19,29 @@ const getPath = async (parent, userId) => {
 }
 
 const recursiveDeleteFiles = async (files) => {
-    if (!files.length) return
+    if (!files.length) return {count: 0, size: 0}
 
+    let countDel = 0, sizeDel = 0
 
     try {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
 
             if (file.type === 'folder') {
-                await recursiveDeleteFiles(await File.find({parent: file._id}))
+                const {count, size} = await recursiveDeleteFiles(await File.find({parent: file._id}))
+                countDel += count
+                sizeDel += size
             }
     
+            const fileDB = await File.findOne({_id: file._id})
+            if (file.type === 'file') {
+                sizeDel += fileDB.size
+            }
+            countDel++
+
             await File.deleteOne({_id: file._id})
         }
-        return 
+        return {count: countDel, size: sizeDel}
     } catch (error) {
         console.log('Error delete files')
     }
@@ -284,6 +293,18 @@ class FileController {
         }
     }
 
+    async permanentDeleteFiles(req, res) {
+        try {
+            const {files} = req.body
+            const {count, size} = await recursiveDeleteFiles(files)
+            console.log(count, size);
+            return res.json({count, size})
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({error: 'Can`t delete files'})
+        }
+    }
+
     async uploadFile(req, res) {
         try {
             const {file} = req.files
@@ -300,6 +321,15 @@ class FileController {
                 return res.status(400).json({message: 'Неверная дирректория'})
             }
 
+            const user = await User.findOne({user: req.user.id})
+            if (!user) {
+                return res.status(500).json({error: 'Upload error'})
+            }
+
+            if (user.usedSpace + file.size > 999999999) {
+                return res.status(400).json({message: 'Нет места на облачном диске'})
+            }
+
             const dbFile = new File({
                 name: fileName,
                 type: 'file',
@@ -307,6 +337,9 @@ class FileController {
                 parent: parent._id,
                 user: req.user.id
             })
+
+            user.usedSpace += dbFile.size
+            await user.save()
 
             await FileService.uploadFile(file, dbFile)
             await dbFile.save()

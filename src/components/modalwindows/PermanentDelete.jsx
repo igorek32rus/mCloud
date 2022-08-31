@@ -3,8 +3,9 @@ import { ModalContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
+import {getFileSize} from "../../utils/getFileSize"
 
-function Delete({items, changeDir, currentDir}) {
+function PermanentDelete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
     const fetch = useFetch()
@@ -13,16 +14,16 @@ function Delete({items, changeDir, currentDir}) {
         closeModal()
         try {
             const updatedDir = await fetch({
-                url: URLS.DELETE_FILES, 
+                url: URLS.PERMANENT_DELETE_FILES, 
                 method: 'POST', 
                 data: {files: items}
             })
       
-            if (updatedDir.files) {
+            if (updatedDir.count >=0) {
                 changeDir(currentDir._id)
                 createNotification({
                     title: `Удаление объектов`, 
-                    message: `Объекты помещены в корзину`
+                    message: `Объекты успешно удалены (${updatedDir.count}). Освобождено ${getFileSize(updatedDir.size)}`
                 })
             }
         } catch (error) {
@@ -32,7 +33,7 @@ function Delete({items, changeDir, currentDir}) {
 
     return (
         <>
-            <p style={{margin: '10px 0'}}>Вы действительно хотите удалить выбранные файлы?</p>
+            <p style={{margin: '10px 0'}}>Вы действительно хотите удалить навсегда выбранные файлы? Это действие необратимо.</p>
             <div className="buttons">
                 <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleDeleteBtn} className={"btn red"} style={{width: '100%'}} >Удалить</Button>
@@ -41,4 +42,4 @@ function Delete({items, changeDir, currentDir}) {
     )
 }
 
-export default Delete
+export default PermanentDelete

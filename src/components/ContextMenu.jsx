@@ -7,6 +7,7 @@ import CreateFolder from "./modalwindows/CreateFolder"
 import Rename from "./modalwindows/Rename"
 import Share from './modalwindows/Share'
 import Delete from "./modalwindows/Delete"
+import PermanentDelete from "./modalwindows/PermanentDelete"
 import Restore from "./modalwindows/Restore/Restore"
 
 function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType, style, category }) {
@@ -47,7 +48,7 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
     const handlerDelete = () => {
         openContextMenu(-1, 0, 0)   // закрыть контекстное меню
         openModal({
-            title: 'Удалить',
+            title: 'Удалить в корзину',
             children: <Delete items={items} changeDir={changeDir} currentDir={currentDir} />
         })
     }
@@ -57,6 +58,14 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
         openModal({
             title: 'Восстановить',
             children: <Restore items={items} changeDir={changeDir} currentDir={currentDir} />
+        })
+    }
+
+    const handlerPermanentDelete = () => {
+        openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        openModal({
+            title: 'Удалить навсегда',
+            children: <PermanentDelete items={items} changeDir={changeDir} currentDir={currentDir} />
         })
     }
 
@@ -74,12 +83,13 @@ function ContextMenu({currentDir, changeDir, openContextMenu, items, contextType
                         <li><div className="icon download"></div>Скачать</li>
                         <li onClick={handlerShare}><div className="icon share"></div>Поделиться</li>
                         <li><div className="icon copy"></div>Копировать</li>
-                        <li onClick={handlerDelete}><div className="icon delete"></div>Удалить</li>
+                        <li onClick={handlerDelete}><div className="icon delete"></div>Удалить в корзину</li>
                     </ul> )
             }
             { category === 'trash' && contextType === 'item' &&
                 ( <ul>
                     <li onClick={handlerRestore}><div className="icon restore"></div>Восстановить</li>
+                    <li onClick={handlerPermanentDelete}><div className="icon delete"></div>Удалить навсегда</li>
                 </ul> )
             }
         </div>

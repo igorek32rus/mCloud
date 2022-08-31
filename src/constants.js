@@ -11,6 +11,7 @@ export const URLS = {
     GET_TREE_FOLDERS: MAIN.SERVER + '/api/files/tree',
     CREATE_FOLDER: MAIN.SERVER + '/api/files/dir/create',
     DELETE_FILES: MAIN.SERVER + '/api/files/delete',
+    PERMANENT_DELETE_FILES: MAIN.SERVER + '/api/files/permanentDelete',
     RENAME_FILE: MAIN.SERVER + '/api/files/rename',
     UPLOAD_FILE: MAIN.SERVER + '/api/files/upload',
 
