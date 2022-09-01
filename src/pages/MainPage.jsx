@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 import Header from '../components/Header'
 import Notify from '../components/Notify'
@@ -11,57 +11,54 @@ import Sidebar from '../components/Sidebar'
 
 import '../styles/App.css'
 
-import { ModalProvider, AuthContext, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
+import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
+import { DirContext } from '../contexts/DirContext/DirContext'
 
-import useQuery from '../hooks/useQuery'
+import { useParams } from 'react-router-dom'
+
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
 
 function MainPage() {
-  const {userData} = useContext(AuthContext)
   const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
 
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
 
-  const queryParams = useQuery()
   const fetch = useFetch()
 
-  const category = useMemo(() => queryParams.get("category") ? queryParams.get("category") : 'main', [queryParams])
-  const parent = useMemo(() => queryParams.get("parent") ? queryParams.get("parent") : userData.rootId, [queryParams, userData.rootId])
-
-  const changeDir = useCallback(async (idDir) => {
-    setLoading(true)
-    let reqParams = [{
-      name: 'parent',
-      value: idDir
-    }]
-
-    if (category !== 'main') reqParams.push({
-      name: 'category',
-      value: category
-    })
-
-    const updateDir = await fetch({
-      url: URLS.GET_FILES,
-      reqParams
-    })
-
-    if (updateDir.files) {
-      setDir(updateDir.files)
-    }
-
-    if (updateDir.path) {
-      setPath(updateDir.path)
-    }
-    setLoading(false)
-  }, [category, setLoading])
-
+  const {category, parent} = useParams()
 
   useEffect(() => {
-    changeDir(parent)
-  }, [changeDir, category, parent])
+    const openFolder = async () => {
+      setLoading(true)
+      let reqParams = [{
+        name: 'parent',
+        value: parent
+      }]
+
+      if (category !== 'main') reqParams.push({
+        name: 'category',
+        value: category
+      })
+
+      const updateDir = await fetch({
+        url: URLS.GET_FILES,
+        reqParams
+      })
+
+      if (updateDir.files) {
+        setDir(updateDir.files)
+      }
+
+      if (updateDir.path) {
+        setPath(updateDir.path)
+      }
+      setLoading(false)
+    }
+    openFolder()
+  }, [category, parent])
 
   const changeParent = async (idNewParent, files) => {
     try {
@@ -91,29 +88,24 @@ function MainPage() {
   }
 
   return (
-    <>
+    <DirContext.Provider value={{dir, setDir}}>
       <MainMenuProvider>
         <Header />
         <Sidebar />
       </MainMenuProvider>
       <div className="pageBodyMain">
         <ModalProvider>
-          {!loading && category === 'main' && <TopPanel path={path} changeDir={changeDir} /> }
-          {!loading && <TitlePage currentDir={path[path.length - 1]} category={category} changeDir={changeDir} /> }
+          {category === 'main' && <TopPanel path={path} /> }
+          {<TitlePage currentDir={path[path.length - 1]} /> }
           {loading 
             ? <Loader /> 
-            : <DirContent 
-                dir={dir} 
-                currentDir={path[path.length - 1]} 
-                changeDir={changeDir} 
-                changeParent={changeParent}
-                category={category} />
+            : <DirContent changeParent={changeParent} />
           }
         </ModalProvider>
       </div>
       <Notify />
       <Footer />
-    </>
+    </DirContext.Provider>
   );
 }
 

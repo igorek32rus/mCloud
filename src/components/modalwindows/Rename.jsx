@@ -4,13 +4,16 @@ import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
-function Rename({items, changeDir}) {
+import { DirContext } from "../../contexts/DirContext/DirContext"
+
+function Rename({items}) {
     const [newName, setNewName] = useState(items[0].name)
     const inputRef = useRef()
     const fetch = useFetch()
 
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+    const {setDir} = useContext(DirContext)
 
     useEffect(() => {
         const input = inputRef.current
@@ -50,7 +53,10 @@ function Rename({items, changeDir}) {
             })
             
             if (updatedFile.file) {
-                changeDir(items[0].parent)
+                // changeDir(items[0].parent)
+                setDir(dir => {
+                    return [...dir.filter(file => file._id !== items[0]._id), updatedFile.file]
+                })
                 createNotification({
                     title: `Переименование ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'}`, 
                     message: `Новое имя ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'} - ${updatedFile.file.name}`

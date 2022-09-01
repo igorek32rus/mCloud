@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from "react"
 import { ModalContext, NotifyContext } from "../../../Context"
+import { DirContext } from "../../../contexts/DirContext/DirContext"
 import Button from "../../UI/button/Button"
 import useFetch from "../../../hooks/useFetch"
 import { URLS } from "../../../constants"
 import Tree from "./Tree"
 import Loader from "../../UI/loader/Loader"
 
-function Restore({items, changeDir, currentDir}) {
+function Restore({items}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+    const {setDir} = useContext(DirContext)
 
     const [tree, setTree] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -26,7 +28,9 @@ function Restore({items, changeDir, currentDir}) {
             })
       
             if (restoreDir.status === 'ok') {
-                changeDir(currentDir._id)
+                setDir(dir => {
+                    return dir.filter(file => !items.find(itemDel => itemDel._id === file._id))
+                })
                 createNotification({
                     title: `Восстановление файлов`, 
                     message: `Файлы успешно восстановлены`

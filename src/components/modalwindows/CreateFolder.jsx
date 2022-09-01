@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react"
+import { useHistory, useParams } from "react-router-dom"
 import { NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
 
@@ -6,10 +7,15 @@ import { ModalContext } from "../../Context"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
-function CreateFolder({currentDir, changeDir}) {
+import { DirContext } from "../../contexts/DirContext/DirContext"
+
+function CreateFolder() {
     const [nameFolder, setNameFolder] = useState('')
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+    const {setDir} = useContext(DirContext)
+
+    const {parent} = useParams()
 
     const fetch = useFetch()
 
@@ -43,11 +49,11 @@ function CreateFolder({currentDir, changeDir}) {
             const newFolder = await fetch({
                 url: URLS.CREATE_FOLDER, 
                 method: 'POST', 
-                data: {name: nameFolder, parent: currentDir._id}
+                data: {name: nameFolder, parent}
             })
         
             if (newFolder.file) {
-                changeDir(currentDir._id)
+                setDir(dir => [...dir, newFolder.file])
                 createNotification({title: 'Создание папки', message: `Папка (${nameFolder}) успешно создана`})
                 return
             }

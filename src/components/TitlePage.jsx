@@ -1,9 +1,11 @@
 import React, {useContext} from "react"
 import { AuthContext } from "../Context"
+import { useParams, useHistory } from "react-router-dom"
 import '../styles/TitlePage.css'
 
 const catToReadble = (cat) => {
     const allCat = {
+        'main': 'Главная',
         'latest': 'Последние',
         'shared': 'Общие',
         'trash': 'Корзина'
@@ -12,16 +14,19 @@ const catToReadble = (cat) => {
     return allCat[cat]
 }
 
-function TitlePage({currentDir, category, changeDir}) {
+function TitlePage({currentDir}) {
+    const {category, parent} = useParams()
+    const history = useHistory()
+
     const {userData} = useContext(AuthContext)
 
     return (
         <div className="title_page">
-            { currentDir && currentDir?._id !== userData.rootId && category === 'trash' ? <div className="back_btn" onClick={() => changeDir(currentDir.parent)}>&laquo;</div> : '' }
+            { parent !== userData.rootId && category === 'trash' ? <div className="back_btn" onClick={() => history.goBack()}>&laquo;</div> : '' }
             <h1>
-                { catToReadble(category) 
+                { parent == userData.rootId 
                     ? catToReadble(category) 
-                    : (currentDir?.parent ? currentDir?.name : 'Главная')
+                    : currentDir.name
                 }
             </h1>
             

@@ -1,17 +1,15 @@
 import React from "react"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 
 import '../styles/Path.css'
 
-function Path({path, changeDir}) {
+function Path({path}) {
     const history = useHistory()
+    const {category} = useParams()
 
     const handlerClick = (dir) => {
-        // history.push(`/files${dir.parent ? `?parent=${dir._id}` : ''}`)
-        changeDir(dir._id)
+        history.push(`/files/${category}/${dir._id}`)
     }
-
-    // написать функцию получения пути по текущей дирректории
     
     return (
         <nav className="path">
@@ -31,15 +29,6 @@ function Path({path, changeDir}) {
                         
                     </li>
                 )) }
-                {/* <li onClick={() => handlerClick('root')}>
-                    <div className="link" style={{padding: 3}}>
-                        <div className="home">Главная</div>
-                    </div>
-                </li>
-                <li>
-                    <div className="delimiter">&#10140;</div>
-                    <div className="link">Папка</div>
-                </li> */}
             </ul>
             
         </nav>

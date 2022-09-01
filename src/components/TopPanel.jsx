@@ -1,15 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext } from "react"
 
 import '../styles/TopPanel.css'
-import Button from "./UI/button/Button";
+import Button from "./UI/button/Button"
 
 import Path from "./Path"
 
 import CreateFolder from './modalwindows/CreateFolder'
 import UploadFiles from './modalwindows/UploadFiles'
 
-// import { ModalContext } from '../Context'
-import { ModalContext } from "../contexts/ModalContext/ModalContext";
+import { ModalContext } from "../contexts/ModalContext/ModalContext"
 
 function TopPanel({path, changeDir}) {
     const inputFile = React.createRef()
@@ -18,7 +17,7 @@ function TopPanel({path, changeDir}) {
     const createFolder = () => {
         openModal({
             title: 'Создание папки',
-            children: <CreateFolder currentDir={path[path.length - 1]} changeDir={changeDir} />
+            children: <CreateFolder />
         })
     }
 
@@ -33,13 +32,13 @@ function TopPanel({path, changeDir}) {
         
         openModal({
             title: 'Загрузка файлов',
-            children: <UploadFiles files={listFiles} currentDir={path[path.length - 1]} changeDir={changeDir} />
+            children: <UploadFiles files={listFiles} />
         })
     }
 
     return (
         <div className="top-panel">
-            { !!path.length && <Path path={path} changeDir={changeDir} /> }
+            { !!path.length && <Path path={path} /> }
             <div className="buttons">
                 <Button click={createFolder}>Создать папку</Button>
                 <Button click={uploadFiles}>Загрузить</Button>

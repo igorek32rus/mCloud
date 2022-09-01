@@ -3,14 +3,18 @@ import Button from "../UI/button/Button"
 import { ModalContext, NotifyContext, AuthContext } from "../../Context"
 import { getFileSize } from "../../utils/getFileSize"
 import { URLS } from "../../constants"
+import { DirContext } from "../../contexts/DirContext/DirContext"
+import { useParams } from "react-router-dom"
 
 import axios from 'axios'
 
-function UploadFiles({files, currentDir, changeDir}) {
+function UploadFiles({files}) {
     const [uploadFiles, setUploadFiles] = useState(files)
     const {closeModal} = useContext(ModalContext)
     const {createNotification, removeNotification} = useContext(NotifyContext)
     const {setUserData} = useContext(AuthContext)
+    const {setDir} = useContext(DirContext)
+    const {parent} = useParams()
 
     const handleUploadFilesBtn = async () => {
         closeModal()
@@ -27,7 +31,7 @@ function UploadFiles({files, currentDir, changeDir}) {
             try {
                 const formData = new FormData()
                 formData.append('file', file)
-                formData.append('parent', currentDir._id)
+                formData.append('parent', parent)
                 formData.append('fileName', file.name)
                 const response = await axios.post(URLS.UPLOAD_FILE, formData, {
                     headers: {
@@ -40,7 +44,9 @@ function UploadFiles({files, currentDir, changeDir}) {
                 setUserData((prev) => {
                     return {...prev, usedSpace: response.data.usedSpace}
                 })
+                setDir(dir => [...dir, response.data.file])
             } catch (error) {
+                console.log(error);
                 createNotification({
                     title: `Ошибка загрузки файла`, 
                     message: `Файл: ${file.name}. ${error.response.data.message}`
@@ -51,7 +57,6 @@ function UploadFiles({files, currentDir, changeDir}) {
     
         removeNotification(idNotification)
     
-        changeDir(currentDir._id)
         createNotification({
             title: `Загрузка файлов`, 
             message: `Файлы успешно загружены`

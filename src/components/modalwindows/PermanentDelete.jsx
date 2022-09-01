@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { ModalContext, NotifyContext, AuthContext } from "../../Context"
+import { DirContext } from "../../contexts/DirContext/DirContext"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
@@ -9,6 +10,7 @@ function PermanentDelete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
     const {setUserData} = useContext(AuthContext)
+    const {setDir} = useContext(DirContext)
     const fetch = useFetch()
 
     const handleDeleteBtn = async () => {
@@ -21,7 +23,9 @@ function PermanentDelete({items, changeDir, currentDir}) {
             })
       
             if (updatedDir.count >=0) {
-                changeDir(currentDir._id)
+                setDir(dir => {
+                    return dir.filter(file => !items.find(itemDel => itemDel._id === file._id))
+                })
                 setUserData(prev => {
                     return {...prev, usedSpace: updatedDir.usedSpace }
                 })

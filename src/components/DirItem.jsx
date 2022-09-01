@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import {getFileSize} from '../utils/getFileSize'
 
 function DirItem(props) {
     const [description, setDescription] = useState(false)
     const history = useHistory()
+    const {category} = useParams()
 
     const blockEl = useRef(null);
 
@@ -84,8 +85,7 @@ function DirItem(props) {
     
             if (e.detail > 1) {     // 2 клика
                 if (props.item.type === 'folder') {
-                    props.changeDir(props.item._id)
-                    // history.push('/files?parent=' + props.item._id)
+                    history.push(`/files/${category}/${props.item._id}`)
                 }
                 return
             }

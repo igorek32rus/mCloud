@@ -19,7 +19,7 @@ function Sidebar(props) {
 
     const handlerChangeCat = (cat) => {
         setLoading(true)
-        history.push(`/files${cat !== 'main' ? `?category=${cat}` : ''}`)
+        history.push(`/files/${cat}/${userData.rootId}`)
     }
 
     const handlerClickBackdrop = (e) => {

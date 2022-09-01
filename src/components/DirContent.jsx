@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
+import { useParams } from "react-router-dom"
+import { DirContext } from "../contexts/DirContext/DirContext"
 
 import DirItem from "./DirItem"
 import ContextMenu from "./ContextMenu"
@@ -22,6 +24,9 @@ const nullMessage = (cat) => {
 }
 
 function DirContent(props) {
+    const {dir} = useContext(DirContext)
+    const {category} = useParams()
+
     const [contextMenu, setContextMenu] = useState(false)
     const [contextMenuParams, setContextMenuParams] = useState({items: [], left: 0, top: 0, type: 'workspace'})
 
@@ -43,7 +48,7 @@ function DirContent(props) {
         startY: 0
     })
 
-    const [dirItemsPos, setDirItemsPos] = useState(props.dir.reduce((prev, cur) => {
+    const [dirItemsPos, setDirItemsPos] = useState(dir.reduce((prev, cur) => {
         return [...prev, {
             id: cur._id,
             left: 0,
@@ -213,7 +218,7 @@ function DirContent(props) {
     }
 
     useEffect(() => {
-        const resetPos = props.dir.reduce((prev, cur) => {
+        const resetPos = dir.reduce((prev, cur) => {
             return [...prev, {
                 id: cur._id,
                 left: 0,
@@ -228,13 +233,13 @@ function DirContent(props) {
         }, [])
 
         setDirItemsPos(resetPos)
-    }, [props.dir])
+    }, [dir])
     
     const openContextMenu = (id, mouseX, mouseY, state = false) => {
         if (state) {
             const itemsContext = dirItemsPos.reduce((prev, cur) => {
                 if (cur.selected || cur.id === id) {
-                    const item = props.dir.find(itemDir => itemDir._id === cur.id)
+                    const item = dir.find(itemDir => itemDir._id === cur.id)
                     if (item) return [...prev, item]
                 }
                 return [...prev]
@@ -266,12 +271,11 @@ function DirContent(props) {
                 </div> 
                 : '' }
 
-            { props.dir.length === 0 ? 
-                <div className="message">{nullMessage(props.category)}</div>
+            { dir.length === 0 ? 
+                <div className="message">{nullMessage(category)}</div>
             : '' }
 
-            { props.dir
-                .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
+            { dir.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
                 .map((item) => 
                 // item.parent === props.currentDir.link && 
                 item.type === 'folder' 
@@ -282,14 +286,12 @@ function DirContent(props) {
                     setElemDrag={setElemDrag} 
                     resetSelectedItems={resetSelectedItems} 
                     updatePos={updatePos} 
-                    changeDir={props.changeDir}
                     openContextMenu={openContextMenu}
                     contextMenu={contextMenu}
                 />) 
             }
 
-            { props.dir
-                .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
+            { dir.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
                 .map((item) => 
                 // item.parent === props.currentDir.link && 
                 item.type === 'file' 
@@ -310,9 +312,6 @@ function DirContent(props) {
                 items={contextMenuParams.items}
                 openContextMenu={openContextMenu}
                 contextType={contextMenuParams.type}
-                currentDir={props.currentDir}
-                changeDir={props.changeDir}
-                category={props.category}
             /> }
             
         </div>

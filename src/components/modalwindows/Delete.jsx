@@ -3,10 +3,12 @@ import { ModalContext, NotifyContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
+import { DirContext } from "../../contexts/DirContext/DirContext"
 
-function Delete({items, changeDir, currentDir}) {
+function Delete({items}) {
     const {closeModal} = useContext(ModalContext)
     const {createNotification} = useContext(NotifyContext)
+    const {setDir} = useContext(DirContext)
     const fetch = useFetch()
 
     const handleDeleteBtn = async () => {
@@ -18,8 +20,10 @@ function Delete({items, changeDir, currentDir}) {
                 data: {files: items}
             })
       
-            if (updatedDir.files) {
-                changeDir(currentDir._id)
+            if (updatedDir.count) {
+                setDir(dir => {
+                    return dir.filter(file => !items.find(itemDel => itemDel._id === file._id))
+                })
                 createNotification({
                     title: `Удаление объектов`, 
                     message: `Объекты помещены в корзину`

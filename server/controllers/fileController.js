@@ -178,7 +178,7 @@ class FileController {
         try {
             const {name, parent} = req.body
 
-            const fileExist = await File.findOne({user: req.user.id, parent, name, type: 'folder'})
+            const fileExist = await File.findOne({user: req.user.id, parent, name, type: 'folder', deleted: null})
             
             if (fileExist) {
                 return res.status(400).json({message: 'Папка с таким именем уже существует в данной директории'})
@@ -269,7 +269,7 @@ class FileController {
         }
     }
 
-    async deleteFiles(req, res) {
+    async deleteFilesToTrash(req, res) {
         try {
             const {files} = req.body
             const parent = files[0].parent
@@ -286,8 +286,8 @@ class FileController {
 
             const {countDeleted, sizeDeleted} = await recursiveMarkDeleteFiles(files)
             await recursiveUpdateSizeParent(req.user.id, parent, -sizeDeleted)
-            const dirFiles = await File.find({user: req.user.id, parent, deleted: null})
-            return res.json({count: countDeleted, files: dirFiles})
+            // const dirFiles = await File.find({user: req.user.id, parent, deleted: null})
+            return res.json({count: countDeleted})
         } catch (error) {
             console.log(error)
             return res.status(500).json({error: 'Can`t delete files'})

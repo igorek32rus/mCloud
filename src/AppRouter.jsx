@@ -4,7 +4,9 @@ import { AuthContext } from './Context'
 import { privateRoutes, publicRoutes } from "./router";
 
 function AppRouter() {
-    const {isAuth} = useContext(AuthContext)
+    const {isAuth, userData} = useContext(AuthContext)
+
+    const redirectUrl = isAuth ? "/files/main/" + userData.rootId : ''
 
     return (
         isAuth ? 
@@ -17,7 +19,7 @@ function AppRouter() {
                         key={route.component.name} />
                     )
                 }) }
-                <Redirect to="/files" />
+                <Redirect to={redirectUrl} />
             </Switch>
         :
             <Switch>
