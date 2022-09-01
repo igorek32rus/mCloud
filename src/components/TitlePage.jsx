@@ -1,5 +1,5 @@
 import React, {useContext} from "react"
-import { AuthContext } from "../Context"
+import { AuthContext, LoaderContext } from "../Context"
 import { useParams, useHistory } from "react-router-dom"
 import '../styles/TitlePage.css'
 
@@ -19,12 +19,13 @@ function TitlePage({currentDir}) {
     const history = useHistory()
 
     const {userData} = useContext(AuthContext)
+    const {loading} = useContext(LoaderContext)
 
     return (
         <div className="title_page">
             { parent !== userData.rootId && category === 'trash' ? <div className="back_btn" onClick={() => history.goBack()}>&laquo;</div> : '' }
             <h1>
-                { parent == userData.rootId 
+                { currentDir._id === userData.rootId 
                     ? catToReadble(category) 
                     : currentDir.name
                 }

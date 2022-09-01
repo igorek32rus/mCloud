@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import Header from '../components/Header'
 import Notify from '../components/Notify'
@@ -13,8 +14,6 @@ import '../styles/App.css'
 
 import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
 import { DirContext } from '../contexts/DirContext/DirContext'
-
-import { useParams } from 'react-router-dom'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -96,7 +95,7 @@ function MainPage() {
       <div className="pageBodyMain">
         <ModalProvider>
           {category === 'main' && <TopPanel path={path} /> }
-          {<TitlePage currentDir={path[path.length - 1]} /> }
+          <TitlePage currentDir={path[path.length - 1]} />
           {loading 
             ? <Loader /> 
             : <DirContent changeParent={changeParent} />
