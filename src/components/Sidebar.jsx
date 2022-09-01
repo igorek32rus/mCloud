@@ -1,25 +1,19 @@
 import React, { useContext } from 'react'
-import { AuthContext, MainMenuContext, LoaderContext } from '../Context'
+import { Link } from 'react-router-dom'
+import { AuthContext, MainMenuContext } from '../Context'
 import '../styles/Sidebar.css'
 import { getFileSize } from '../utils/getFileSize'
 
-import { useHistory } from 'react-router-dom'
+import categories from '../categories'
 
-function Sidebar(props) {
+function Sidebar() {
     const {isMenuOpened, setIsMenuOpened, setIsMenuClosing, isMenuClosing} = useContext(MainMenuContext)
     const {setIsAuth, setUserData, userData} = useContext(AuthContext)
-    const {setLoading} = useContext(LoaderContext)
-    const history = useHistory()
 
     const handlerLogout = () => {
         setUserData({})
         localStorage.removeItem('token')
         setIsAuth(false)
-    }
-
-    const handlerChangeCat = (cat) => {
-        setLoading(true)
-        history.push(`/files/${cat}/${userData.rootId}`)
     }
 
     const handlerClickBackdrop = (e) => {
@@ -37,18 +31,27 @@ function Sidebar(props) {
                     <div className={isMenuClosing ? "sidebar hide" : "sidebar"} onClick={(e) => e.stopPropagation()}>
                         <menu>
                             <ul>
-                                <li onClick={() => handlerChangeCat('main')}>Главная</li>
-                                <li onClick={() => handlerChangeCat('latest')}>Последние</li>
-                                <li onClick={() => handlerChangeCat('shared')}>Общие</li>
-                                <li onClick={() => handlerChangeCat('trash')}>Корзина</li>
-                                <li style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}>Настройки</li>
-                                <li onClick={handlerLogout}>Выйти</li>
+                                <ListCategories />
+                                <li key={"settings"} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}>Настройки</li>
+                                <li key={"logout"} onClick={handlerLogout}>Выйти</li>
                             </ul>
                         </menu>
                         <div className="used-disk-space">Диск: {getFileSize(userData.usedSpace)}</div>
                     </div>
                 </div>
             }
+        </>
+    )
+}
+
+function ListCategories() {
+    const {userData} = useContext(AuthContext)
+
+    return (
+        <>
+            {Object.keys(categories).map(category => {
+                return <Link key={category} to={"/files/" + category + "/" + userData.rootId}><li>{categories[category]}</li></Link>
+            })}
         </>
     )
 }
