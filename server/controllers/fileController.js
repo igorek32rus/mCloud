@@ -431,6 +431,18 @@ class FileController {
             console.log(error)
         }
     }
+
+    async searchFiles(req, res) {
+        try {
+            const { fileName } = req.query
+            const allFiles = await File.find({user: req.user.id, deleted: null})
+            const files = allFiles.filter(file => file.name.toLowerCase().includes(fileName.toLowerCase()))
+            
+            return res.json({files})
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 module.exports = new FileController()

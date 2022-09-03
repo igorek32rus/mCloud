@@ -1,60 +1,66 @@
 import React, { useState, useRef } from 'react'
-
 import '../styles/Search.css'
+
+import useFetch from '../hooks/useFetch'
+import { URLS } from '../constants'
 
 function Search() {
     const [searchValue, setSearchValue] = useState('')
-    const [isSearchResult, setSearchResult] = useState(false)
+    const [searchResult, setSearchResult] = useState([])
+    const [inputTimeout, setInputTimeout] = useState(false)
     const inputRef = useRef()
+    const fetch = useFetch()
+
+    const search = async (fileName) => {
+        const reqParams = [{
+            name: 'fileName',
+            value: fileName
+        }]
+
+        const res = await fetch({
+            url: URLS.SEARCH_FILES, 
+            reqParams
+        })
+        setSearchResult(res.files)
+    }
 
     const handleInputSearch = (event) => {
         setSearchValue(event.target.value)
 
-        if (event.target.value.length >= 3) {
-            setSearchResult(true)
-            return
-        }
+        if (inputTimeout)
+            clearTimeout(inputTimeout)
 
-        setSearchResult(false)
-    }
-
-    const handleBlurSearch = () => {
-        setSearchResult(false)
+        setInputTimeout(
+            setTimeout(() => {
+                search(event.target.value)
+            }, 500)
+        )
     }
 
     const handleClearSearch = () => {
         setSearchValue("")
+        setSearchResult([])
         inputRef.current.focus()
+    }
+
+    const handlerBlur = () => {
+        setSearchResult([])
     }
 
     return (
         <div className="search">
             <div className="icon-search"></div>
-            <input type="text" ref={inputRef} placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handleBlurSearch} />
+            <input type="text" ref={inputRef} placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handlerBlur} />
             { !!searchValue.length && <div className='search-clear' onClick={handleClearSearch}>&times;</div> }
 
-            { isSearchResult &&
+            { searchResult.length > 0 &&
                 <div className="search-result">
-                    <div className="item">
-                        <div className="filename">Test</div>
-                        <div className="folder">Главная</div>
-                    </div>
-                    <div className="item">
-                        <div className="filename">Test</div>
-                        <div className="folder">Главная</div>
-                    </div>
-                    <div className="item">
-                        <div className="filename">Test</div>
-                        <div className="folder">Главная</div>
-                    </div>
-                    <div className="item">
-                        <div className="filename">Test</div>
-                        <div className="folder">Главная</div>
-                    </div>
-                    <div className="item">
-                        <div className="filename">Test</div>
-                        <div className="folder">Главная</div>
-                    </div>
+                    { searchResult.map(file => (
+                        <div className="item">
+                            <div className="filename">{file.name}</div>
+                            <div className="folder">Главная</div>
+                        </div>
+                    )) }
                 </div>
             }
             

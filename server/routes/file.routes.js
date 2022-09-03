@@ -12,6 +12,7 @@ router.post('/move', authMiddleware, FileController.changeParent)
 router.post('/restore', authMiddleware, FileController.restoreFiles)
 
 router.get('', authMiddleware, FileController.getFiles)
+router.get('/search', authMiddleware, FileController.searchFiles)
 router.get('/tree', authMiddleware, FileController.getTree)
 
 module.exports = router

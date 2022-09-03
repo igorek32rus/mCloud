@@ -75,8 +75,12 @@
     background-color: rgba(255, 255, 255, .05);
 }
 
+.search-result .item .filename {
+    font-size: 12px;
+}
+
 .search-result .item .folder {
-    font-size: .7rem;
+    font-size: 10px;
     color: rgba(255, 255, 255, .3);
     font-style: italic;
 }

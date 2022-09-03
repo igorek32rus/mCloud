@@ -16,5 +16,6 @@ export const URLS = {
     UPLOAD_FILE: MAIN.SERVER + '/api/files/upload',
 
     GET_FILES: MAIN.SERVER + '/api/files',
-    MOVE_FILES: MAIN.SERVER + '/api/files/move'
+    MOVE_FILES: MAIN.SERVER + '/api/files/move',
+    SEARCH_FILES: MAIN.SERVER + '/api/files/search'
 }
