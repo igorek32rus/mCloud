@@ -27,6 +27,12 @@ function Search() {
     const handleInputSearch = (event) => {
         setSearchValue(event.target.value)
 
+        if (event.target.value == "") {
+            clearTimeout(inputTimeout)
+            setSearchResult([])
+            return
+        }
+
         if (inputTimeout)
             clearTimeout(inputTimeout)
 
