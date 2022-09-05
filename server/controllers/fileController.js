@@ -437,8 +437,45 @@ class FileController {
             const { fileName } = req.query
             const allFiles = await File.find({user: req.user.id, deleted: null})
             const files = allFiles.filter(file => file.name.toLowerCase().includes(fileName.toLowerCase()))
+            const root = await File.findOne({user: req.user.id, parent: null})
+            const parents = new Map()
+
+            let filesWithParentsName = []
             
-            return res.json({files})
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileParent = file.parent.toString()
+                if (parents.has(fileParent)) {
+                    const parentName = parents.get(fileParent)
+                    filesWithParentsName.push({
+                        _id: file._id,
+                        name: file.name,
+                        parent: file.parent,
+                        parentName})
+                    continue
+                }
+
+                const parent = await File.findOne({user: req.user.id, _id: file.parent})
+                
+                if (fileParent == root._id.toString()) {
+                    parents.set(fileParent, "Главная")
+                    filesWithParentsName.push({
+                        _id: file._id,
+                        name: file.name,
+                        parent: file.parent,
+                        parentName: "Главная"})
+                    continue
+                }
+
+                parents.set(fileParent, parent.name)
+                filesWithParentsName.push({
+                    _id: file._id,
+                    name: file.name,
+                    parent: file.parent,
+                    parentName: parent.name})
+            }
+
+            return res.json({files: filesWithParentsName})
         } catch (error) {
             console.log(error)
         }

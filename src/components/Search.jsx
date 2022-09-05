@@ -27,7 +27,7 @@ function Search() {
     const handleInputSearch = (event) => {
         setSearchValue(event.target.value)
 
-        if (event.target.value == "") {
+        if (event.target.value === "") {
             clearTimeout(inputTimeout)
             setSearchResult([])
             return
@@ -64,7 +64,7 @@ function Search() {
                     { searchResult.map(file => (
                         <div className="item">
                             <div className="filename">{file.name}</div>
-                            <div className="folder">Главная</div>
+                            <div className="folder">{file.parentName}</div>
                         </div>
                     )) }
                 </div>
