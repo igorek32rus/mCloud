@@ -21,7 +21,7 @@ function Search() {
             url: URLS.SEARCH_FILES, 
             reqParams
         })
-        setSearchResult(res.files)
+        setSearchResult(res.files.slice(0, 5))
     }
 
     const handleInputSearch = (event) => {
