@@ -57,7 +57,7 @@ function Search() {
         <div className="search">
             <div className="icon-search"></div>
             <input type="text" ref={inputRef} placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handlerBlur} />
-            { !!searchValue.length && <div className='search-clear' onClick={handleClearSearch}>&times;</div> }
+            <div className='search-clear' style={!!searchValue.length ? {visibility: 'visible'}: {visibility: 'hidden'}} onClick={handleClearSearch}>&times;</div>
 
             { searchResult.length > 0 &&
                 <div className="search-result">
