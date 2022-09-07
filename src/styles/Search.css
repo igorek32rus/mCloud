@@ -58,8 +58,30 @@
     border-bottom: 1px solid rgba(255, 255, 255, .3);
     padding: 5px 10px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     cursor: pointer;
+}
+
+.search-result .item .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result .item .img_type {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    opacity: .7;
+}
+
+.search-result .item .img_type.folder {
+    background: url("../images/folder-64.webp") center no-repeat;
+    background-size: contain;
+}
+
+.search-result .item .img_type.file {
+    background: url("../images/file-64.webp") center no-repeat;
+    background-size: contain;
 }
 
 .search-result .item:first-child {

@@ -451,6 +451,7 @@ class FileController {
                         _id: file._id,
                         name: file.name,
                         parent: file.parent,
+                        type: file.type,
                         parentName})
                     continue
                 }
@@ -463,6 +464,7 @@ class FileController {
                         _id: file._id,
                         name: file.name,
                         parent: file.parent,
+                        type: file.type,
                         parentName: "Главная"})
                     continue
                 }
@@ -472,6 +474,7 @@ class FileController {
                     _id: file._id,
                     name: file.name,
                     parent: file.parent,
+                    type: file.type,
                     parentName: parent.name})
             }
 

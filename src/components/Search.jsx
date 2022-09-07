@@ -63,8 +63,11 @@ function Search() {
                 <div className="search-result">
                     { searchResult.map(file => (
                         <div className="item">
-                            <div className="filename">{file.name}</div>
-                            <div className="folder">{file.parentName}</div>
+                            <div className={file.type === "folder" ? "img_type folder" : "img_type file"}></div>
+                            <div className="info">
+                                <div className="filename">{file.name}</div>
+                                <div className="folder">{file.parentName}</div>
+                            </div>
                         </div>
                     )) }
                 </div>
