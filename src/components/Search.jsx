@@ -62,7 +62,7 @@ function Search() {
             { searchResult.length > 0 &&
                 <div className="search-result">
                     { searchResult.map(file => (
-                        <div className="item">
+                        <div className="item" key={file._id}>
                             <div className={file.type === "folder" ? "img_type folder" : "img_type file"}></div>
                             <div className="info">
                                 <div className="filename">{file.name}</div>
