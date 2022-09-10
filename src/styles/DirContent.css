@@ -136,7 +136,7 @@ input[type='checkbox'].check-custom:checked ~ .check-toggle {
     position: absolute;
     bottom: -10px;
     left: 0;
-    width: 200px;
+    width: 220px;
     z-index: 5;
     opacity: 0;
     animation: fadeInDesc .2s ease-in-out .7s forwards;

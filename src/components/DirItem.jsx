@@ -136,7 +136,7 @@ function DirItem(props) {
                 <div className="description">
                     <div className="text">Имя: {props.item.name}</div>
                     <div className="text">Размер: {getFileSize(props.item.size)}</div>
-                    <div className="text">Дата загрузки: {new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
+                    <div className="text">Дата {props.item.type === 'folder' ? "создания" : "загрузки"}: {new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
                 </div>
             ) : '' }
             
