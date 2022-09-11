@@ -5,11 +5,16 @@ import { getExtension } from '../utils/getExtension'
 
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
+import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
 function DirItem({file, setElemDrag, ...props}) {
     const [description, setDescription] = useState(false)
     const { setPositionFiles, selected, setSelected } = React.useContext(SelectionContext)
     const { shiftPosition, dragStart, setDragStart, dragFileId, setDragFileId, setPositionStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
+    const { isContextMenuOpened, setIsContextMenuOpened,
+            setTypeContextMenu,
+            setPositionContextMenu } = React.useContext(ContextMenuContext)
+
     const history = useHistory()
     const {category} = useParams()
 
@@ -30,7 +35,7 @@ function DirItem({file, setElemDrag, ...props}) {
 
     const handleMouseDown = (e) => {
         e.stopPropagation()
-        props.openContextMenu(-1, 0, 0)   // закрыть контекстное меню
+        setIsContextMenuOpened(false)   // закрыть контекстное меню
         setDescription(false)   // отключить описание
 
         if (e.button === 0) {       // ЛКМ
@@ -74,12 +79,18 @@ function DirItem({file, setElemDrag, ...props}) {
                 setSelected([file._id])
             }
 
-            props.openContextMenu(file._id, e.pageX, e.pageY, true)
+            setPositionContextMenu({
+                left: e.pageX,
+                top: e.pageY
+            })
+            setTypeContextMenu('item')
+            setIsContextMenuOpened(true)
+            // props.openContextMenu(file._id, e.pageX, e.pageY, true)
         }
     }
 
     const handlerMouseEnter = (e) => {
-        if (!props.contextMenu && !e.buttons) setDescription(true)
+        if (!isContextMenuOpened && !e.buttons) setDescription(true)
     }
 
     const handlerMouseLeave = () => {

@@ -3,9 +3,12 @@ import { useParams } from "react-router-dom"
 import { DirContext } from "../contexts/DirContext/DirContext"
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
+import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
 import DirItem from "./DirItem"
-import ContextMenu from "./ContextMenu"
+
+import MainContextMenu from "./contextMenus/MainContextMenu"
+import TrashContextMenu from "./contextMenus/TrashContextMenu"
 
 import Selection from "./Selection"
 
@@ -40,18 +43,28 @@ function DirContent(props) {
         setShiftPosition, 
         positionStart, setPositionStart, 
         dragnDropGoal, setDragnDropGoal } = useContext(DragnDropFilesContext)
+    
+    const {
+        isContextMenuOpened, setIsContextMenuOpened,
+        setTypeContextMenu,
+        setPositionContextMenu } = useContext(ContextMenuContext)
 
     const {category} = useParams()
 
-    const [contextMenu, setContextMenu] = useState(false)
-    const [contextMenuParams, setContextMenuParams] = useState({items: [], left: 0, top: 0, type: 'workspace'})
-
-    const handleContextMenu = (event) => {
-        event.preventDefault()
+    let ContextMenu = null
+    switch (category) {
+        case 'main':
+            ContextMenu = <MainContextMenu />
+            break;
+        case 'trash':
+            ContextMenu = <TrashContextMenu />
+            break;
+        default:
+            break;
     }
 
     const handleMouseDown = (e) => {
-        setContextMenu(false)
+        setIsContextMenuOpened(false)
 
         if (e.button === 0) {   // ЛКМ
             setSelection(true)
@@ -71,7 +84,12 @@ function DirContent(props) {
         }
         
         if (e.button === 2) {   // ПКМ
-            openContextMenu(-1, e.pageX, e.pageY, true)
+            setPositionContextMenu({
+                left: e.pageX,
+                top: e.pageY
+            })
+            setTypeContextMenu('workspace')
+            setIsContextMenuOpened(true)
             setSelected([])
         }
     }
@@ -173,33 +191,13 @@ function DirContent(props) {
         }
     }
 
-    const handleDragStart = () => {
-        return false
-    }
-    
-    const openContextMenu = (id, mouseX, mouseY, state = false) => {
-        // if (state) {
-        //     const itemsContext = dirItemsPos.reduce((prev, cur) => {
-        //         if (cur.selected || cur.id === id) {
-        //             const item = dir.find(itemDir => itemDir._id === cur.id)
-        //             if (item) return [...prev, item]
-        //         }
-        //         return [...prev]
-        //     }, [])
-        //     setContextMenuParams({items: itemsContext, left: mouseX, top: mouseY, type: id === -1 ? 'workspace' : 'item' })
-        //     setContextMenu(true)
-        //     return
-        // }
-        setContextMenu(false)
-    }
-
     return (
         <div className="dirContent" 
-            onContextMenu={(e) => handleContextMenu(e)} 
-            onMouseDown={(e) => handleMouseDown(e)} 
-            onMouseMove={(e) => handleMouseMove(e)} 
-            onMouseUp={(e) => handleMouseUp(e)} 
-            onDragStart={() => handleDragStart() } 
+            onContextMenu={ (e) => e.preventDefault() } 
+            onMouseDown={ (e) => handleMouseDown(e) } 
+            onMouseMove={ (e) => handleMouseMove(e) } 
+            onMouseUp={ (e) => handleMouseUp(e) } 
+            onDragStart={ () => false } 
         >
 
             { selection && <Selection /> }
@@ -214,8 +212,6 @@ function DirContent(props) {
                 && <DirItem 
                     file={item} 
                     key={item._id} 
-                    openContextMenu={openContextMenu}
-                    contextMenu={contextMenu}
                 />) 
             }
 
@@ -225,17 +221,10 @@ function DirContent(props) {
                 && <DirItem 
                     file={item} 
                     key={item._id} 
-                    openContextMenu={openContextMenu}
-                    contextMenu={contextMenu}
                 />) 
             }
 
-            { contextMenu && <ContextMenu 
-                style={{left: contextMenuParams.left + 'px', top: contextMenuParams.top + 'px'}}
-                items={contextMenuParams.items}
-                openContextMenu={openContextMenu}
-                contextType={contextMenuParams.type}
-            /> }
+            { isContextMenuOpened && ContextMenu }
             
         </div>
     )

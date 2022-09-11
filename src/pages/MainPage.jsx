@@ -16,6 +16,7 @@ import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '.
 import { DirContext } from '../contexts/DirContext/DirContext'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
+import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -103,9 +104,11 @@ function MainPage() {
             <TitlePage currentDir={path[path.length - 1]} />
             {loading 
               ? <Loader /> 
-              : <DragnDropFilesContextProvider>
-                  <DirContent changeParent={changeParent} />
-                </DragnDropFilesContextProvider> 
+              : <ContextMenuContextProvider>
+                  <DragnDropFilesContextProvider>
+                    <DirContent changeParent={changeParent} />
+                  </DragnDropFilesContextProvider>
+                </ContextMenuContextProvider>
             }
           </ModalProvider>
         </div>
