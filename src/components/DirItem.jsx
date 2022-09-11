@@ -7,7 +7,7 @@ import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
-function DirItem({file, setElemDrag, ...props}) {
+function DirItem({ file }) {
     const [description, setDescription] = useState(false)
     const { setPositionFiles, selected, setSelected } = React.useContext(SelectionContext)
     const { shiftPosition, dragStart, setDragStart, dragFileId, setDragFileId, setPositionStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
@@ -85,7 +85,6 @@ function DirItem({file, setElemDrag, ...props}) {
             })
             setTypeContextMenu('item')
             setIsContextMenuOpened(true)
-            // props.openContextMenu(file._id, e.pageX, e.pageY, true)
         }
     }
 
@@ -97,10 +96,10 @@ function DirItem({file, setElemDrag, ...props}) {
         setDescription(false)
     }
 
-    const transformElement = dragStart && dragFileId === file._id && selected.includes(file._id) 
+    const transformElement = dragStart && selected.includes(file._id) 
         ? `translate(${shiftPosition.posX}px, ${shiftPosition.posY}px)` 
         : `translate(0px, 0px)`
-    const zIndexElement = dragStart && dragFileId === file._id && selected.includes(file._id) 
+    const zIndexElement = dragStart && selected.includes(file._id) 
         ? 100
         : 1
 
