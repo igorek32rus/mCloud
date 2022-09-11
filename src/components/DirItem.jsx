@@ -99,7 +99,7 @@ function DirItem({ file }) {
     const transformElement = dragStart && selected.includes(file._id) 
         ? `translate(${shiftPosition.posX}px, ${shiftPosition.posY}px)` 
         : `translate(0px, 0px)`
-    const zIndexElement = dragStart && selected.includes(file._id) 
+    const zIndexElement = (dragStart && selected.includes(file._id)) || description
         ? 100
         : 1
 

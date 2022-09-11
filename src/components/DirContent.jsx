@@ -202,30 +202,17 @@ function DirContent(props) {
 
             { selection && <Selection /> }
 
-            { dir.length === 0 ? 
-                <div className="message">{nullMessage(category)}</div>
-            : '' }
+            { !dir.length && <div className="message">{nullMessage(category)}</div> }
 
-            { dir.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
-                .map((item) => 
-                item.type === 'folder' 
-                && <DirItem 
-                    file={item} 
-                    key={item._id} 
-                />) 
-            }
-
-            { dir.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
-                .map((item) => 
-                item.type === 'file' 
-                && <DirItem 
-                    file={item} 
-                    key={item._id} 
-                />) 
+            { 
+                [...dir.filter(item => item.type === 'folder')
+                    .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1),
+                ...dir.filter(item => item.type === 'file')
+                    .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)]
+                .map(item => <DirItem file={item} key={item._id} />) 
             }
 
             { isContextMenuOpened && ContextMenu }
-            
         </div>
     )
 }
