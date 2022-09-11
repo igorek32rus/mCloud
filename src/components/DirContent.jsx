@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 import { DirContext } from "../contexts/DirContext/DirContext"
+import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 
 import DirItem from "./DirItem"
 import ContextMenu from "./ContextMenu"
+
+import Selection from "./Selection"
 
 import '../styles/DirContent.css'
 
@@ -25,21 +28,15 @@ const nullMessage = (cat) => {
 
 function DirContent(props) {
     const {dir} = useContext(DirContext)
+    const {
+        selection, setSelection,
+        selected, setSelected,
+        positionSelection, setPositionSelection } = useContext(SelectionContext)
+
     const {category} = useParams()
 
     const [contextMenu, setContextMenu] = useState(false)
     const [contextMenuParams, setContextMenuParams] = useState({items: [], left: 0, top: 0, type: 'workspace'})
-
-
-    const [selection, setSelection] = useState({
-        dragstart: false,
-        startX: 0,
-        startY: 0,
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0
-    })
 
     const [elemDrag, setElemDrag] = useState({
         dragstart: false,
@@ -70,8 +67,8 @@ function DirContent(props) {
         setContextMenu(false)
 
         if (e.button === 0) {   // ЛКМ
-            setSelection({...selection,
-                dragstart: true, 
+            setSelection(true)
+            setPositionSelection({
                 startX: e.pageX,
                 startY: e.pageY,
                 left: e.pageX,
@@ -95,26 +92,28 @@ function DirContent(props) {
     }
 
     const handleMouseMove = (e) => {
-        if (selection.dragstart) {
-            const posX = e.pageX - selection.startX
-            const posY = e.pageY - selection.startY
-            let left = selection.left
-            let top = selection.top
+        if (selection) {
+            const posX = e.pageX - positionSelection.startX
+            const posY = e.pageY - positionSelection.startY
+            let left = positionSelection.left
+            let top = positionSelection.top
         
             if (posX < 0) left = e.pageX
             if (posY < 0) top = e.pageY
-        
-            setSelection({...selection,
-                width: Math.abs(posX),
-                height: Math.abs(posY),
-                left,
-                top
+
+            setPositionSelection(prev => {
+                return {...prev, 
+                    width: Math.abs(posX),
+                    height: Math.abs(posY),
+                    left,
+                    top
+                }
             })
 
             const cloneDirItemsPos = [...dirItemsPos]
         
             cloneDirItemsPos.forEach((item) => {
-                const intersect = checkIntersectSelection(item, selection)
+                const intersect = checkIntersectSelection(item, positionSelection)
           
                 if (e.ctrlKey) {
                     if (intersect && !item.changed) {
@@ -168,15 +167,13 @@ function DirContent(props) {
     }
 
     const handleMouseUp = (e) => {
-        if (selection.dragstart) {
-            const posX = Math.abs(e.pageX - selection.startX)
-            const posY = Math.abs(e.pageY - selection.startY)
+        if (selection) {
+            const posX = Math.abs(e.pageX - positionSelection.startX)
+            const posY = Math.abs(e.pageY - positionSelection.startY)
 
             if (posX < 2 && posY < 2) resetSelectedItems()
 
-            setSelection({...selection,
-                dragstart: false
-            })
+            setSelection(false)
             return
         }
 
@@ -259,17 +256,8 @@ function DirContent(props) {
             onMouseUp={(e) => handleMouseUp(e)} 
             onDragStart={() => handleDragStart() } 
         >
-            {console.log('dirContent updated')}
-            { selection.dragstart ? 
-                <div className="selection" 
-                    style={{
-                        width: selection.width, 
-                        height: selection.height, 
-                        top: selection.top + 'px', 
-                        left: selection.left + 'px'
-                    }}>
-                </div> 
-                : '' }
+
+            { selection && <Selection /> }
 
             { dir.length === 0 ? 
                 <div className="message">{nullMessage(category)}</div>

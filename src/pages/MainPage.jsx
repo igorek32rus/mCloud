@@ -14,6 +14,7 @@ import '../styles/App.css'
 
 import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
 import { DirContext } from '../contexts/DirContext/DirContext'
+import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -88,22 +89,28 @@ function MainPage() {
 
   return (
     <DirContext.Provider value={{dir, setDir}}>
-      <MainMenuProvider>
-        <Header />
-        <Sidebar />
-      </MainMenuProvider>
-      <div className="pageBodyMain">
-        <ModalProvider>
-          {category === 'main' && <TopPanel path={path} /> }
-          <TitlePage currentDir={path[path.length - 1]} />
-          {loading 
-            ? <Loader /> 
-            : <DirContent changeParent={changeParent} />
-          }
-        </ModalProvider>
-      </div>
-      <Notify />
-      <Footer />
+
+      <SelectionContextProvider>
+
+        <MainMenuProvider>
+          <Header />
+          <Sidebar />
+        </MainMenuProvider>
+        <div className="pageBodyMain">
+          <ModalProvider>
+            {category === 'main' && <TopPanel path={path} /> }
+            <TitlePage currentDir={path[path.length - 1]} />
+            {loading 
+              ? <Loader /> 
+              : <DirContent changeParent={changeParent} />
+            }
+          </ModalProvider>
+        </div>
+        <Notify />
+        <Footer />
+
+      </SelectionContextProvider>
+      
     </DirContext.Provider>
   );
 }
