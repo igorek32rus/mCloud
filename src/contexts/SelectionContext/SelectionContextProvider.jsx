@@ -12,11 +12,13 @@ export const SelectionContextProvider = ({ children }) => {
         width: 0,
         height: 0
     })
+    const [positionFiles, setPositionFiles] = React.useState([])
 
     const providerValue = {
         selection, setSelection,
         selected, setSelected,
-        positionSelection, setPositionSelection
+        positionSelection, setPositionSelection,
+        positionFiles, setPositionFiles
     }
 
     return (

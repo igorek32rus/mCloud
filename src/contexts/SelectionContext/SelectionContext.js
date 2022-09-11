@@ -13,5 +13,7 @@ export const SelectionContext = createContext({
         width: 0,
         height: 0
     },
-    setPositionSelection: () => {}
+    setPositionSelection: () => {},
+    positionFiles: [],
+    setPositionFiles: () => {}
 })

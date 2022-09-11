@@ -1,51 +1,32 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import {getFileSize} from '../utils/getFileSize'
+import { getFileSize } from '../utils/getFileSize'
+import { getExtension } from '../utils/getExtension'
 
-function DirItem(props) {
+import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
+import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
+
+function DirItem({file, setElemDrag, ...props}) {
     const [description, setDescription] = useState(false)
+    const { setPositionFiles, selected, setSelected } = React.useContext(SelectionContext)
+    const { shiftPosition, dragStart, setDragStart, dragFileId, setDragFileId, setPositionStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
     const history = useHistory()
     const {category} = useParams()
 
-    const blockEl = useRef(null);
+    const fileRef = useRef(null);
 
-    const updatePos = props.updatePos
-
-    const posItem = props.posItem ? props.posItem
-        : {
-            id: props.item._id,
-            selected: false,
-            goal: false,
-            transform: ''
-        }
-
-    const getExtension = (fileName) => {
-        const ext = fileName.split('.').pop()
-        if (ext.length > 5 || ext.length === 0) {
-            return ''
-        }
-        return ext
-    }
-
-    const handleContextMenu = (e) => {
-        e.preventDefault()
-    }
-
-    // при изменении положения элемента (пример - изменение размеров экрана) - обновление позиционирования
-    useEffect(() => {
-        const elem = blockEl.current
-
-        if (!posItem.selected && (elem.offsetLeft !== posItem.left || elem.offsetTop !== posItem.top)) {
-            const params = {...posItem,
-                left: elem.offsetLeft,
-                top: elem.offsetTop,
-                width: elem.offsetWidth,
-                height: elem.offsetHeight
-            }
-
-            updatePos(params)
-        }   
-    })
+    React.useEffect(() => {
+        setPositionFiles(prev => {
+            return [...prev.filter(item => item._id !== file._id), {
+                _id: file._id,
+                left: fileRef.current.offsetLeft,
+                top: fileRef.current.offsetTop,
+                width: fileRef.current.offsetWidth,
+                height: fileRef.current.offsetHeight,
+                changed: false
+            }]
+        })
+    }, [window.innerHeight, window.innerWidth])
 
     const handleMouseDown = (e) => {
         e.stopPropagation()
@@ -54,53 +35,46 @@ function DirItem(props) {
 
         if (e.button === 0) {       // ЛКМ
             if (e.detail === 1) {    // 1 клик
-                const dragParams = {
+                setPositionStart({
                     startX: e.pageX,
-                    startY: e.pageY,
-                    id: props.item._id,
-                    dragstart: false
-                }
+                    startY: e.pageY
+                })
+                setDragFileId(file._id)
         
-                const tempElem = {...posItem}
-                const elemSelected = tempElem.selected    // начальное состояние
+                const elemSelected = selected.includes(file._id)    // начальное состояние
         
                 if (e.ctrlKey) {
-                    tempElem.selected = !tempElem.selected
+                    if (!elemSelected) {
+                        setSelected(prev => [...prev, file._id])
+                    } else {
+                        setSelected(prev => prev.filter(item => item !== file._id))
+                    }
                 }
         
                 if (!e.ctrlKey && !elemSelected) {
-                    props.resetSelectedItems()
-                    tempElem.selected = true
+                    setSelected([file._id])
                 }
         
                 if (!e.ctrlKey) {
-                    dragParams.dragstart = true
+                    setDragStart(true)
                 }
-        
-                props.setElemDrag(dragParams)
-                props.updatePos(tempElem)
-    
                 return
             }
     
             if (e.detail > 1) {     // 2 клика
-                if (props.item.type === 'folder') {
-                    history.push(`/files/${category}/${props.item._id}`)
+                if (file.type === 'folder') {
+                    history.push(`/files/${category}/${file._id}`)
                 }
                 return
             }
         }
         
         if (e.button === 2) {    // ПКМ
-            const tempElem = {...posItem}
-
-            if (!tempElem.selected) {
-                props.resetSelectedItems()
-                tempElem.selected = true
-                props.updatePos(tempElem)
+            if (!selected.includes(file._id)) {
+                setSelected([file._id])
             }
 
-            props.openContextMenu(props.item._id, e.pageX, e.pageY, true)
+            props.openContextMenu(file._id, e.pageX, e.pageY, true)
         }
     }
 
@@ -112,31 +86,37 @@ function DirItem(props) {
         setDescription(false)
     }
 
+    const transformElement = dragStart && dragFileId === file._id && selected.includes(file._id) 
+        ? `translate(${shiftPosition.posX}px, ${shiftPosition.posY}px)` 
+        : `translate(0px, 0px)`
+    const zIndexElement = dragStart && dragFileId === file._id && selected.includes(file._id) 
+        ? 100
+        : 1
+
     return (
         <div className={
-                posItem.selected 
-                || (props.item.type === 'folder' && posItem.goal) ? 
+            selected.includes(file._id) || dragnDropGoal === file._id
+                 ? 
                 'block selected' 
                 : 'block'
-            } ref={blockEl} style={{transform: posItem.transform}}
-            onContextMenu={(e) => handleContextMenu(e)} 
+            } ref={fileRef} style={{transform: transformElement, zIndex: zIndexElement}}
+            onContextMenu={(e) => e.preventDefault()} 
             onMouseDown={handleMouseDown} 
             onMouseEnter={handlerMouseEnter} 
             onMouseLeave={handlerMouseLeave}
         >
             
-            { props.item.type === 'folder' ? <div className="image folder" /> : 
+            { file.type === 'folder' ? <div className="image folder" /> : 
                 <div className="image file">
-                    { getExtension(props.item.name) ? <div className="type">{getExtension(props.item.name)}</div> : '' }
+                    { getExtension(file.name) ? <div className="type">{getExtension(file.name)}</div> : '' }
                 </div>
             }
-            <div className="name">{props.item.name}</div>
-            {/* <div className="date">{new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'short', day: 'numeric'})}</div> */}
+            <div className="name">{file.name}</div>
             { description ? (
                 <div className="description">
-                    <div className="text">Имя: {props.item.name}</div>
-                    <div className="text">Размер: {getFileSize(props.item.size)}</div>
-                    <div className="text">Дата {props.item.type === 'folder' ? "создания" : "загрузки"}: {new Date(props.item.date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
+                    <div className="text">Имя: {file.name}</div>
+                    <div className="text">Размер: {getFileSize(file.size)}</div>
+                    <div className="text">Дата {file.type === 'folder' ? "создания" : "загрузки"}: {new Date(file.date).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'})}</div>
                 </div>
             ) : '' }
             

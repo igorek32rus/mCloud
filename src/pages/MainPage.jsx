@@ -15,6 +15,7 @@ import '../styles/App.css'
 import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
 import { DirContext } from '../contexts/DirContext/DirContext'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
+import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -102,7 +103,9 @@ function MainPage() {
             <TitlePage currentDir={path[path.length - 1]} />
             {loading 
               ? <Loader /> 
-              : <DirContent changeParent={changeParent} />
+              : <DragnDropFilesContextProvider>
+                  <DirContent changeParent={changeParent} />
+                </DragnDropFilesContextProvider> 
             }
           </ModalProvider>
         </div>
