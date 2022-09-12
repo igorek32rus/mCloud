@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react"
-import { useHistory, useParams } from "react-router-dom"
 import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
@@ -7,18 +6,17 @@ import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
+import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
+
 function DirItem({ file }) {
     const [description, setDescription] = useState(false)
-    const { setPositionFiles, selected, setSelected } = React.useContext(SelectionContext)
-    const { shiftPosition, dragStart, setDragStart, dragFileId, setDragFileId, setPositionStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
-    const { isContextMenuOpened, setIsContextMenuOpened,
-            setTypeContextMenu,
-            setPositionContextMenu } = React.useContext(ContextMenuContext)
+    const { setPositionFiles, selected } = React.useContext(SelectionContext)
+    const { shiftPosition, dragStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
+    const { isContextMenuOpened } = React.useContext(ContextMenuContext)
 
-    const history = useHistory()
-    const {category} = useParams()
+    const fileRef = useRef(null)
 
-    const fileRef = useRef(null);
+    const handlerMouseDown = useHandlerMouseDown()
 
     React.useEffect(() => {
         setPositionFiles(prev => {
@@ -32,61 +30,6 @@ function DirItem({ file }) {
             }]
         })
     }, [window.innerHeight, window.innerWidth])
-
-    const handleMouseDown = (e) => {
-        e.stopPropagation()
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
-        setDescription(false)   // отключить описание
-
-        if (e.button === 0) {       // ЛКМ
-            if (e.detail === 1) {    // 1 клик
-                setPositionStart({
-                    startX: e.pageX,
-                    startY: e.pageY
-                })
-                setDragFileId(file._id)
-        
-                const elemSelected = selected.includes(file._id)    // начальное состояние
-        
-                if (e.ctrlKey) {
-                    if (!elemSelected) {
-                        setSelected(prev => [...prev, file._id])
-                    } else {
-                        setSelected(prev => prev.filter(item => item !== file._id))
-                    }
-                }
-        
-                if (!e.ctrlKey && !elemSelected) {
-                    setSelected([file._id])
-                }
-        
-                if (!e.ctrlKey) {
-                    setDragStart(true)
-                }
-                return
-            }
-    
-            if (e.detail > 1) {     // 2 клика
-                if (file.type === 'folder') {
-                    history.push(`/files/${category}/${file._id}`)
-                }
-                return
-            }
-        }
-        
-        if (e.button === 2) {    // ПКМ
-            if (!selected.includes(file._id)) {
-                setSelected([file._id])
-            }
-
-            setPositionContextMenu({
-                left: e.pageX,
-                top: e.pageY
-            })
-            setTypeContextMenu('item')
-            setIsContextMenuOpened(true)
-        }
-    }
 
     const handlerMouseEnter = (e) => {
         if (!isContextMenuOpened && !e.buttons) setDescription(true)
@@ -106,12 +49,11 @@ function DirItem({ file }) {
     return (
         <div className={
             selected.includes(file._id) || dragnDropGoal === file._id
-                 ? 
-                'block selected' 
+                ? 'block selected' 
                 : 'block'
             } ref={fileRef} style={{transform: transformElement, zIndex: zIndexElement}}
             onContextMenu={(e) => e.preventDefault()} 
-            onMouseDown={handleMouseDown} 
+            onMouseDown={(e) => handlerMouseDown(e, file, setDescription)} 
             onMouseEnter={handlerMouseEnter} 
             onMouseLeave={handlerMouseLeave}
         >
