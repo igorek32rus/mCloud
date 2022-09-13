@@ -5,6 +5,8 @@ import { ContextMenuContext } from "../../../contexts/ContextMenuContext/Context
 import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
 
+import categories from "../../../categories"
+
 export const useHandlerMouseDown = () => {
     const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
     const { selected, setSelected } = React.useContext(SelectionContext)
@@ -12,6 +14,7 @@ export const useHandlerMouseDown = () => {
 
     const { category } = useParams()
     const history = useHistory()
+    const categoryParams = categories.find(cat => cat.name === category)
 
     return (e, file, setDescription) => {
         e.stopPropagation()
@@ -20,12 +23,18 @@ export const useHandlerMouseDown = () => {
 
         if (e.button === 0) {       // ЛКМ
             if (e.detail === 1) {    // 1 клик
-                setPositionStart({
-                    startX: e.pageX,
-                    startY: e.pageY
-                })
-                setDragFileId(file._id)
+                if (categoryParams.activeDragnDrop) {
+                    setPositionStart({
+                        startX: e.pageX,
+                        startY: e.pageY
+                    })
+                    setDragFileId(file._id)
         
+                    if (!e.ctrlKey) {
+                        setDragStart(true)
+                    }
+                }
+                
                 const elemSelected = selected.includes(file._id)    // начальное состояние
         
                 if (e.ctrlKey) {
@@ -38,10 +47,6 @@ export const useHandlerMouseDown = () => {
         
                 if (!e.ctrlKey && !elemSelected) {
                     setSelected([file._id])
-                }
-        
-                if (!e.ctrlKey) {
-                    setDragStart(true)
                 }
                 return
             }

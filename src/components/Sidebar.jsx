@@ -49,8 +49,8 @@ function ListCategories() {
 
     return (
         <>
-            {Object.keys(categories).map(category => {
-                return <Link key={category} to={"/files/" + category + "/" + userData.rootId}><li>{categories[category]}</li></Link>
+            {categories.map(category => {
+                return <Link key={category.name} to={"/files/" + category.name + "/" + userData.rootId}><li>{category.title}</li></Link>
             })}
         </>
     )

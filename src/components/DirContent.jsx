@@ -7,30 +7,15 @@ import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuCo
 import DirItem from "./DirItem"
 import Selection from "./Selection"
 
-import MainContextMenu from "./contextMenus/MainContextMenu"
-import TrashContextMenu from "./contextMenus/TrashContextMenu"
-
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirContent/useHandlerMouseDown"
 import { useHandlerMouseMove } from "../hooks/eventHandlers/DirContent/useHandlerMouseMove"
 import { useHandlerMouseUp } from "../hooks/eventHandlers/DirContent/useHandlerMouseUp"
 
+import categories from "../categories"
+
 import '../styles/DirContent.css'
 
-const nullMessage = (cat) => {
-    if (cat === 'main')
-        return 'Папка пуста. Загрузите файлы или создайте новую папку'
-
-    if (cat === 'latest')
-        return 'Вы пока ничего не загрузили'
-    
-    if (cat === 'shared')
-        return 'Вы пока не открыли общий доступ к файлам'
-
-    if (cat === 'trash')
-        return 'Удалённых файлов нет'
-}
-
-function DirContent(props) {
+function DirContent({ changeParent }) {
     const { dir } = useContext(DirContext)
     const { selection } = useContext(SelectionContext)
     
@@ -40,32 +25,21 @@ function DirContent(props) {
     const handlerMouseMove = useHandlerMouseMove()
     const handlerMouseUp = useHandlerMouseUp()
 
-    const {category} = useParams()
-
-    let ContextMenu = null
-    switch (category) {
-        case 'main':
-            ContextMenu = <MainContextMenu />
-            break;
-        case 'trash':
-            ContextMenu = <TrashContextMenu />
-            break;
-        default:
-            break;
-    }
+    const { category } = useParams()
+    const categoryParams = categories.find(cat => cat.name === category)
 
     return (
         <div className="dirContent" 
             onContextMenu={ (e) => e.preventDefault() } 
             onMouseDown={ (e) => handlerMouseDown(e) } 
             onMouseMove={ (e) => handlerMouseMove(e, dir) } 
-            onMouseUp={ (e) => handlerMouseUp(e, props.changeParent) } 
+            onMouseUp={ (e) => handlerMouseUp(e, changeParent) } 
             onDragStart={ () => false } 
         >
 
             { selection && <Selection /> }
 
-            { !dir.length && <div className="message">{nullMessage(category)}</div> }
+            { !dir.length && <div className="message">{categoryParams.emptyMessage}</div> }
 
             { 
                 [...dir.filter(item => item.type === 'folder')
@@ -75,7 +49,7 @@ function DirContent(props) {
                 .map(item => <DirItem file={item} key={item._id} />) 
             }
 
-            { isContextMenuOpened && ContextMenu }
+            { isContextMenuOpened && categoryParams.contextMenu }
         </div>
     )
 }

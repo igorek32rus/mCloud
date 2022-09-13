@@ -20,6 +20,7 @@ import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/Conte
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
+import categories from '../categories'
 
 function MainPage() {
   const { createNotification } = useContext(NotifyContext)
@@ -31,6 +32,7 @@ function MainPage() {
   const fetch = useFetch()
 
   const {category, parent} = useParams()
+  const categoryParams = categories.find(cat => cat.name === category)
 
   useEffect(() => {
     const openFolder = async () => {
@@ -100,7 +102,7 @@ function MainPage() {
         </MainMenuProvider>
         <div className="pageBodyMain">
           <ModalProvider>
-            {category === 'main' && <TopPanel path={path} /> }
+            {categoryParams.showTopPanel && <TopPanel path={path} /> }
             <TitlePage currentDir={path[path.length - 1]} />
             {loading 
               ? <Loader /> 

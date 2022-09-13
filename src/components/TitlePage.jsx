@@ -9,13 +9,14 @@ function TitlePage({currentDir}) {
     const history = useHistory()
 
     const {userData} = useContext(AuthContext)
+    const categoryParams = categories.find(cat => cat.name === category)
 
     return (
         <div className="title_page">
-            { parent !== userData.rootId && category === 'trash' ? <div className="back_btn" onClick={() => history.goBack()}>&laquo;</div> : '' }
+            { parent !== userData.rootId && categoryParams.showBackButtonInTitle ? <div className="back_btn" onClick={() => history.goBack()}>&laquo;</div> : '' }
             <h1>
                 { currentDir?._id === userData.rootId 
-                    ? categories[category]
+                    ? categoryParams.title
                     : currentDir?.name
                 }
             </h1>
