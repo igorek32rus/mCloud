@@ -5,6 +5,7 @@ import { getExtension } from '../utils/getExtension'
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
+import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
 
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
 
@@ -13,6 +14,7 @@ function DirItem({ file }) {
     const { setPositionFiles, selected } = React.useContext(SelectionContext)
     const { shiftPosition, dragStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
     const { isContextMenuOpened } = React.useContext(ContextMenuContext)
+    const { windowSize } = React.useContext(WindowSizeContext)
 
     const fileRef = useRef(null)
 
@@ -29,7 +31,7 @@ function DirItem({ file }) {
                 changed: false
             }]
         })
-    }, [window.innerHeight, window.innerWidth])
+    }, [windowSize])
 
     const handlerMouseEnter = (e) => {
         if (!isContextMenuOpened && !e.buttons) setDescription(true)

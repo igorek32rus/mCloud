@@ -17,6 +17,7 @@ import { DirContext } from '../contexts/DirContext/DirContext'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
+import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -28,6 +29,11 @@ function MainPage() {
 
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0
+  })
+  let timerWindowSize = 0
 
   const fetch = useFetch()
 
@@ -83,6 +89,25 @@ function MainPage() {
     }
   }, [category, parent])
 
+  const updateWindowSize = () => {
+    if (timerWindowSize) {
+      clearTimeout(timerWindowSize)
+    }
+
+    timerWindowSize = setTimeout(() => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    }, 300);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", updateWindowSize);
+
+    return () => window.removeEventListener("resize", updateWindowSize) 
+  }, [])
+
   const changeParent = async (idNewParent, files) => {
     try {
       const updatedDir = await fetch({
@@ -127,7 +152,9 @@ function MainPage() {
               ? <Loader /> 
               : <ContextMenuContextProvider>
                   <DragnDropFilesContextProvider>
-                    <DirContent changeParent={changeParent} />
+                    <WindowSizeContext.Provider value={{windowSize}} >
+                      <DirContent changeParent={changeParent} />
+                    </WindowSizeContext.Provider>
                   </DragnDropFilesContextProvider>
                 </ContextMenuContextProvider>
             }
