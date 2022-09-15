@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import '../styles/Search.css'
+
+import { SelectionContext } from '../contexts/SelectionContext/SelectionContext'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -8,8 +11,14 @@ function Search() {
     const [searchValue, setSearchValue] = useState('')
     const [searchResult, setSearchResult] = useState([])
     const [inputTimeout, setInputTimeout] = useState(false)
+    const [showResults, setShowResults] = useState(false)
+    const [openFullSearch, setOpenFullSearch] = useState(false)
+
+    const { setSelected } = React.useContext(SelectionContext)
+
     const inputRef = useRef()
     const fetch = useFetch()
+    const history = useHistory()
 
     const search = async (fileName) => {
         const reqParams = [{
@@ -21,7 +30,18 @@ function Search() {
             url: URLS.SEARCH_FILES, 
             reqParams
         })
-        setSearchResult(res.files.slice(0, 5))
+
+        if (res.files) {
+            setSearchResult(res.files.slice(0, 5))
+            setShowResults(true)
+        }
+
+        if (res.files.length > 5) {
+            setOpenFullSearch(true)
+            return
+        }
+        
+        setOpenFullSearch(false)
     }
 
     const handleInputSearch = (event) => {
@@ -30,6 +50,7 @@ function Search() {
         if (event.target.value === "") {
             clearTimeout(inputTimeout)
             setSearchResult([])
+            setShowResults(false)
             return
         }
 
@@ -46,32 +67,70 @@ function Search() {
     const handleClearSearch = () => {
         setSearchValue("")
         setSearchResult([])
+        setShowResults(false)
         inputRef.current.focus()
     }
 
     const handlerBlur = () => {
-        setSearchResult([])
+        setTimeout(() => {
+            setShowResults(false)
+        }, 100);
+    }
+
+    const handlerFocus = () => {
+        if (searchResult.length > 0) {
+            setShowResults(true)
+        }
+    }
+
+    const handlerClick = (fileId) => {
+        setSelected([fileId])
+        history.push("/files/search/" + searchValue)
+    }
+
+    const handlerClickFullSearch = () => {
+        setSelected([])
+        history.push("/files/search/" + searchValue)
     }
 
     return (
         <div className="search">
             <div className="icon-search"></div>
-            <input type="text" ref={inputRef} placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handlerBlur} />
+            <input type="text" ref={inputRef} placeholder="Поиск файлов" value={searchValue} onChange={handleInputSearch} onBlur={handlerBlur} onFocus={handlerFocus} />
             <div className='search-clear' style={!!searchValue.length ? {visibility: 'visible'}: {visibility: 'hidden'}} onClick={handleClearSearch}>&times;</div>
 
-            { searchResult.length > 0 &&
+            { showResults && (
                 <div className="search-result">
-                    { searchResult.map(file => (
-                        <div className="item" key={file._id}>
-                            <div className={file.type === "folder" ? "img_type folder" : "img_type file"}></div>
+                    { searchResult.length > 0 &&
+                        searchResult.map(file => (
+                            <div className="item" key={file._id} onClick={() => handlerClick(file._id)}>
+                                <div className={file.type === "folder" ? "img_type folder" : "img_type file"}></div>
+                                <div className="info">
+                                    <div className="filename">{file.name}</div>
+                                    <div className="folder">{file.parentName}</div>
+                                </div>
+                            </div>
+                        )) 
+                    }
+                    { searchResult.length === 0 && (
+                        <div className="item" key={"Nothing_found"} >
                             <div className="info">
-                                <div className="filename">{file.name}</div>
-                                <div className="folder">{file.parentName}</div>
+                                <div className="filename">По данному запросу ничего не найдено</div>
+                                <div className="folder">Попробуйте изменить параметры поиска</div>
                             </div>
                         </div>
-                    )) }
+                    ) }
+                    { openFullSearch && (
+                        <div className="item" key={"Too_many_results"} onClick={handlerClickFullSearch} >
+                            <div className="info">
+                                <div className="filename">Открыть страницу поиска</div>
+                                {/* <div className="folder">Попробуйте изменить параметры поиска</div> */}
+                            </div>
+                        </div>
+                    ) }
                 </div>
-            }
+            ) }
+            
             
         </div>
     )

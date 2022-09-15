@@ -8,7 +8,8 @@ const categories = [{
     contextMenu: <MainContextMenu />,
     showBackButtonInTitle: false,
     emptyMessage: "Папка пуста. Загрузите файлы или создайте новую папку",
-    activeDragnDrop: true
+    activeDragnDrop: true,
+    hidden: false
 }, {
     name: 'latest',
     title: 'Последние',
@@ -16,7 +17,8 @@ const categories = [{
     contextMenu: null,
     showBackButtonInTitle: false,
     emptyMessage: "Вы пока ничего не загрузили",
-    activeDragnDrop: false
+    activeDragnDrop: false,
+    hidden: false
 }, {
     name: 'shared',
     title: 'Общие',
@@ -24,7 +26,8 @@ const categories = [{
     contextMenu: null,
     showBackButtonInTitle: false,
     emptyMessage: "Вы пока не открыли общий доступ к файлам",
-    activeDragnDrop: false
+    activeDragnDrop: false,
+    hidden: false
 }, {
     name: 'trash',
     title: 'Корзина',
@@ -32,7 +35,17 @@ const categories = [{
     contextMenu: <TrashContextMenu />,
     showBackButtonInTitle: true,
     emptyMessage: "Удалённых файлов нет",
-    activeDragnDrop: false
+    activeDragnDrop: false,
+    hidden: false
+}, {
+    name: 'search',
+    title: 'Поиск файлов',
+    showTopPanel: false,
+    contextMenu: null,
+    showBackButtonInTitle: false,
+    emptyMessage: "Файлов по данному запросу нет",
+    activeDragnDrop: false,
+    hidden: true
 }]
 
 export default categories

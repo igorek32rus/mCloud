@@ -34,34 +34,53 @@ function MainPage() {
   const {category, parent} = useParams()
   const categoryParams = categories.find(cat => cat.name === category)
 
-  useEffect(() => {
-    const openFolder = async () => {
-      setLoading(true)
-      let reqParams = [{
-        name: 'parent',
-        value: parent
-      }]
+  const search = async (fileName) => {
+    setLoading(true)
+    const reqParams = [{
+        name: 'fileName',
+        value: fileName
+    }]
 
-      if (category !== 'main') reqParams.push({
-        name: 'category',
-        value: category
-      })
-
-      const updateDir = await fetch({
-        url: URLS.GET_FILES,
+    const res = await fetch({
+        url: URLS.SEARCH_FILES, 
         reqParams
-      })
+    })
 
-      if (updateDir.files) {
-        setDir(updateDir.files)
-      }
+    setDir(res.files)
+    setLoading(false)
+  }
 
-      if (updateDir.path) {
-        setPath(updateDir.path)
-      }
-      setLoading(false)
+  const getFiles = async () => {
+    setLoading(true)
+    let reqParams = [{
+      name: 'parent',
+      value: parent
+    }, {
+      name: 'category',
+      value: category
+    }]
+
+    const updateDir = await fetch({
+      url: URLS.GET_FILES,
+      reqParams
+    })
+
+    if (updateDir.files) {
+      setDir(updateDir.files)
     }
-    openFolder()
+
+    if (updateDir.path) {
+      setPath(updateDir.path)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    if (category === "search") {
+      search(parent)
+    } else {
+      getFiles()
+    }
   }, [category, parent])
 
   const changeParent = async (idNewParent, files) => {

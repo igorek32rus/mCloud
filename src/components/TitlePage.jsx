@@ -15,7 +15,7 @@ function TitlePage({currentDir}) {
         <div className="title_page">
             { parent !== userData.rootId && categoryParams.showBackButtonInTitle ? <div className="back_btn" onClick={() => history.goBack()}>&laquo;</div> : '' }
             <h1>
-                { currentDir?._id === userData.rootId 
+                { currentDir?._id === userData.rootId || category === "search"
                     ? categoryParams.title
                     : currentDir?.name
                 }
