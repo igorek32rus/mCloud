@@ -50,7 +50,7 @@ function ListCategories() {
     return (
         <>
             {categories.map(category => {
-                return <Link key={category.name} to={"/files/" + category.name + "/" + userData.rootId}><li>{category.title}</li></Link>
+                return !category.hidden && <Link key={category.name} to={"/files/" + category.name + "/" + userData.rootId}><li>{category.title}</li></Link>
             })}
         </>
     )
