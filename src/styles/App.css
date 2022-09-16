@@ -177,7 +177,7 @@ footer {
         visibility: hidden;
     }
     100% {
-        transform: translateY(0px);
+        transform: translateX(0px);
         opacity: 1;
         visibility: visible;
     }
@@ -185,13 +185,13 @@ footer {
   
 @keyframes slideLeft {
     0% {
-        transform: translateX(00px);
-        opacity: 1;
-        visibility: visible;
-    }
-    100% {
-        transform: translateY(-10px);
+        transform: translateX(10px);
         opacity: 0;
         visibility: hidden;
+    }
+    100% {
+        transform: translateX(0px);
+        opacity: 1;
+        visibility: visible;
     }
 }

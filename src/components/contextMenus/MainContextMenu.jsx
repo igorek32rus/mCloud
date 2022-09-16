@@ -7,6 +7,7 @@ import { ModalContext, AuthContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { DirContext } from "../../contexts/DirContext/DirContext"
+import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import CreateFolder from "../modalwindows/CreateFolder"
 import Rename from "../modalwindows/Rename"
@@ -19,6 +20,7 @@ function MainContextMenu() {
     const { selected } = useContext(SelectionContext)
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useContext(DirContext)
+    const { windowSize } = useContext(WindowSizeContext)
     const { parent } = useParams()
 
     const items = dir.filter(item => selected.includes(item._id))
@@ -63,8 +65,11 @@ function MainContextMenu() {
         })
     }
 
+    const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"
+    const leftContext = positionContextMenu.left + 200 > windowSize.width ? positionContextMenu.left - 200 : positionContextMenu.left
+
     return (
-        <div className="context-menu slideRight" style={{ left: positionContextMenu.left, top: positionContextMenu.top }} onMouseDown={(e) => e.stopPropagation()}>
+        <div className={classContext} style={{ left: leftContext, top: positionContextMenu.top }} onMouseDown={(e) => e.stopPropagation()}>
             { typeContextMenu === 'workspace'
                 ? ( <ul>
                         <li onClick={createFolder}><div className="icon edit"></div>Создать папку</li>
