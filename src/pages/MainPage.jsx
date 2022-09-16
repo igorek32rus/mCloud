@@ -103,7 +103,8 @@ function MainPage() {
   }
 
   useEffect(() => {
-    window.addEventListener("resize", updateWindowSize);
+    window.addEventListener("resize", updateWindowSize)
+    updateWindowSize()
 
     return () => window.removeEventListener("resize", updateWindowSize) 
   }, [])
