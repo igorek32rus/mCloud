@@ -11,7 +11,7 @@ import axios from 'axios'
 function UploadFiles({files}) {
     const [uploadFiles, setUploadFiles] = useState(files)
     const {closeModal} = useContext(ModalContext)
-    const {createNotification, removeNotification} = useContext(NotifyContext)
+    const {createNotification, removeNotification, updateNotification} = useContext(NotifyContext)
     const {setUserData} = useContext(AuthContext)
     const {setDir} = useContext(DirContext)
     const {parent} = useParams()
@@ -27,9 +27,9 @@ function UploadFiles({files}) {
 
         const sizeAllFiles = files.reduce((prev, cur) => prev + cur.size, 0)
         let sizeUploaded = 0
-        console.log('All size: ' + sizeAllFiles);
+        // console.log('All size: ' + sizeAllFiles);
         const onePersent = sizeAllFiles / 100
-        console.log('1 persent: ' + onePersent);
+        // console.log('1 persent: ' + onePersent);
     
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
@@ -44,7 +44,10 @@ function UploadFiles({files}) {
                         Authorization: `Baerer ${localStorage.getItem('token')}`
                     },
                     onUploadProgress: progressEvent => {
-                        console.log((sizeUploaded + progressEvent.loaded) / onePersent + "%");
+                        // console.log((sizeUploaded + progressEvent.loaded) / onePersent + "%");
+                        updateNotification(idNotification, {
+                            message: 'Загрузка ' + Math.round((sizeUploaded + progressEvent.loaded) / onePersent) + "%"
+                        })
                     }
                 })
                 setUserData((prev) => {
@@ -53,7 +56,10 @@ function UploadFiles({files}) {
                 setDir(dir => [...dir, response.data.file])
 
                 sizeUploaded += file.size
-                console.log(sizeUploaded / onePersent + "%");
+                // console.log(sizeUploaded / onePersent + "%");
+                updateNotification(idNotification, {
+                    message: 'Загрузка ' + Math.round(sizeUploaded / onePersent) + "%"
+                })
             } catch (error) {
                 console.log(error);
                 createNotification({
@@ -64,7 +70,7 @@ function UploadFiles({files}) {
             }
         }
 
-        console.log('Uploaded size: ' + sizeUploaded);
+        // console.log('Uploaded size: ' + sizeUploaded);
     
         removeNotification(idNotification)
     

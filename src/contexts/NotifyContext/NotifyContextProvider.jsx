@@ -40,7 +40,15 @@ export const NotifyProvider = ({ children }) => {
         }, 150);
     }
 
-    const valueNotifyProvider = { notifications, createNotification, removeNotification }
+    const updateNotification = (key, params = {}) => {
+        const notification = notificationsRef.current.find(item => item.key === key)
+        setNotifications([
+            ...notificationsRef.current.filter(item => item.key !== key),
+            {...notification, ...params}
+        ])
+    }
+
+    const valueNotifyProvider = { notifications, createNotification, removeNotification, updateNotification }
 
     return (
         <NotifyContext.Provider value={valueNotifyProvider}>
