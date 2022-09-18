@@ -24,6 +24,12 @@ function UploadFiles({files}) {
             message: `Подождите, выполняется загрузка файлов`,
             time: 0
         })
+
+        const sizeAllFiles = files.reduce((prev, cur) => prev + cur.size, 0)
+        let sizeUploaded = 0
+        console.log('All size: ' + sizeAllFiles);
+        const onePersent = sizeAllFiles / 100
+        console.log('1 persent: ' + onePersent);
     
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
@@ -38,13 +44,16 @@ function UploadFiles({files}) {
                         Authorization: `Baerer ${localStorage.getItem('token')}`
                     },
                     onUploadProgress: progressEvent => {
-                    // console.log(progressEvent.loaded);
+                        console.log((sizeUploaded + progressEvent.loaded) / onePersent + "%");
                     }
                 })
                 setUserData((prev) => {
                     return {...prev, usedSpace: response.data.usedSpace}
                 })
                 setDir(dir => [...dir, response.data.file])
+
+                sizeUploaded += file.size
+                console.log(sizeUploaded / onePersent + "%");
             } catch (error) {
                 console.log(error);
                 createNotification({
@@ -54,6 +63,8 @@ function UploadFiles({files}) {
                 return
             }
         }
+
+        console.log('Uploaded size: ' + sizeUploaded);
     
         removeNotification(idNotification)
     

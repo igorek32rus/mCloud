@@ -317,7 +317,7 @@ class FileController {
         try {
             const {file} = req.files
             const {fileName} = req.body
-            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: fileName, type: 'file'})
+            const fileExist = await File.findOne({user: req.user.id, parent: req.body.parent, name: fileName, type: 'file', deleted: null})
             
             if (fileExist) {
                 return res.status(400).json({message: 'Файл с таким именем уже существует в данной папке'})
