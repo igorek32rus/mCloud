@@ -34,6 +34,10 @@ function UploadFiles({files}) {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             
+            updateNotification(idNotification, {
+                message: 'Загрузка ' + file.name
+            })
+            
             try {
                 const formData = new FormData()
                 formData.append('file', file)
@@ -46,7 +50,8 @@ function UploadFiles({files}) {
                     onUploadProgress: progressEvent => {
                         // console.log((sizeUploaded + progressEvent.loaded) / onePersent + "%");
                         updateNotification(idNotification, {
-                            message: 'Загрузка ' + Math.round((sizeUploaded + progressEvent.loaded) / onePersent) + "%"
+                            // message: 'Загрузка ' + Math.round((sizeUploaded + progressEvent.loaded) / onePersent) + "%"
+                            progress: Math.round((sizeUploaded + progressEvent.loaded) / onePersent)
                         })
                     }
                 })
@@ -58,7 +63,8 @@ function UploadFiles({files}) {
                 sizeUploaded += file.size
                 // console.log(sizeUploaded / onePersent + "%");
                 updateNotification(idNotification, {
-                    message: 'Загрузка ' + Math.round(sizeUploaded / onePersent) + "%"
+                    // message: 'Загрузка ' + Math.round(sizeUploaded / onePersent) + "%"
+                    progress: Math.round(sizeUploaded / onePersent)
                 })
             } catch (error) {
                 console.log(error);

@@ -14,7 +14,8 @@ export const NotifyProvider = ({ children }) => {
             message,
             time,
             fadeOut: false,
-            delete: false
+            delete: false,
+            progress: 0
         }
     
         setNotifications([...notifications, newNotification])
