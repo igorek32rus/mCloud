@@ -22,7 +22,9 @@ function UploadFiles({files}) {
         const idNotification = createNotification({
             title: `Загрузка файлов`, 
             message: `Подождите, выполняется загрузка файлов`,
-            time: 0
+            time: 0,
+            showProgress: true,
+            progress: 0
         })
 
         const sizeAllFiles = files.reduce((prev, cur) => prev + cur.size, 0)

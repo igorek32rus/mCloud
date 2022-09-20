@@ -6,24 +6,28 @@ export const NotifyProvider = ({ children }) => {
     const notificationsRef = useRef()
     notificationsRef.current = notifications
 
-    const createNotification = ({title = '', message = '', time = 3}) => {
+    const createNotification = (params) => {
         const id = Date.now() - (Math.floor(Math.random() * 100)) + ''
-        const newNotification = {
+        let newNotification = {
             key: id,
-            title,
-            message,
-            time,
+            title: '',
+            message: '',
+            time: 3,
             fadeOut: false,
             delete: false,
+            showProgress: false,
             progress: 0
         }
+
+        newNotification = {...newNotification, ...params}
     
+        notificationsRef.current = [...notifications, newNotification]
         setNotifications([...notifications, newNotification])
     
-        if (time > 0) {
+        if (newNotification.time > 0) {
             setTimeout(() => {
                 removeNotification(newNotification.key)
-            }, time * 1000);
+            }, newNotification.time * 1000);
         }
     
         return id
