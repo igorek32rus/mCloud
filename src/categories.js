@@ -1,6 +1,11 @@
 import MainContextMenu from "./components/contextMenus/MainContextMenu"
 import TrashContextMenu from "./components/contextMenus/TrashContextMenu"
 
+import HomeIcon from "./images/home-24.webp"
+import LatestIcon from "./images/history.svg"
+import ShareIcon from "./images/shared.svg"
+import DeletedIcon from "./images/deleted.svg"
+
 const categories = [{
     name: 'main',
     title: 'Главная',
@@ -9,7 +14,8 @@ const categories = [{
     showBackButtonInTitle: false,
     emptyMessage: "Папка пуста. Загрузите файлы или создайте новую папку",
     activeDragnDrop: true,
-    hidden: false
+    hidden: false,
+    icon: HomeIcon
 }, {
     name: 'latest',
     title: 'Последние',
@@ -18,7 +24,8 @@ const categories = [{
     showBackButtonInTitle: false,
     emptyMessage: "Вы пока ничего не загрузили",
     activeDragnDrop: false,
-    hidden: false
+    hidden: false,
+    icon: LatestIcon
 }, {
     name: 'shared',
     title: 'Общие',
@@ -27,7 +34,8 @@ const categories = [{
     showBackButtonInTitle: false,
     emptyMessage: "Вы пока не открыли общий доступ к файлам",
     activeDragnDrop: false,
-    hidden: false
+    hidden: false,
+    icon: ShareIcon
 }, {
     name: 'trash',
     title: 'Корзина',
@@ -36,7 +44,8 @@ const categories = [{
     showBackButtonInTitle: true,
     emptyMessage: "Удалённых файлов нет",
     activeDragnDrop: false,
-    hidden: false
+    hidden: false,
+    icon: DeletedIcon
 }, {
     name: 'search',
     title: 'Поиск файлов',
@@ -45,7 +54,8 @@ const categories = [{
     showBackButtonInTitle: false,
     emptyMessage: "Файлов по данному запросу нет",
     activeDragnDrop: false,
-    hidden: true
+    hidden: true,
+    icon: HomeIcon
 }]
 
 export default categories

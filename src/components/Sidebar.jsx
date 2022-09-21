@@ -6,6 +6,9 @@ import { getFileSize } from '../utils/getFileSize'
 
 import categories from '../categories'
 
+import SettingsIcon from "../images/settings.svg"
+import LogoutIcon from "../images/logout.svg"
+
 function Sidebar() {
     const {isMenuOpened, setIsMenuOpened, setIsMenuClosing, isMenuClosing} = useContext(MainMenuContext)
     const {setIsAuth, setUserData, userData} = useContext(AuthContext)
@@ -32,8 +35,8 @@ function Sidebar() {
                         <menu>
                             <ul>
                                 <ListCategories />
-                                <li key={"settings"} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}>Настройки</li>
-                                <li key={"logout"} onClick={handlerLogout}>Выйти</li>
+                                <li key={"settings"} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}><div className='icon' style={{backgroundImage: `url(${SettingsIcon})`}}></div>Настройки</li>
+                                <li key={"logout"} onClick={handlerLogout}><div className='icon' style={{backgroundImage: `url(${LogoutIcon})`}}></div>Выйти</li>
                             </ul>
                         </menu>
                         <div className="used-disk-space">Диск: {getFileSize(userData.usedSpace)}</div>
@@ -50,7 +53,7 @@ function ListCategories() {
     return (
         <>
             {categories.map(category => {
-                return !category.hidden && <Link key={category.name} to={"/files/" + category.name + "/" + userData.rootId}><li>{category.title}</li></Link>
+                return !category.hidden && <Link key={category.name} to={"/files/" + category.name + "/" + userData.rootId}><li><div className='icon' style={{backgroundImage: `url(${category.icon})`}}></div>{category.title}</li></Link>
             })}
         </>
     )

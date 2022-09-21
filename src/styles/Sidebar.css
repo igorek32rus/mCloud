@@ -44,6 +44,8 @@
     padding: 5px 10px;
     border-bottom: 1px solid rgba(255, 255, 255, .15);
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .sidebar menu ul li:hover {
@@ -52,6 +54,13 @@
 
 .main-menu ul li:last-child {
     border-bottom: none;
+}
+
+.sidebar menu ul li .icon {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    margin-right: 5px;
 }
 
 .sidebar .used-disk-space {
