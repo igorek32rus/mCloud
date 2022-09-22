@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { DirContext } from "../contexts/DirContext/DirContext"
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
@@ -17,7 +17,7 @@ import '../styles/DirContent.css'
 
 function DirContent({ changeParent }) {
     const { dir } = useContext(DirContext)
-    const { selection } = useContext(SelectionContext)
+    const { selection, setSelected } = useContext(SelectionContext)
     
     const { isContextMenuOpened } = useContext(ContextMenuContext)
 
@@ -27,6 +27,12 @@ function DirContent({ changeParent }) {
 
     const { category } = useParams()
     const categoryParams = categories.find(cat => cat.name === category)
+
+    useEffect(() => {
+        if (category !== "search") {
+            setSelected([])
+        }
+    }, [category, setSelected])
 
     return (
         <div className="dirContent" 
