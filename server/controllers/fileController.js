@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs")
+
 const FileService = require("../services/fileService")
 const User = require("../models/User")
 const File = require("../models/File")
@@ -487,6 +489,34 @@ class FileController {
             return res.json({files: filesWithParentsName})
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    async shareFile(req, res) {
+        try {
+            const { fileID } = req.body
+            const fileDB = await File.findOne({user: req.user.id, _id: fileID})
+            const userDB = await File.findOne({_id: req.user.id})
+            const hashAccessLink = await bcrypt.hash(fileDB.name + Date().toString() + userDB.email, 5)
+            fileDB.accessLink = hashAccessLink
+            await fileDB.save()
+
+            return res.json({link: hashAccessLink})
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async closeShareFile(req, res) {
+        try {
+            const { fileID } = req.body
+            const fileDB = await File.findOne({user: req.user.id, _id: fileID})
+            fileDB.accessLink = null
+            await fileDB.save()
+    
+            return res.json({link: null})
+        } catch (e) {
+            console.log(e)
         }
     }
 }

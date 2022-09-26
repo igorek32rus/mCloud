@@ -79,7 +79,7 @@ function MainContextMenu() {
                 : ( <ul>
                         <li className={selected.length > 1 ? 'disabled' : ''} onClick={selected.length === 1 ? handlerRename : undefined}><div className="icon edit"></div>Переименовать</li>
                         <li><div className="icon download"></div>Скачать</li>
-                        <li onClick={handlerShare}><div className="icon share"></div>Поделиться</li>
+                        <li className={selected.length > 1 ? 'disabled' : ''} onClick={selected.length === 1 ? handlerShare : undefined}><div className="icon share"></div>Поделиться</li>
                         <li><div className="icon copy"></div>Копировать</li>
                         <li onClick={handlerDelete}><div className="icon delete"></div>Удалить в корзину</li>
                     </ul> )
