@@ -11,8 +11,8 @@ router.post('/upload', authMiddleware, FileController.uploadFile)
 router.post('/move', authMiddleware, FileController.changeParent)
 router.post('/restore', authMiddleware, FileController.restoreFiles)
 
-router.post('/share', authMiddleware, FileController.shareFile)
-router.post('/closeShare', authMiddleware, FileController.closeShareFile)
+router.post('/share', authMiddleware, FileController.toggleShareFile)
+router.get('/shareInfo', authMiddleware, FileController.getShareInfoFile)
 
 router.get('', authMiddleware, FileController.getFiles)
 router.get('/search', authMiddleware, FileController.searchFiles)

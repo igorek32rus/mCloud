@@ -492,29 +492,27 @@ class FileController {
         }
     }
 
-    async shareFile(req, res) {
+    async toggleShareFile(req, res) {
         try {
             const { fileID } = req.body
             const fileDB = await File.findOne({user: req.user.id, _id: fileID})
-            const userDB = await File.findOne({_id: req.user.id})
+            const userDB = await User.findOne({_id: req.user.id})
             const hashAccessLink = await bcrypt.hash(fileDB.name + Date().toString() + userDB.email, 5)
-            fileDB.accessLink = hashAccessLink
+
+            fileDB.accessLink = fileDB.accessLink ? null : hashAccessLink
             await fileDB.save()
 
-            return res.json({link: hashAccessLink})
+            return res.json({link: fileDB.accessLink})
         } catch (e) {
             console.log(e)
         }
     }
 
-    async closeShareFile(req, res) {
+    async getShareInfoFile(req, res) {
         try {
-            const { fileID } = req.body
+            const { fileID } = req.query
             const fileDB = await File.findOne({user: req.user.id, _id: fileID})
-            fileDB.accessLink = null
-            await fileDB.save()
-    
-            return res.json({link: null})
+            return res.json({link: fileDB.accessLink})
         } catch (e) {
             console.log(e)
         }

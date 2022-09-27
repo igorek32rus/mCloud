@@ -1,5 +1,6 @@
 const MAIN = {
-    SERVER: 'http://localhost:5000'
+    SERVER: 'http://localhost:5000',
+    SITE: 'http://localhost:3000'
 }
 
 export const URLS = {
@@ -17,5 +18,9 @@ export const URLS = {
 
     GET_FILES: MAIN.SERVER + '/api/files',
     MOVE_FILES: MAIN.SERVER + '/api/files/move',
-    SEARCH_FILES: MAIN.SERVER + '/api/files/search'
+    SEARCH_FILES: MAIN.SERVER + '/api/files/search',
+    TOGGLE_SHARE: MAIN.SERVER + '/api/files/share',
+    SHARE_INFO: MAIN.SERVER + '/api/files/shareInfo',
+
+    SHARE: MAIN.SITE + '/share'
 }
