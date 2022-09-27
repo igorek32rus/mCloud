@@ -13,6 +13,7 @@ router.post('/restore', authMiddleware, FileController.restoreFiles)
 
 router.post('/share', authMiddleware, FileController.toggleShareFile)
 router.get('/shareInfo', authMiddleware, FileController.getShareInfoFile)
+router.get('/getShare', FileController.getShare)
 
 router.get('', authMiddleware, FileController.getFiles)
 router.get('/search', authMiddleware, FileController.searchFiles)

@@ -1,10 +1,12 @@
 import AuthPage from "../pages/AuthPage"
 import MainPage from "../pages/MainPage"
+import SharePage from "../pages/SharePage"
 
 export const privateRoutes = [
     { path: '/files/:category/:parent', component: MainPage, exact: true }
 ]
 
 export const publicRoutes = [
-    { path: '/auth', component: AuthPage, exact: true }
+    { path: '/share/:fileID', component: SharePage, exact: true },
+    { path: '*', component: AuthPage, exact: true }
 ]

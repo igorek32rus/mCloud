@@ -31,7 +31,7 @@ function AppRouter() {
                         key={route.component.name} />
                     )
                 }) }
-                <Redirect to="/auth" />
+                {/* <Redirect to="/auth" /> */}
             </Switch>
     )
 }

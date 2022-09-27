@@ -498,8 +498,7 @@ class FileController {
             const fileDB = await File.findOne({user: req.user.id, _id: fileID})
             const userDB = await User.findOne({_id: req.user.id})
             const hashAccessLink = await bcrypt.hash(fileDB.name + Date().toString() + userDB.email, 5)
-
-            fileDB.accessLink = fileDB.accessLink ? null : hashAccessLink
+            fileDB.accessLink = fileDB.accessLink ? null : hashAccessLink.replace(/[^a-zA-Z0-9]/g, "")
             await fileDB.save()
 
             return res.json({link: fileDB.accessLink})
@@ -513,6 +512,21 @@ class FileController {
             const { fileID } = req.query
             const fileDB = await File.findOne({user: req.user.id, _id: fileID})
             return res.json({link: fileDB.accessLink})
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async getShare(req, res) {
+        try {
+            const { accessLink } = req.query
+            const fileDB = await File.findOne({accessLink})
+            if (!fileDB) {
+                return res.status(404).json({message: `Файл не найден`})
+            }
+
+            const files = fileDB.type === "file" ? [fileDB] : await File.find({parent: fileDB._id})
+            return res.json({files})
         } catch (e) {
             console.log(e)
         }
