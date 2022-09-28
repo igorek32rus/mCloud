@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import Notify from '../components/Notify'
 import Footer from '../components/Footer'
 import TopPanel from '../components/TopPanel'
-import TitlePage from '../components/TitlePage'
+import TitlePageShare from '../components/TitlePageShare'
 import DirShareContent from '../components/DirShareContent'
 import Loader from '../components/UI/loader/Loader'
 import Sidebar from '../components/Sidebar'
@@ -92,7 +92,7 @@ function SharePage() {
         <div className="pageBodyMain">
           <ModalProvider>
             {/* <TopPanel path={path} /> */}
-            {/* <TitlePage currentDir={path[path.length - 1]} /> */}
+            <TitlePageShare />
             {loading 
               ? <Loader /> 
               : <ContextMenuContextProvider>

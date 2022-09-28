@@ -1,5 +1,6 @@
 import MainContextMenu from "./components/contextMenus/MainContextMenu"
 import TrashContextMenu from "./components/contextMenus/TrashContextMenu"
+import SharedContextMenu from "./components/contextMenus/SharedContextMenu"
 
 import HomeIcon from "./images/home-24.webp"
 import LatestIcon from "./images/history.svg"
@@ -30,7 +31,7 @@ const categories = [{
     name: 'shared',
     title: 'Общие',
     showTopPanel: false,
-    contextMenu: null,
+    contextMenu: <SharedContextMenu />,
     showBackButtonInTitle: false,
     emptyMessage: "Вы пока не открыли общий доступ к файлам",
     activeDragnDrop: false,
