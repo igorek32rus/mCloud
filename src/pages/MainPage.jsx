@@ -10,9 +10,11 @@ import DirContent from '../components/DirContent'
 import Loader from '../components/UI/loader/Loader'
 import Sidebar from '../components/Sidebar'
 
+import BackButton from '../components/BackButton'
+
 import '../styles/App.css'
 
-import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
+import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider, AuthContext } from '../Context'
 import { DirContext } from '../contexts/DirContext/DirContext'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
@@ -26,6 +28,7 @@ import categories from '../categories'
 function MainPage() {
   const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
+  const { userData } = useContext(AuthContext)
 
   const [dir, setDir] = useState([])
   const [path, setPath] = useState([])
@@ -148,7 +151,16 @@ function MainPage() {
         <div className="pageBodyMain">
           <ModalProvider>
             {categoryParams.showTopPanel && <TopPanel path={path} /> }
-            <TitlePage currentDir={path[path.length - 1]} />
+            {/* <TitlePage currentDir={path[path.length - 1]} /> */}
+            <TitlePage>
+              { parent !== userData.rootId && categoryParams.showBackButtonInTitle && <BackButton /> }
+              <h1>
+                { path[path.length - 1]?._id === userData.rootId || category === "search"
+                    ? categoryParams.title
+                    : path[path.length - 1]?.name
+                }
+              </h1>
+            </TitlePage>
             {loading 
               ? <Loader /> 
               : <ContextMenuContextProvider>
