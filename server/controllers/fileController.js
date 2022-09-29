@@ -67,6 +67,7 @@ const recursiveMarkDeleteFiles = async (files) => {
     
             const fileDB = await File.findOne({_id: file._id})
             fileDB.deleted = new Date()
+            fileDB.accessLink = null
             await fileDB.save()
             size += fileDB.size
             count++
