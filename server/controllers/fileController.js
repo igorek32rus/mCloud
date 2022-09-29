@@ -520,7 +520,7 @@ class FileController {
     async getShare(req, res) {
         try {
             const { accessLink } = req.query
-            const fileDB = await File.findOne({accessLink})
+            const fileDB = await File.findOne({accessLink, deleted: null})
             if (!fileDB) {
                 return res.status(404).json({message: `Файл не найден`})
             }

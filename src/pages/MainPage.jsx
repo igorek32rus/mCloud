@@ -151,7 +151,6 @@ function MainPage() {
         <div className="pageBodyMain">
           <ModalProvider>
             {categoryParams.showTopPanel && <TopPanel path={path} /> }
-            {/* <TitlePage currentDir={path[path.length - 1]} /> */}
             <TitlePage>
               { parent !== userData.rootId && categoryParams.showBackButtonInTitle && <BackButton /> }
               <h1>
