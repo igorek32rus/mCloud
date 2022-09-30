@@ -19,7 +19,7 @@ function AppRouter() {
                         key={route.component.name} />
                     )
                 }) }
-                <Redirect to={redirectUrl} />
+                <Redirect from="*" to={redirectUrl} />
             </Switch>
         :
             <Switch>

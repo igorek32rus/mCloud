@@ -3,6 +3,7 @@ import MainPage from "../pages/MainPage"
 import SharePage from "../pages/SharePage"
 
 export const privateRoutes = [
+    { path: '/share/:fileID', component: SharePage, exact: true },
     { path: '/files/:category/:parent', component: MainPage, exact: true }
 ]
 
