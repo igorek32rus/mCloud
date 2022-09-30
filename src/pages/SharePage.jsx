@@ -26,6 +26,8 @@ function SharePage() {
   const {loading, setLoading} = useContext(LoaderContext)
 
   const [dir, setDir] = useState([])
+  const [errorMessage, setErrorMessage] = useState("")
+
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0
@@ -52,6 +54,8 @@ function SharePage() {
     if (getShareFile.files) {
       setDir(getShareFile.files)
     }
+
+    if (getShareFile.message) setErrorMessage(getShareFile.message)
 
     setLoading(false)
   }, [])
@@ -99,7 +103,7 @@ function SharePage() {
               ? <Loader /> 
               : <ContextMenuContextProvider>
                   <WindowSizeContext.Provider value={{windowSize}} >
-                    <DirShareContent />
+                    { errorMessage ? <div class="message" style={{marginTop: 10}}>{errorMessage}</div> : <DirShareContent /> }
                   </WindowSizeContext.Provider>
                 </ContextMenuContextProvider>
             }
