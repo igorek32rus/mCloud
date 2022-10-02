@@ -2,6 +2,10 @@ const fs = require("fs")
 const path = require("path")
 
 class FileService {
+    getFilePath(userId, fileId) {
+        return path.join(__dirname, '../files/', userId.toString(), fileId.toString())
+    }
+
     createUserRootDir(file) {
         return new Promise((resolve, reject) => {
             const filePath = path.join(__dirname, '../files/', file.user.toString())
@@ -47,6 +51,18 @@ class FileService {
             }
         })
     }
+
+    // prepareDownloadingFiles(files) {
+    //     return new Promise((resolve, reject) => {
+            
+    //         try {
+
+    //             return reject({message: ''})
+    //         } catch (error) {
+    //             return reject({message: ''})
+    //         }
+    //     })
+    // }
 }
 
 module.exports = new FileService()

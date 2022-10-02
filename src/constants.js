@@ -22,6 +22,8 @@ export const URLS = {
     TOGGLE_SHARE: MAIN.SERVER + '/api/files/share',
     SHARE_INFO: MAIN.SERVER + '/api/files/shareInfo',
     GET_SHARE_FILE: MAIN.SERVER + '/api/files/getShare',
+    
+    DOWNLOAD_FILES: MAIN.SERVER + '/api/files/download',
 
     SHARE: MAIN.SITE + '/share'
 }

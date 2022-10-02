@@ -14,6 +14,8 @@ import Rename from "../modalwindows/Rename"
 import Share from '../modalwindows/Share'
 import Delete from "../modalwindows/Delete"
 
+import { URLS } from "../../constants"
+
 function MainContextMenu() {
     const { openModal } = useContext(ModalContext)
     const { userData } = useContext(AuthContext)
@@ -65,6 +67,32 @@ function MainContextMenu() {
         })
     }
 
+    const handlerDownload = async () => {
+        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        
+        const response = await fetch(URLS.DOWNLOAD_FILES, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                files: items
+            })
+        })
+
+        if (response.ok) {
+            const blob = await response.blob()
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = items[0].name;
+            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+            a.click();    
+            a.remove();
+        }
+
+    }
+
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"
     const leftContext = positionContextMenu.left + 200 > windowSize.width ? positionContextMenu.left - 200 : positionContextMenu.left
 
@@ -78,7 +106,7 @@ function MainContextMenu() {
                     </ul> ) 
                 : ( <ul>
                         <li className={selected.length > 1 ? 'disabled' : ''} onClick={selected.length === 1 ? handlerRename : undefined}><div className="icon edit"></div>Переименовать</li>
-                        <li><div className="icon download"></div>Скачать</li>
+                        <li onClick={handlerDownload}><div className="icon download"></div>Скачать</li>
                         <li className={selected.length > 1 ? 'disabled' : ''} onClick={selected.length === 1 ? handlerShare : undefined}><div className="icon share"></div>Поделиться</li>
                         <li><div className="icon copy"></div>Копировать</li>
                         <li onClick={handlerDelete}><div className="icon delete"></div>Удалить в корзину</li>

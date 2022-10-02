@@ -532,6 +532,27 @@ class FileController {
             console.log(e)
         }
     }
+
+    async downloadFiles(req, res) {
+        try {
+            const { files } = req.body
+            if (!files.length) {
+                return res.status(400).json({message: `Не выбраны файлы для скачивания`})
+            }
+
+            if (files.length === 1) {
+                const fileDB = await File.findOne({_id: files[0]._id})
+                if (fileDB.type === "file") {
+                    res.download(FileService.getFilePath(fileDB.user, fileDB._id), fileDB.name)
+                }
+            }
+
+
+            // return res.json({files})
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 module.exports = new FileController()

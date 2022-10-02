@@ -19,4 +19,6 @@ router.get('', authMiddleware, FileController.getFiles)
 router.get('/search', authMiddleware, FileController.searchFiles)
 router.get('/tree', authMiddleware, FileController.getTree)
 
+router.post('/download', FileController.downloadFiles)
+
 module.exports = router
