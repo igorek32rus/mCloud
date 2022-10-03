@@ -11,6 +11,7 @@
 !/server/config/default-SAMPLE.json
 
 /server/files
+/server/temp
 
 # testing
 /coverage
