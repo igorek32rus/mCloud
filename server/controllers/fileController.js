@@ -154,23 +154,23 @@ const getRootTrash = async (user) => {
     return result
 }
 
-const recursiveZipFiles = async (parent, files) => {
-    if (!files.length) return parent
+const recursiveZipFiles = async (zip, parent, files) => {
+    if (!files.length) return zip
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i]
         const fileDB = await File.findOne({_id: file._id})
         
         if (fileDB.type === "file") {
-            parent.file(fileDB.name, FileService.getFile(fileDB.user, fileDB._id))
+            zip.file(parent + fileDB.name, FileService.getFile(fileDB.user, fileDB._id))
             continue
         }
 
         const filesFolder = await File.find({parent: fileDB._id})
-        parent = await recursiveZipFiles(parent.folder(fileDB.name), filesFolder)
+        await recursiveZipFiles(zip, parent + fileDB.name + "/", filesFolder)
     }
 
-    return parent
+    return zip
 }
 
 class FileController {
@@ -358,9 +358,9 @@ class FileController {
                 return res.status(500).json({error: 'Upload error'})
             }
 
-            if (user.usedSpace + file.size > 999999999) {
-                return res.status(400).json({message: 'Нет места на облачном диске'})
-            }
+            // if (user.usedSpace + file.size > 999999999) {
+            //     return res.status(400).json({message: 'Нет места на облачном диске'})
+            // }
 
             const dbFile = new File({
                 name: fileName,
@@ -578,16 +578,12 @@ class FileController {
 
             
             let zip = new JSZip()
-            // zip.file("Hello.txt", "Hello World\n")
-            zip = await recursiveZipFiles(zip, files)
+            zip = await recursiveZipFiles(zip, "/", files)
             zip.generateAsync({ type: 'nodebuffer' }).then(buffer => {
                 res.setHeader('Content-Type', 'application/octet-stream')
                 res.setHeader('Content-Disposition', 'attachment; filename="' + fileName + '"')
                 res.end(buffer)
             })
-            
-
-            // return res.json({files})
         } catch (e) {
             console.log(e)
         }
