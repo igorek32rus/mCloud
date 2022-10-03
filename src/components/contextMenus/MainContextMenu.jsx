@@ -80,12 +80,19 @@ function MainContextMenu() {
             })
         })
 
+        const filename = response.headers.get('content-disposition')
+            .split(';')
+            .find(n => n.includes('filename='))
+            .replace('filename=', '')
+            .trim()
+            .replaceAll('"', "")
+
         if (response.ok) {
             const blob = await response.blob()
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = items[0].name;
+            a.download = filename;
             document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
             a.click();    
             a.remove();

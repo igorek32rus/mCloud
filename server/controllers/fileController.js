@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
 
+const JSZip = require("jszip")
+
 const FileService = require("../services/fileService")
 const User = require("../models/User")
 const File = require("../models/File")
@@ -150,6 +152,25 @@ const getRootTrash = async (user) => {
     }
 
     return result
+}
+
+const recursiveZipFiles = async (parent, files) => {
+    if (!files.length) return parent
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const fileDB = await File.findOne({_id: file._id})
+        
+        if (fileDB.type === "file") {
+            parent.file(fileDB.name, FileService.getFile(fileDB.user, fileDB._id))
+            continue
+        }
+
+        const filesFolder = await File.find({parent: fileDB._id})
+        parent = await recursiveZipFiles(parent.folder(fileDB.name), filesFolder)
+    }
+
+    return parent
 }
 
 class FileController {
@@ -540,13 +561,31 @@ class FileController {
                 return res.status(400).json({message: `Не выбраны файлы для скачивания`})
             }
 
+            const date = new Date()
+            let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+            let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
+            let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
+            let fileName = `mCloud_(${da}-${mo}-${ye}).zip`
+
             if (files.length === 1) {
                 const fileDB = await File.findOne({_id: files[0]._id})
                 if (fileDB.type === "file") {
-                    res.download(FileService.getFilePath(fileDB.user, fileDB._id), fileDB.name)
+                    return res.download(FileService.getFilePath(fileDB.user, fileDB._id), fileDB.name)
                 }
+
+                fileName = fileDB.name + ".zip"
             }
 
+            
+            let zip = new JSZip()
+            // zip.file("Hello.txt", "Hello World\n")
+            zip = await recursiveZipFiles(zip, files)
+            zip.generateAsync({ type: 'nodebuffer' }).then(buffer => {
+                res.setHeader('Content-Type', 'application/octet-stream')
+                res.setHeader('Content-Disposition', 'attachment; filename="' + fileName + '"')
+                res.end(buffer)
+            })
+            
 
             // return res.json({files})
         } catch (e) {
