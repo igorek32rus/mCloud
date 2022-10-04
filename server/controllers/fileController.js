@@ -638,6 +638,11 @@ class FileController {
                 return res.status(400).json({message: `Не выбраны файлы для копирования`})
             }
 
+            const parentSourceEqualTarget = await File.findOne({_id: files[0]})
+            if (parentSourceEqualTarget.parent.toString() == parent) {
+                return res.status(400).json({error: `Исходная папка не может являться папкой назначения`})
+            }
+
             const size = await recursiveCopyFiles(parent, files, req.user.id)
             await recursiveUpdateSizeParent(req.user.id, parent, size)
 
