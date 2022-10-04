@@ -179,7 +179,7 @@ const recursiveCopyFiles = async (parent, files, user) => {
     let sizeResult = 0
 
     for (let i = 0; i < files.length; i++) {
-        const file = files[i]; console.log(files);
+        const file = files[i];
         const fileDB = await File.findOne({_id: file, user})
 
         if (fileDB.type === "folder") {

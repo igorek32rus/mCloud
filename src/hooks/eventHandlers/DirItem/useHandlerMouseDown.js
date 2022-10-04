@@ -53,6 +53,7 @@ export const useHandlerMouseDown = () => {
     
             if (e.detail > 1) {     // 2 клика
                 if (file.type === 'folder') {
+                    setSelected([])
                     history.push(`/files/${category === "search" ? "main" : category}/${file._id}`)
                 }
                 return
