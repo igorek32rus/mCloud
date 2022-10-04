@@ -115,12 +115,20 @@ function MainContextMenu() {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
         setItemsPaste(selected)
         setModePaste("copy")
+        createNotification({
+            title: `Копирование файлов`, 
+            message: `Скопировано`
+        })
     }
 
     const handlerCut = () => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
         setItemsPaste(selected)
         setModePaste("cut")
+        createNotification({
+            title: `Вырезать файлы`, 
+            message: `Вырезано`
+        })
     }
 
     const handlerPaste = () => {
