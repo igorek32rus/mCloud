@@ -55,6 +55,24 @@ class FileService {
     getFile(user, file) {
         return fs.readFileSync(this.getFilePath(user, file))
     }
+
+    copyFile(user, fileSource, fileTarget) {
+        return new Promise((resolve, reject) => {
+            const sourcePath = this.getFilePath(user, fileSource)
+            const targetPath = this.getFilePath(user, fileTarget)
+
+            try {
+                if (fs.existsSync(sourcePath)) {
+                    fs.copyFileSync(sourcePath, targetPath);
+                    return resolve({message: 'File copied'})
+                }
+
+                return reject({message: 'File already exist'})
+            } catch (error) {
+                return reject({message: 'Error copy file'})
+            }
+        })
+    }
 }
 
 module.exports = new FileService()

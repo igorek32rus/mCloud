@@ -173,6 +173,47 @@ const recursiveZipFiles = async (zip, parent, files) => {
     return zip
 }
 
+const recursiveCopyFiles = async (parent, files, user) => {
+    if (!files.length) return 0
+
+    let sizeResult = 0
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i]; console.log(files);
+        const fileDB = await File.findOne({_id: file, user})
+
+        if (fileDB.type === "folder") {
+            const newFolder = new File({
+                name: fileDB.name,
+                type: 'folder',
+                size: fileDB.size,
+                parent,
+                user
+            })
+            await newFolder.save()
+
+            const filesNewFolder = (await File.find({parent: file})).reduce((prev, cur) => [...prev, cur._id], [])
+            sizeResult += await recursiveCopyFiles(newFolder._id, filesNewFolder, user)
+            continue
+        }
+
+        const newFile = new File({
+            name: fileDB.name,
+            type: 'file',
+            size: fileDB.size,
+            parent,
+            user
+        })
+
+        await FileService.copyFile(user, fileDB._id, newFile._id)
+        await newFile.save()
+
+        sizeResult += newFile.size
+    }
+
+    return sizeResult
+}
+
 class FileController {
     async createUserRootDir(userId) {
         try {
@@ -396,7 +437,7 @@ class FileController {
                 const dbFileExist = await File.findOne({ name: dbFile.name, type: dbFile.type, user: req.user.id, parent: idNewParent })
 
                 if (dbFileExist) {
-                    return res.status(500).json({error: `Файл с именем ${dbFileExist.name} уже существует в дирректории для перемещения`})
+                    return res.status(400).json({error: `Файл с именем ${dbFileExist.name} уже существует в дирректории для перемещения`})
                 }
 
                 sizeToParent += dbFile.size
@@ -587,6 +628,30 @@ class FileController {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    async copyFiles(req, res) {
+        try {
+            const { parent, files } = req.body
+
+            if (!files.length) {
+                return res.status(400).json({message: `Не выбраны файлы для копирования`})
+            }
+
+            const size = await recursiveCopyFiles(parent, files, req.user.id)
+            await recursiveUpdateSizeParent(req.user.id, parent, size)
+
+            let user = await User.findOne({_id: req.user.id})
+            user.usedSpace += size
+            await user.save()
+
+            const updatedParentFiles = await File.find({parent})
+            return res.json({files: updatedParentFiles, usedSpace: user.usedSpace})
+        } catch (e) {
+            console.log(e)
+            return res.status(400).json({error: `Ошибка при копировании`})
+        }
+        
     }
 }
 

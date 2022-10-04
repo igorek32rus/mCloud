@@ -18,6 +18,7 @@ export const URLS = {
 
     GET_FILES: MAIN.SERVER + '/api/files',
     MOVE_FILES: MAIN.SERVER + '/api/files/move',
+    COPY_FILES: MAIN.SERVER + '/api/files/copy',
     SEARCH_FILES: MAIN.SERVER + '/api/files/search',
     TOGGLE_SHARE: MAIN.SERVER + '/api/files/share',
     SHARE_INFO: MAIN.SERVER + '/api/files/shareInfo',

@@ -5,5 +5,6 @@ export const DirContext = createContext({
     setDir: () => {},
     path: [],
     setPath: () => {},
-    changeParent: () => {}
+    changeParent: () => {},
+    copyFiles: () => {}
 })

@@ -9,6 +9,7 @@ router.post('/delete', authMiddleware, FileController.deleteFilesToTrash)
 router.post('/permanentDelete', authMiddleware, FileController.permanentDeleteFiles)
 router.post('/upload', authMiddleware, FileController.uploadFile)
 router.post('/move', authMiddleware, FileController.changeParent)
+router.post('/copy', authMiddleware, FileController.copyFiles)
 router.post('/restore', authMiddleware, FileController.restoreFiles)
 
 router.post('/share', authMiddleware, FileController.toggleShareFile)
