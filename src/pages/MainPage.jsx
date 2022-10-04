@@ -20,6 +20,7 @@ import { SelectionContextProvider } from '../contexts/SelectionContext/Selection
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
+import { CopyCutPasteContextProvider } from '../contexts/CopyCutPasteContext/CopyCutPasteContextProvider'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
@@ -162,13 +163,15 @@ function MainPage() {
             </TitlePage>
             {loading 
               ? <Loader /> 
-              : <ContextMenuContextProvider>
-                  <DragnDropFilesContextProvider>
-                    <WindowSizeContext.Provider value={{windowSize}} >
-                      <DirContent changeParent={changeParent} />
-                    </WindowSizeContext.Provider>
-                  </DragnDropFilesContextProvider>
-                </ContextMenuContextProvider>
+              : <CopyCutPasteContextProvider>
+                  <ContextMenuContextProvider>
+                    <DragnDropFilesContextProvider>
+                      <WindowSizeContext.Provider value={{windowSize}} >
+                        <DirContent changeParent={changeParent} />
+                      </WindowSizeContext.Provider>
+                    </DragnDropFilesContextProvider>
+                  </ContextMenuContextProvider>
+                </CopyCutPasteContextProvider> 
             }
           </ModalProvider>
         </div>

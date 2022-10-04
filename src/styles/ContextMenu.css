@@ -51,6 +51,16 @@
     background-size: contain;
 }
   
+.context-menu ul li div.icon.cut {
+    background: url('../images/cut.svg') no-repeat;
+    background-size: contain;
+}
+  
+.context-menu ul li div.icon.paste {
+    background: url('../images/paste.svg') no-repeat;
+    background-size: contain;
+}
+  
 .context-menu ul li div.icon.delete {
     background: url('../images/delete.svg') no-repeat;
     background-size: contain;

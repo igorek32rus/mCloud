@@ -52,7 +52,7 @@ export const useHandlerMouseMove = () => {
                     return
                 }
         
-                setSelected(prev => [...prev, item._id])
+                setSelected(prev => [...prev.filter(itemSel => itemSel !== item._id), item._id])
             })
         }
         

@@ -9,6 +9,7 @@ import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMen
 import { DirContext } from "../../contexts/DirContext/DirContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 import { NotifyContext } from "../../Context"
+import { CopyCutPasteContext } from "../../contexts/CopyCutPasteContext/CopyCutPasteContext"
 
 import CreateFolder from "../modalwindows/CreateFolder"
 import Rename from "../modalwindows/Rename"
@@ -24,6 +25,7 @@ function MainContextMenu() {
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
+    const { modePaste, setModePaste, setItemsPaste, pasteItems } = useContext(CopyCutPasteContext)
     const { createNotification, removeNotification } = useContext(NotifyContext)
     const { parent } = useParams()
 
@@ -109,6 +111,23 @@ function MainContextMenu() {
         removeNotification(idNotify)
     }
 
+    const handlerCopy = () => {
+        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        setItemsPaste(selected)
+        setModePaste("copy")
+    }
+
+    const handlerCut = () => {
+        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        setItemsPaste(selected)
+        setModePaste("cut")
+    }
+
+    const handlerPaste = () => {
+        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        pasteItems()
+    }
+
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"
     const leftContext = positionContextMenu.left + 200 > windowSize.width ? positionContextMenu.left - 200 : positionContextMenu.left
 
@@ -118,13 +137,14 @@ function MainContextMenu() {
                 ? ( <ul>
                         <li onClick={createFolder}><div className="icon edit"></div>Создать папку</li>
                         <li className={parent === userData.rootId ? 'disabled' : ''} onClick={handlerShareCurrentDir}><div className="icon share"></div>Поделиться</li>
-                        <li><div className="icon copy"></div>Вставить</li>
+                        <li className={!modePaste ? 'disabled' : ''} onClick={modePaste ? handlerPaste : undefined} ><div className="icon paste"></div>Вставить</li>
                     </ul> ) 
                 : ( <ul>
                         <li className={selected.length > 1 ? 'disabled' : ''} onClick={selected.length === 1 ? handlerRename : undefined}><div className="icon edit"></div>Переименовать</li>
                         <li onClick={handlerDownload}><div className="icon download"></div>Скачать</li>
                         <li className={selected.length > 1 ? 'disabled' : ''} onClick={selected.length === 1 ? handlerShare : undefined}><div className="icon share"></div>Поделиться</li>
-                        <li><div className="icon copy"></div>Копировать</li>
+                        <li onClick={handlerCopy}><div className="icon copy"></div>Копировать</li>
+                        <li onClick={handlerCut}><div className="icon cut"></div>Вырезать</li>
                         <li onClick={handlerDelete}><div className="icon delete"></div>Удалить в корзину</li>
                     </ul> )
             }
