@@ -59,7 +59,7 @@ function MainContextMenu() {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
         openModal({
             title: 'Поделиться',
-            children: <Share items={items} />
+            children: <Share items={[{_id: parent}]} />
         })
     }
 
@@ -136,7 +136,7 @@ function MainContextMenu() {
             { typeContextMenu === 'workspace'
                 ? ( <ul>
                         <li onClick={createFolder}><div className="icon edit"></div>Создать папку</li>
-                        <li className={parent === userData.rootId ? 'disabled' : ''} onClick={handlerShareCurrentDir}><div className="icon share"></div>Поделиться</li>
+                        <li className={parent === userData.rootId ? 'disabled' : ''} onClick={parent !== userData.rootId ? handlerShareCurrentDir : undefined}><div className="icon share"></div>Поделиться</li>
                         <li className={!modePaste ? 'disabled' : ''} onClick={modePaste ? handlerPaste : undefined} ><div className="icon paste"></div>Вставить</li>
                     </ul> ) 
                 : ( <ul>
