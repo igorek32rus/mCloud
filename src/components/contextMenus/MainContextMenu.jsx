@@ -8,6 +8,7 @@ import { SelectionContext } from "../../contexts/SelectionContext/SelectionConte
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { DirContext } from "../../contexts/DirContext/DirContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
+import { NotifyContext } from "../../Context"
 
 import CreateFolder from "../modalwindows/CreateFolder"
 import Rename from "../modalwindows/Rename"
@@ -23,6 +24,7 @@ function MainContextMenu() {
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
+    const { createNotification, removeNotification } = useContext(NotifyContext)
     const { parent } = useParams()
 
     const items = dir.filter(item => selected.includes(item._id))
@@ -69,6 +71,12 @@ function MainContextMenu() {
 
     const handlerDownload = async () => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
+
+        const idNotify = createNotification({
+            title: `Скачивание файлов`, 
+            message: `Подготовка файлов. Пожалуйста, подождите...`,
+            time: 0
+        })
         
         const response = await fetch(URLS.DOWNLOAD_FILES, {
             method: 'POST',
@@ -98,6 +106,7 @@ function MainContextMenu() {
             a.remove();
         }
 
+        removeNotification(idNotify)
     }
 
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"
