@@ -1,19 +1,21 @@
 import React from "react"
 import { CopyCutPasteContext } from "./CopyCutPasteContext"
+import { DirContext } from "../DirContext/DirContext"
 
 export const CopyCutPasteContextProvider = ({children}) => {
     const [modePaste, setModePaste] = React.useState("")
     const [itemsPaste, setItemsPaste] = React.useState([])
 
-    const pasteItems = () => {
+    const { changeParent } = React.useContext(DirContext)
+
+    const pasteItems = async (parent) => {
         if (modePaste === "copy") {
             console.log("paste --- copy")
             console.log(itemsPaste)
         }
 
         if (modePaste === "cut") {
-            console.log("paste --- cut")
-            console.log(itemsPaste)
+            changeParent(parent, itemsPaste)
         }
 
         setModePaste("")

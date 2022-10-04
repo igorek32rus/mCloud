@@ -2,13 +2,20 @@ import React from 'react'
 import { AuthProvider } from './Context'
 import { NotifyProvider } from './Context'
 import { LoaderProvider } from './Context'
+import { CopyCutPasteContextProvider } from './Context'
+import { DirContextProvider } from './Context'
+
 
 export const GeneralProvider = ({children}) => {
     return (
         <AuthProvider>
             <NotifyProvider>
                 <LoaderProvider>
-                    { children }
+                    <DirContextProvider>
+                        <CopyCutPasteContextProvider>
+                            { children }
+                        </CopyCutPasteContextProvider>
+                    </DirContextProvider>
                 </LoaderProvider>
             </NotifyProvider>
         </AuthProvider>
@@ -29,3 +36,9 @@ export * from './contexts/LoaderContext/LoaderContextProvider'
 
 export * from './contexts/MainMenuContext/MainMenuContext'
 export * from './contexts/MainMenuContext/MainMenuContextProvider'
+
+export * from './contexts/CopyCutPasteContext/CopyCutPasteContext'
+export * from './contexts/CopyCutPasteContext/CopyCutPasteContextProvider'
+
+export * from './contexts/DirContext/DirContext'
+export * from './contexts/DirContext/DirContextProvider'

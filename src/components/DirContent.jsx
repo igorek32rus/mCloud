@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { DirContext } from "../contexts/DirContext/DirContext"
+import { DirContext } from "../Context"
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
@@ -15,8 +15,8 @@ import categories from "../categories"
 
 import '../styles/DirContent.css'
 
-function DirContent({ changeParent }) {
-    const { dir } = useContext(DirContext)
+function DirContent() {
+    const { dir, changeParent } = useContext(DirContext)
     const { selection, setSelected } = useContext(SelectionContext)
     
     const { isContextMenuOpened } = useContext(ContextMenuContext)

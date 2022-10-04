@@ -133,7 +133,7 @@ function MainContextMenu() {
 
     const handlerPaste = () => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
-        pasteItems()
+        pasteItems(parent)
     }
 
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"

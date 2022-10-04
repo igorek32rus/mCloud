@@ -14,25 +14,21 @@ import BackButton from '../components/BackButton'
 
 import '../styles/App.css'
 
-import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider, AuthContext } from '../Context'
-import { DirContext } from '../contexts/DirContext/DirContext'
+import { ModalProvider, LoaderContext, MainMenuProvider, AuthContext, DirContext } from '../Context'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
-import { CopyCutPasteContextProvider } from '../contexts/CopyCutPasteContext/CopyCutPasteContextProvider'
 
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
 import categories from '../categories'
 
 function MainPage() {
-  const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
   const { userData } = useContext(AuthContext)
+  const { setDir, path, setPath } = useContext(DirContext)
 
-  const [dir, setDir] = useState([])
-  const [path, setPath] = useState([])
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0
@@ -113,36 +109,7 @@ function MainPage() {
     return () => window.removeEventListener("resize", updateWindowSize) 
   }, [])
 
-  const changeParent = async (idNewParent, files) => {
-    try {
-      const updatedDir = await fetch({
-        url: URLS.MOVE_FILES, 
-        method: 'POST', 
-        data: {idNewParent, files, curDir: path[path.length - 1]}
-      })
-
-      if (updatedDir.files) {
-        setDir(updatedDir.files)
-        createNotification({
-          title: `Перемещение объектов`, 
-          message: `Объекты успешно перемещены`
-        })
-      }
-
-      if (updatedDir.error) {
-        createNotification({
-          title: `Перемещение объектов`, 
-          message: updatedDir.error
-        })
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   return (
-    <DirContext.Provider value={{dir, setDir}}>
-
       <SelectionContextProvider>
 
         <MainMenuProvider>
@@ -163,15 +130,13 @@ function MainPage() {
             </TitlePage>
             {loading 
               ? <Loader /> 
-              : <CopyCutPasteContextProvider>
-                  <ContextMenuContextProvider>
-                    <DragnDropFilesContextProvider>
-                      <WindowSizeContext.Provider value={{windowSize}} >
-                        <DirContent changeParent={changeParent} />
-                      </WindowSizeContext.Provider>
-                    </DragnDropFilesContextProvider>
-                  </ContextMenuContextProvider>
-                </CopyCutPasteContextProvider> 
+              : <ContextMenuContextProvider>
+                  <DragnDropFilesContextProvider>
+                    <WindowSizeContext.Provider value={{windowSize}} >
+                      <DirContent />
+                    </WindowSizeContext.Provider>
+                  </DragnDropFilesContextProvider>
+                </ContextMenuContextProvider>
             }
           </ModalProvider>
         </div>
@@ -179,8 +144,6 @@ function MainPage() {
         <Footer />
 
       </SelectionContextProvider>
-      
-    </DirContext.Provider>
   );
 }
 
