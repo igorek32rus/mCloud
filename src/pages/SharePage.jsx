@@ -12,8 +12,7 @@ import Sidebar from '../components/Sidebar'
 
 import '../styles/App.css'
 
-import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider } from '../Context'
-import { DirContext } from '../contexts/DirContext/DirContext'
+import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider, DirContext } from '../Context'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
@@ -24,8 +23,8 @@ import { URLS } from '../constants'
 function SharePage() {
   const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
+  const { setDir } = useContext(DirContext)
 
-  const [dir, setDir] = useState([])
   const [errorMessage, setErrorMessage] = useState("")
   const [folderName, setFolderName] = useState("Общий доступ")
 
@@ -90,36 +89,32 @@ function SharePage() {
   }, [])
 
   return (
-    <DirContext.Provider value={{dir, setDir}}>
+    <SelectionContextProvider>
 
-      <SelectionContextProvider>
+      <MainMenuProvider>
+        <Header />
+        <Sidebar />
+      </MainMenuProvider>
+      <div className="pageBodyMain">
+        <ModalProvider>
+          {/* <TopPanel path={path} /> */}
+          <TitlePage>
+            <h1>{folderName}</h1>
+          </TitlePage>
+          {loading 
+            ? <Loader /> 
+            : <ContextMenuContextProvider>
+                <WindowSizeContext.Provider value={{windowSize}} >
+                  { errorMessage ? <div class="message" style={{marginTop: 10}}>{errorMessage}</div> : <DirShareContent /> }
+                </WindowSizeContext.Provider>
+              </ContextMenuContextProvider>
+          }
+        </ModalProvider>
+      </div>
+      <Notify />
+      <Footer />
 
-        <MainMenuProvider>
-          <Header />
-          <Sidebar />
-        </MainMenuProvider>
-        <div className="pageBodyMain">
-          <ModalProvider>
-            {/* <TopPanel path={path} /> */}
-            <TitlePage>
-              <h1>{folderName}</h1>
-            </TitlePage>
-            {loading 
-              ? <Loader /> 
-              : <ContextMenuContextProvider>
-                  <WindowSizeContext.Provider value={{windowSize}} >
-                    { errorMessage ? <div class="message" style={{marginTop: 10}}>{errorMessage}</div> : <DirShareContent /> }
-                  </WindowSizeContext.Provider>
-                </ContextMenuContextProvider>
-            }
-          </ModalProvider>
-        </div>
-        <Notify />
-        <Footer />
-
-      </SelectionContextProvider>
-      
-    </DirContext.Provider>
+    </SelectionContextProvider>
   );
 }
 

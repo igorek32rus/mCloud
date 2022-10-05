@@ -4,6 +4,12 @@ import { DirContext } from "../contexts/DirContext/DirContext"
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
+import { useHandlerMouseDown } from '../hooks/eventHandlers/DirContent/useHandlerMouseDown'
+import { useHandlerMouseMove } from '../hooks/eventHandlers/DirContent/useHandlerMouseMove'
+import { useHandlerMouseUp } from '../hooks/eventHandlers/DirContent/useHandlerMouseUp'
+
+import SharePageContextMenu from "./contextMenus/SharePageContextMenu"
+
 import DirItem from "./DirItem"
 import Selection from "./Selection"
 
@@ -14,6 +20,10 @@ function DirShareContent() {
     const { selection, setSelected } = useContext(SelectionContext)
     const { isContextMenuOpened } = useContext(ContextMenuContext)
 
+    const handlerMouseDown = useHandlerMouseDown()
+    const handlerMouseMove = useHandlerMouseMove()
+    const handlerMouseUp = useHandlerMouseUp()
+
 
     useEffect(() => {
         setSelected([])
@@ -23,6 +33,9 @@ function DirShareContent() {
         <div className="dirContent" 
             onContextMenu={ (e) => e.preventDefault() } 
             onDragStart={ () => false } 
+            onMouseDown={handlerMouseDown}
+            onMouseMove={handlerMouseMove}
+            onMouseUp={handlerMouseUp}
         >
 
             { selection && <Selection /> }
@@ -35,7 +48,7 @@ function DirShareContent() {
                 .map(item => <DirItem file={item} key={item._id} />) 
             }
 
-            {/* { isContextMenuOpened && categoryParams.contextMenu } */}
+            { isContextMenuOpened && <SharePageContextMenu /> }
         </div>
     )
 }
