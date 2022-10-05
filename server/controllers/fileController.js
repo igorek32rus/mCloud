@@ -589,7 +589,13 @@ class FileController {
             }
 
             const files = fileDB.type === "file" ? [fileDB] : await File.find({parent: fileDB._id})
-            return res.json({files})
+            let response = {
+                files,
+                isFolder: fileDB.type === "folder"
+            }
+
+            if (fileDB.type === "folder") response.folderName = fileDB.name
+            return res.json(response)
         } catch (e) {
             console.log(e)
         }

@@ -27,6 +27,7 @@ function SharePage() {
 
   const [dir, setDir] = useState([])
   const [errorMessage, setErrorMessage] = useState("")
+  const [folderName, setFolderName] = useState("Общий доступ")
 
   const [windowSize, setWindowSize] = useState({
     width: 0,
@@ -53,6 +54,10 @@ function SharePage() {
 
     if (getShareFile.files) {
       setDir(getShareFile.files)
+    }
+
+    if (getShareFile.isFolder) {
+      setFolderName(getShareFile.folderName)
     }
 
     if (getShareFile.message) setErrorMessage(getShareFile.message)
@@ -97,7 +102,7 @@ function SharePage() {
           <ModalProvider>
             {/* <TopPanel path={path} /> */}
             <TitlePage>
-              <h1>Общий доступ</h1>
+              <h1>{folderName}</h1>
             </TitlePage>
             {loading 
               ? <Loader /> 
