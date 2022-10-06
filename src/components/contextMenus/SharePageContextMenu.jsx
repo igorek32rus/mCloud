@@ -2,12 +2,10 @@ import React, { useContext } from "react"
 
 import '../../styles/ContextMenu.css'
 
-import { ModalContext } from '../../Context'
+import { ModalContext, NotifyContext, DirContext, AuthContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
-import { NotifyContext } from "../../Context"
 
 import { URLS } from "../../constants"
 
@@ -18,11 +16,19 @@ function SharePageContextMenu() {
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
+    const { isAuth } = useContext(AuthContext)
 
     const items = dir.filter(item => selected.includes(item._id))
 
-    const handlerDownload = async () => {
+    const handlerDownload = async ({downloadFolder = false}) => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
+
+        if (!items.length && !downloadFolder) {
+            return createNotification({
+                title: `Скачивание файлов`, 
+                message: `Не выбрано ни одного файла для скачивания`,
+            })
+        }
 
         const idNotify = createNotification({
             title: `Скачивание файлов`, 
@@ -36,18 +42,19 @@ function SharePageContextMenu() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                files: items
+                files: downloadFolder ? dir : items
             })
         })
 
-        const filename = response.headers.get('content-disposition')
-            .split(';')
-            .find(n => n.includes('filename='))
-            .replace('filename=', '')
-            .trim()
-            .replaceAll('"', "")
-
         if (response.ok) {
+
+            const filename = response.headers.get('content-disposition')
+                .split(';')
+                .find(n => n.includes('filename='))
+                .replace('filename=', '')
+                .trim()
+                .replaceAll('"', "")
+
             const blob = await response.blob()
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
@@ -61,6 +68,10 @@ function SharePageContextMenu() {
         removeNotification(idNotify)
     }
 
+    const handlerAddToCloud = () => {
+        setIsContextMenuOpened(false)   // закрыть контекстное меню
+    }
+
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"
     const leftContext = positionContextMenu.left + 200 > windowSize.width ? positionContextMenu.left - 200 : positionContextMenu.left
 
@@ -68,15 +79,15 @@ function SharePageContextMenu() {
         <div className={classContext} style={{ left: leftContext, top: positionContextMenu.top }} onMouseDown={(e) => e.stopPropagation()}>
             { typeContextMenu === 'item' &&
                 ( <ul>
-                    <li><div className="icon upload"></div>Добавить в облако</li>
+                    <li className={!isAuth ? 'disabled' : ''} onClick={!isAuth ? handlerAddToCloud : undefined}><div className="icon upload"></div>Добавить в облако</li>
                     <li onClick={handlerDownload}><div className="icon download"></div>Скачать</li>
                 </ul> )
             }
 
             { typeContextMenu === 'workspace' &&
                 ( <ul>
-                    <li><div className="icon upload"></div>Добавить в облако</li>
-                    <li onClick={handlerDownload}><div className="icon download"></div>Скачать папку</li>
+                    <li className={!isAuth ? 'disabled' : ''} onClick={!isAuth ? handlerAddToCloud : undefined}><div className="icon upload"></div>Добавить в облако</li>
+                    <li onClick={() => handlerDownload({downloadFolder: true})}><div className="icon download"></div>Скачать папку</li>
                 </ul> )
             }
         </div>
