@@ -1,14 +1,15 @@
 import React, {useContext} from "react"
 import copyImg from "../../images/copy.svg"
 import linkCloseImg from "../../images/link_slash.svg"
-import { ModalContext, NotifyContext } from "../../Context"
+import { ModalContext } from "../../Context"
+import useNotification from "../../hooks/useNotification"
 
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
 function Share({items}) {
     const [inputLink, setInputLink] = React.useState("")
-    const {createNotification} = useContext(NotifyContext)
+    const [createNotification] = useNotification()
     const {closeModal} = useContext(ModalContext)
 
     const fetch = useFetch()

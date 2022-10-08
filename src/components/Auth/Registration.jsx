@@ -4,13 +4,15 @@ import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 import '../../styles/Auth.css'
+import { useDispatch } from "react-redux"
+import useNotification from "../../hooks/useNotification"
 
 const Registration = ({setLoginWindow}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const {createNotification} = useContext(NotifyContext)
+    const [createNotification] = useNotification()
     const {setLoading} = useContext(LoaderContext)
     const fetch = useFetch()
 

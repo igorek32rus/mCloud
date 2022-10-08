@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
-import { ModalContext, NotifyContext } from "../../../Context"
+
+import { ModalContext } from "../../../Context"
 import { DirContext } from "../../../contexts/DirContext/DirContext"
 import Button from "../../UI/button/Button"
 import useFetch from "../../../hooks/useFetch"
@@ -7,9 +8,11 @@ import { URLS } from "../../../constants"
 import Tree from "./Tree"
 import Loader from "../../UI/loader/Loader"
 
+import useNotification from "../../../hooks/useNotification"
+
 function Restore({items}) {
     const {closeModal} = useContext(ModalContext)
-    const {createNotification} = useContext(NotifyContext)
+    const [createNotification] = useNotification()
     const {setDir} = useContext(DirContext)
 
     const [tree, setTree] = useState(null)

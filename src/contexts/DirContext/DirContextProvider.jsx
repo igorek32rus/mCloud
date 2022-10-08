@@ -1,18 +1,20 @@
 import React from "react"
 import { DirContext } from "./DirContext"
 
+import { useDispatch } from "react-redux"
+import { authUpdateUserData } from "../../store/authReducer"
+
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
-import { NotifyContext } from "../NotifyContext/NotifyContext"
-import { AuthContext } from "../../Context"
+import useNotification from "../../hooks/useNotification"
 
 export const DirContextProvider = ({ children }) => {
     const [dir, setDir] = React.useState([])
     const [path, setPath] = React.useState([])
 
-    const { createNotification, removeNotification } = React.useContext(NotifyContext)
-    const { setUserData } = React.useContext(AuthContext)
+    const [ createNotification, removeNotification ] = useNotification()
     const fetch = useFetch()
+    const dispatch = useDispatch()
 
     const changeParent = async (idNewParent, files) => {
         try {
@@ -63,9 +65,7 @@ export const DirContextProvider = ({ children }) => {
                     title: `Копирование файлов`, 
                     message: `Все файлы успешно скопированы`
                 })
-                setUserData(prev => {
-                    return {...prev, usedSpace: updatedDir.usedSpace}
-                })
+                dispatch(authUpdateUserData({usedSpace: updatedDir.usedSpace}))
             }
 
             if (updatedDir.error) {

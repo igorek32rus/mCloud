@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
@@ -7,16 +8,20 @@ import { SelectionContext } from "../../contexts/SelectionContext/SelectionConte
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
+import useNotification from "../../hooks/useNotification"
+
 import { URLS } from "../../constants"
 
 function SharePageContextMenu() {
     const { openModal } = useContext(ModalContext)
     const { selected } = useContext(SelectionContext)
-    const { createNotification, removeNotification } = useContext(NotifyContext)
+    const [ createNotification, removeNotification ] = useNotification()
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
-    const { isAuth } = useContext(AuthContext)
+    // const { isAuth } = useContext(AuthContext)
+
+    const isAuth = useSelector(state => state.auth.isAuth)
 
     const items = dir.filter(item => selected.includes(item._id))
 

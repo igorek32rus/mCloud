@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { useParams } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
@@ -8,8 +9,10 @@ import { SelectionContext } from "../../contexts/SelectionContext/SelectionConte
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { DirContext } from "../../contexts/DirContext/DirContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
-import { NotifyContext } from "../../Context"
+// import { NotifyContext } from "../../Context"
 import { CopyCutPasteContext } from "../../contexts/CopyCutPasteContext/CopyCutPasteContext"
+
+import useNotification from "../../hooks/useNotification"
 
 import CreateFolder from "../modalwindows/CreateFolder"
 import Rename from "../modalwindows/Rename"
@@ -20,14 +23,16 @@ import { URLS } from "../../constants"
 
 function MainContextMenu() {
     const { openModal } = useContext(ModalContext)
-    const { userData } = useContext(AuthContext)
+    // const { userData } = useContext(AuthContext)
     const { selected } = useContext(SelectionContext)
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
     const { modePaste, setModePaste, setItemsPaste, pasteItems } = useContext(CopyCutPasteContext)
-    const { createNotification, removeNotification } = useContext(NotifyContext)
+    const [ createNotification, removeNotification ] = useNotification()
     const { parent } = useParams()
+
+    const userData = useSelector(state => state.auth.userData)
 
     const items = dir.filter(item => selected.includes(item._id))
 

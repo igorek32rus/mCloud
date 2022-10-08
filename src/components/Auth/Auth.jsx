@@ -3,11 +3,15 @@ import { AuthContext, LoaderContext } from "../../Context"
 import Loader from "../UI/loader/Loader"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
+import { useDispatch } from "react-redux"
+import { authLoginAction } from "../../store/authReducer"
 
 const Auth = ({setCheckAuth}) => {
-    const {setIsAuth, setUserData} = useContext(AuthContext)
+    // const {setIsAuth, setUserData} = useContext(AuthContext)
     const {loading, setLoading} = useContext(LoaderContext)
     const fetch = useFetch()
+
+    const dispatch = useDispatch()
   
     const auth = useCallback(async () => {
         setLoading(true)
@@ -19,9 +23,10 @@ const Auth = ({setCheckAuth}) => {
         })
     
         if (res.token) {
-            setUserData(res.user)
+            // setUserData(res.user)
+            dispatch(authLoginAction(res.user))
             localStorage.setItem('token', res.token)
-            setIsAuth(true)
+            // setIsAuth(true)
         }
         
         setCheckAuth(false)

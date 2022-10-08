@@ -4,11 +4,13 @@ import Logo from './Logo'
 import Search from './Search'
 
 import '../styles/Header.css'
-import { AuthContext } from '../Context'
+// import { AuthContext } from '../Context'
 import ProfileAvatar from './ProfileAvatar'
+import { useSelector } from 'react-redux'
 
 function Header(props) {
-    const {isAuth} = useContext(AuthContext)
+    // const {isAuth} = useContext(AuthContext)
+    const isAuth = useSelector(state => state.auth.isAuth)
 
     return (
         <header>

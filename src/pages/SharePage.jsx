@@ -12,7 +12,7 @@ import Sidebar from '../components/Sidebar'
 
 import '../styles/App.css'
 
-import { ModalProvider, NotifyContext, LoaderContext, MainMenuProvider, DirContext } from '../Context'
+import { ModalProvider, LoaderContext, MainMenuProvider, DirContext } from '../Context'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
@@ -21,7 +21,6 @@ import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
 
 function SharePage() {
-  const { createNotification } = useContext(NotifyContext)
   const {loading, setLoading} = useContext(LoaderContext)
   const { setDir } = useContext(DirContext)
 

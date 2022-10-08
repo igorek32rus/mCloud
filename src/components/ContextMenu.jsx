@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 
 import '../styles/ContextMenu.css'
 
-import { ModalContext, AuthContext } from '../Context'
+import { ModalContext } from '../Context'
 import CreateFolder from "./modalwindows/CreateFolder"
 import Rename from "./modalwindows/Rename"
 import Share from './modalwindows/Share'
@@ -11,10 +11,12 @@ import Delete from "./modalwindows/Delete"
 import PermanentDelete from "./modalwindows/PermanentDelete"
 import Restore from "./modalwindows/Restore/Restore"
 
+import { useSelector } from 'react-redux'
+
 function ContextMenu({openContextMenu, items, contextType, style }) {
     const {openModal} = useContext(ModalContext)
-    const {userData} = useContext(AuthContext)
     const {category, parent} = useParams()
+    const userData = useSelector(state => state.auth.userData)
 
     const createFolder = () => {
         openContextMenu(-1, 0, 0)   // закрыть контекстное меню

@@ -1,18 +1,21 @@
 import React, {useState, useContext} from "react"
-import { AuthContext, NotifyContext, LoaderContext } from "../../Context"
+import { LoaderContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 import '../../styles/Auth.css'
+import { useDispatch } from "react-redux"
+import { authLoginAction } from "../../store/authReducer"
+import useNotification from "../../hooks/useNotification"
 
 const Login = ({setLoginWindow}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const {setIsAuth, setUserData} = useContext(AuthContext)
-    const {createNotification} = useContext(NotifyContext)
     const {setLoading} = useContext(LoaderContext)
     const fetch = useFetch()
+    const dispatch = useDispatch()
+    const [createNotification] = useNotification()
 
     const login = async () => {
         setLoading(true)
@@ -25,9 +28,8 @@ const Login = ({setLoginWindow}) => {
         setLoading(false)
         
         if (res.token) {
-            setUserData(res.user)
+            dispatch(authLoginAction(res.user))
             localStorage.setItem('token', res.token)
-            setIsAuth(true)
             return
         }
 

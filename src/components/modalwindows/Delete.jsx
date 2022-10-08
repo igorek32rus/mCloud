@@ -1,13 +1,14 @@
 import React, { useContext } from "react"
-import { ModalContext, NotifyContext } from "../../Context"
+import { ModalContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 import { DirContext } from "../../contexts/DirContext/DirContext"
+import useNotification from "../../hooks/useNotification"
 
 function Delete({items}) {
     const {closeModal} = useContext(ModalContext)
-    const {createNotification} = useContext(NotifyContext)
+    const [createNotification] = useNotification()
     const {setDir} = useContext(DirContext)
     const fetch = useFetch()
 

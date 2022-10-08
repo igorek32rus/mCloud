@@ -8,11 +8,12 @@ import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
 import { DirContext } from "../../contexts/DirContext/DirContext"
+import useNotification from "../../hooks/useNotification"
 
 function CreateFolder() {
     const [nameFolder, setNameFolder] = useState('')
     const {closeModal} = useContext(ModalContext)
-    const {createNotification} = useContext(NotifyContext)
+    const [createNotification] = useNotification()
     const {setDir} = useContext(DirContext)
 
     const {parent} = useParams()

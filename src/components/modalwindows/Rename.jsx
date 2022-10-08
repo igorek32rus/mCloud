@@ -1,8 +1,9 @@
 import React, { useContext, useState, useRef, useEffect } from "react"
-import { ModalContext, NotifyContext } from "../../Context"
+import { ModalContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
+import useNotification from "../../hooks/useNotification"
 
 import { DirContext } from "../../contexts/DirContext/DirContext"
 
@@ -12,7 +13,7 @@ function Rename({items}) {
     const fetch = useFetch()
 
     const {closeModal} = useContext(ModalContext)
-    const {createNotification} = useContext(NotifyContext)
+    const [createNotification] = useNotification()
     const {setDir} = useContext(DirContext)
 
     useEffect(() => {

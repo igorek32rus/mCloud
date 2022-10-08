@@ -1,20 +1,24 @@
 import React, {useContext, useState} from "react"
 import Button from "../UI/button/Button"
-import { ModalContext, NotifyContext, AuthContext } from "../../Context"
+import { ModalContext } from "../../Context"
 import { getFileSize } from "../../utils/getFileSize"
 import { URLS } from "../../constants"
 import { DirContext } from "../../contexts/DirContext/DirContext"
 import { useParams } from "react-router-dom"
+
+import { useDispatch } from "react-redux"
+import { authUpdateUserData } from "../../store/authReducer"
+import useNotification from "../../hooks/useNotification"
 
 import axios from 'axios'
 
 function UploadFiles({files}) {
     const [uploadFiles, setUploadFiles] = useState(files)
     const {closeModal} = useContext(ModalContext)
-    const {createNotification, removeNotification, updateNotification} = useContext(NotifyContext)
-    const {setUserData} = useContext(AuthContext)
+    const [createNotification, removeNotification, updateNotification] = useNotification()
     const {setDir} = useContext(DirContext)
     const {parent} = useParams()
+    const dispatch = useDispatch()
 
     const handleUploadFilesBtn = async () => {
         closeModal()
@@ -57,9 +61,10 @@ function UploadFiles({files}) {
                         })
                     }
                 })
-                setUserData((prev) => {
-                    return {...prev, usedSpace: response.data.usedSpace}
-                })
+                // setUserData((prev) => {
+                //     return {...prev, usedSpace: response.data.usedSpace}
+                // })
+                dispatch(authUpdateUserData({usedSpace: response.data.usedSpace}))
                 setDir(dir => [...dir, response.data.file])
 
                 sizeUploaded += file.size

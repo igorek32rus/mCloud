@@ -14,7 +14,7 @@ import BackButton from '../components/BackButton'
 
 import '../styles/App.css'
 
-import { ModalProvider, LoaderContext, MainMenuProvider, AuthContext, DirContext } from '../Context'
+import { ModalProvider, LoaderContext, MainMenuProvider, DirContext } from '../Context'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
@@ -24,9 +24,11 @@ import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
 import categories from '../categories'
 
+import { useSelector } from 'react-redux'
+
 function MainPage() {
   const {loading, setLoading} = useContext(LoaderContext)
-  const { userData } = useContext(AuthContext)
+  const userData = useSelector(state => state.auth.userData)
   const { setDir, path, setPath } = useContext(DirContext)
 
   const [windowSize, setWindowSize] = useState({

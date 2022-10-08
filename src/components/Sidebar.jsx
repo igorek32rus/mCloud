@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { AuthContext, MainMenuContext } from '../Context'
+import { MainMenuContext } from '../Context'
 import '../styles/Sidebar.css'
 import { getFileSize } from '../utils/getFileSize'
 
@@ -9,14 +9,17 @@ import categories from '../categories'
 import SettingsIcon from "../images/settings.svg"
 import LogoutIcon from "../images/logout.svg"
 
+import { useDispatch, useSelector } from 'react-redux'
+import { authLogoutAction } from '../store/authReducer'
+
 function Sidebar() {
     const {isMenuOpened, setIsMenuOpened, setIsMenuClosing, isMenuClosing} = useContext(MainMenuContext)
-    const {setIsAuth, setUserData, userData} = useContext(AuthContext)
+    const userData = useSelector(state => state.auth.userData)
+    const dispatch = useDispatch()
 
     const handlerLogout = () => {
-        setUserData({})
         localStorage.removeItem('token')
-        setIsAuth(false)
+        dispatch(authLogoutAction())
     }
 
     const handlerClickBackdrop = (e) => {
@@ -48,7 +51,7 @@ function Sidebar() {
 }
 
 function ListCategories() {
-    const {userData} = useContext(AuthContext)
+    const userData = useSelector(state => state.auth.userData)
 
     return (
         <>

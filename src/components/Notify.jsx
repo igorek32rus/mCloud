@@ -1,10 +1,12 @@
 import React, { useContext } from "react"
-import { NotifyContext } from "../Context"
+// import { NotifyContext } from "../Context"
 import '../styles/Notify.css'
 import NotificationItem from "./NotificationItem"
+import { useSelector } from "react-redux"
 
 function Notify() {
-    const {notifications} = useContext(NotifyContext)
+    // const {notifications} = useContext(NotifyContext)
+    const notifications = useSelector(state => state.notifications.notifications)
 
     return (
         <div id="notifications">
