@@ -1,11 +1,11 @@
 import React, { useContext } from "react"
+import { useSelector } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import Rename from "../modalwindows/Rename"
@@ -16,7 +16,7 @@ function SharedContextMenu() {
     const { openModal } = useContext(ModalContext)
     const { selected } = useContext(SelectionContext)
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
-    const { dir } = useContext(DirContext)
+    const { dir } = useSelector(state => state.dir)
     const { windowSize } = useContext(WindowSizeContext)
 
     const items = dir.filter(item => selected.includes(item._id))

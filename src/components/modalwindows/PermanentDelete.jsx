@@ -1,18 +1,17 @@
 import React, { useContext } from "react"
+import { useDispatch } from "react-redux"
 import { ModalContext } from "../../Context"
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 import {getFileSize} from "../../utils/getFileSize"
-import { useDispatch } from "react-redux"
 import { authUpdateUserData } from "../../store/authReducer"
 import useNotification from "../../hooks/useNotification"
+import { dirRemoveFiles } from "../../store/dirReducer"
 
 function PermanentDelete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
-    const {setDir} = useContext(DirContext)
     const fetch = useFetch()
     const dispatch = useDispatch()
 
@@ -26,12 +25,8 @@ function PermanentDelete({items, changeDir, currentDir}) {
             })
       
             if (updatedDir.count >=0) {
-                setDir(dir => {
-                    return dir.filter(file => !items.find(itemDel => itemDel._id === file._id))
-                })
-                // setUserData(prev => {
-                //     return {...prev, usedSpace: updatedDir.usedSpace }
-                // })
+                dispatch(dirRemoveFiles(items))
+
                 dispatch(authUpdateUserData({usedSpace: updatedDir.usedSpace}))
                 createNotification({
                     title: `Удаление объектов`, 

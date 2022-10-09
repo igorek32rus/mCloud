@@ -1,11 +1,11 @@
 import React, { useContext, useState, useRef, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { ModalContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 import useNotification from "../../hooks/useNotification"
-
-import { DirContext } from "../../contexts/DirContext/DirContext"
+import { dirUpdateFile } from "../../store/dirReducer"
 
 function Rename({items}) {
     const [newName, setNewName] = useState(items[0].name)
@@ -14,7 +14,7 @@ function Rename({items}) {
 
     const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
-    const {setDir} = useContext(DirContext)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const input = inputRef.current
@@ -55,9 +55,10 @@ function Rename({items}) {
             
             if (updatedFile.file) {
                 // changeDir(items[0].parent)
-                setDir(dir => {
-                    return [...dir.filter(file => file._id !== items[0]._id), updatedFile.file]
-                })
+                dispatch(dirUpdateFile(updatedFile.file))
+                // setDir(dir => {
+                //     return [...dir.filter(file => file._id !== items[0]._id), updatedFile.file]
+                // })
                 createNotification({
                     title: `Переименование ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'}`, 
                     message: `Новое имя ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'} - ${updatedFile.file.name}`

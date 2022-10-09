@@ -1,16 +1,13 @@
 import React, { useContext } from "react"
 import { useParams } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
-import { ModalContext, AuthContext } from '../../Context'
+import { ModalContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
-// import { NotifyContext } from "../../Context"
-import { CopyCutPasteContext } from "../../contexts/CopyCutPasteContext/CopyCutPasteContext"
 
 import useNotification from "../../hooks/useNotification"
 
@@ -21,18 +18,21 @@ import Delete from "../modalwindows/Delete"
 
 import { URLS } from "../../constants"
 
+import useCopyPaste from "../../hooks/useCopyPaste"
+
 function MainContextMenu() {
     const { openModal } = useContext(ModalContext)
-    // const { userData } = useContext(AuthContext)
     const { selected } = useContext(SelectionContext)
     const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
-    const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
-    const { modePaste, setModePaste, setItemsPaste, pasteItems } = useContext(CopyCutPasteContext)
+    // const { modePaste, setModePaste, setItemsPaste, pasteItems } = useContext(CopyCutPasteContext)
+    const [copy, cut, paste] = useCopyPaste()
+    const modePaste = useSelector(state => state.copyPaste.mode)
     const [ createNotification, removeNotification ] = useNotification()
     const { parent } = useParams()
 
     const userData = useSelector(state => state.auth.userData)
+    const dir = useSelector(state => state.dir.dir)
 
     const items = dir.filter(item => selected.includes(item._id))
 
@@ -118,8 +118,9 @@ function MainContextMenu() {
 
     const handlerCopy = () => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
-        setItemsPaste(selected)
-        setModePaste("copy")
+        copy(selected)
+        // setItemsPaste(selected)
+        // setModePaste("copy")
         createNotification({
             title: `Копирование файлов`, 
             message: `Скопировано`
@@ -128,8 +129,9 @@ function MainContextMenu() {
 
     const handlerCut = () => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
-        setItemsPaste(selected)
-        setModePaste("cut")
+        cut(selected)
+        // setItemsPaste(selected)
+        // setModePaste("cut")
         createNotification({
             title: `Вырезать файлы`, 
             message: `Вырезано`
@@ -138,7 +140,8 @@ function MainContextMenu() {
 
     const handlerPaste = () => {
         setIsContextMenuOpened(false)   // закрыть контекстное меню
-        pasteItems(parent)
+        paste(parent)
+        // pasteItems(parent)
     }
 
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"

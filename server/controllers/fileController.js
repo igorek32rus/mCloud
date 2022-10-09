@@ -279,24 +279,27 @@ class FileController {
                 return res.status(500).json({error: 'Can`t get files'})
             }
 
+            const root = await File.findOne({user: req.user.id, parent: null})
+
             let files = []
 
             if (category === 'latest') {
                 files = await File.find({user: req.user.id, parent: {$ne: null}, type: {$ne: 'folder'}, deleted: null }).sort({date: -1}).limit(50)
-                return res.json({files})
+                return res.json({files, path: [root], currentDir: root})
             }
 
             if (category === 'shared') {
                 files = await File.find({user: req.user.id, accessLink: {$ne: null}, parent: {$ne: null}, deleted: null })
-                return res.json({files})
+                return res.json({files, path: [root], currentDir: root})
             }
 
+            const currentDir = await File.findOne({user: req.user.id, _id: parent})
+
             if (category === 'trash') {
-                const root = await File.findOne({user: req.user.id, parent: null})
 
                 if (root._id == parent) {
                     const rootTrash = await getRootTrash(req.user.id)
-                    return res.json({files: rootTrash, path: [root]})
+                    return res.json({files: rootTrash, path: [root], currentDir: root})
                 }
 
                 let parentFile = null
@@ -304,13 +307,13 @@ class FileController {
                 if (tempParent.deleted) parentFile = tempParent
 
                 files = await File.find({user: req.user.id, deleted: {$ne: null}, parent})
-                return res.json({files, path: [parentFile]})
+                return res.json({files, path: [parentFile], currentDir})
             }
 
             files = await File.find({user: req.user.id, parent, deleted: null})
             const path = await getPath(parent, req.user.id)
             // const path = []
-            return res.json({path, files})
+            return res.json({path, files, currentDir})
         } catch (error) {
             console.log(error)
             return res.status(500).json({error: 'Can`t get files'})
@@ -656,7 +659,7 @@ class FileController {
             user.usedSpace += size
             await user.save()
 
-            const updatedParentFiles = await File.find({parent})
+            const updatedParentFiles = await File.find({parent, deleted: null})
             return res.json({files: updatedParentFiles, usedSpace: user.usedSpace})
         } catch (e) {
             console.log(e)

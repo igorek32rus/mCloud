@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../components/Header'
 import Notify from '../components/Notify'
@@ -12,20 +13,16 @@ import Sidebar from '../components/Sidebar'
 
 import '../styles/App.css'
 
-import { ModalProvider, LoaderContext, MainMenuProvider, DirContext } from '../Context'
+import { ModalProvider, MainMenuProvider } from '../Context'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
-import useFetch from '../hooks/useFetch'
-import { URLS } from '../constants'
+import { asyncGetSharedFile } from '../store/asyncActions/dir'
 
 function SharePage() {
-  const {loading, setLoading} = useContext(LoaderContext)
-  const { setDir } = useContext(DirContext)
-
-  const [errorMessage, setErrorMessage] = useState("")
-  const [folderName, setFolderName] = useState("Общий доступ")
+  const dispatch = useDispatch()
+  const {loading, currentDir, errorMessage} = useSelector(state => state.dir)
 
   const [windowSize, setWindowSize] = useState({
     width: 0,
@@ -33,38 +30,10 @@ function SharePage() {
   })
   let timerWindowSize = 0
 
-  const fetch = useFetch()
-
   const { fileID } = useParams()
 
-
-  const getShareFile = React.useCallback(async () => {
-    setLoading(true)
-    let reqParams = [{
-      name: 'accessLink',
-      value: fileID
-    }]
-
-    const getShareFile = await fetch({
-      url: URLS.GET_SHARE_FILE,
-      reqParams
-    })
-
-    if (getShareFile.files) {
-      setDir(getShareFile.files)
-    }
-
-    if (getShareFile.isFolder) {
-      setFolderName(getShareFile.folderName)
-    }
-
-    if (getShareFile.message) setErrorMessage(getShareFile.message)
-
-    setLoading(false)
-  }, [])
-
   useEffect(() => {
-    getShareFile()
+    dispatch(asyncGetSharedFile(fileID))
   }, [])
 
   const updateWindowSize = () => {
@@ -98,7 +67,7 @@ function SharePage() {
         <ModalProvider>
           {/* <TopPanel path={path} /> */}
           <TitlePage>
-            <h1>{folderName}</h1>
+            <h1>{ currentDir === "folder" ? currentDir.name : "Общий доступ" }</h1>
           </TitlePage>
           {loading 
             ? <Loader /> 

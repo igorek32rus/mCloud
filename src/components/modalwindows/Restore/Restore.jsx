@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 
 import { ModalContext } from "../../../Context"
-import { DirContext } from "../../../contexts/DirContext/DirContext"
 import Button from "../../UI/button/Button"
 import useFetch from "../../../hooks/useFetch"
 import { URLS } from "../../../constants"
@@ -9,11 +9,12 @@ import Tree from "./Tree"
 import Loader from "../../UI/loader/Loader"
 
 import useNotification from "../../../hooks/useNotification"
+import { dirRemoveFiles } from "../../../store/dirReducer"
 
 function Restore({items}) {
     const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
-    const {setDir} = useContext(DirContext)
+    const dispatch = useDispatch()
 
     const [tree, setTree] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -31,9 +32,7 @@ function Restore({items}) {
             })
       
             if (restoreDir.status === 'ok') {
-                setDir(dir => {
-                    return dir.filter(file => !items.find(itemDel => itemDel._id === file._id))
-                })
+                dispatch(dirRemoveFiles(items))
                 createNotification({
                     title: `Восстановление файлов`, 
                     message: `Файлы успешно восстановлены`

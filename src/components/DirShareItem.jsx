@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react"
+import { useSelector } from "react-redux"
+
 import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
@@ -14,7 +16,7 @@ function DirShareItem({ file }) {
     const { setPositionFiles, selected } = React.useContext(SelectionContext)
     const { isContextMenuOpened } = React.useContext(ContextMenuContext)
     const { windowSize } = React.useContext(WindowSizeContext)
-    const { dir } = React.useContext(DirContext)
+    const { dir } = useSelector(state => state.dir)
 
     const fileRef = useRef(null)
 

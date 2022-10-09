@@ -14,139 +14,95 @@ import BackButton from '../components/BackButton'
 
 import '../styles/App.css'
 
-import { ModalProvider, LoaderContext, MainMenuProvider, DirContext } from '../Context'
+import { ModalProvider, MainMenuProvider } from '../Context'
 import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
-import useFetch from '../hooks/useFetch'
-import { URLS } from '../constants'
 import categories from '../categories'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { asyncGetCategoryFiles, asyncGetSearchFiles } from '../store/asyncActions/dir'
 
 function MainPage() {
-  const {loading, setLoading} = useContext(LoaderContext)
-  const userData = useSelector(state => state.auth.userData)
-  const { setDir, path, setPath } = useContext(DirContext)
+    const userData = useSelector(state => state.auth.userData)
+    const { path, loading, currentDir } = useSelector(state => state.dir)
+    const dispatch = useDispatch()
 
-  const [windowSize, setWindowSize] = useState({
-    width: 0,
-    height: 0
-  })
-  let timerWindowSize = 0
-
-  const fetch = useFetch()
-
-  const {category, parent} = useParams()
-  const categoryParams = categories.find(cat => cat.name === category)
-
-  const search = async (fileName) => {
-    setLoading(true)
-    const reqParams = [{
-        name: 'fileName',
-        value: fileName
-    }]
-
-    const res = await fetch({
-        url: URLS.SEARCH_FILES, 
-        reqParams
+    const [windowSize, setWindowSize] = useState({
+        width: 0,
+        height: 0
     })
+    let timerWindowSize = 0
 
-    setDir(res.files)
-    setLoading(false)
-  }
+    const { category, parent } = useParams()
+    const categoryParams = categories.find(cat => cat.name === category)
 
-  const getFiles = async () => {
-    setLoading(true)
-    let reqParams = [{
-      name: 'parent',
-      value: parent
-    }, {
-      name: 'category',
-      value: category
-    }]
+    useEffect(() => {
+        if (category === "search") {
+            dispatch(asyncGetSearchFiles(parent))
+        } else {
+            dispatch(asyncGetCategoryFiles(parent, category))
+        }
+    }, [category, parent])
 
-    const updateDir = await fetch({
-      url: URLS.GET_FILES,
-      reqParams
-    })
+    const updateWindowSize = () => {
+        if (timerWindowSize) {
+            clearTimeout(timerWindowSize)
+        }
 
-    if (updateDir.files) {
-      setDir(updateDir.files)
+        timerWindowSize = setTimeout(() => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            })
+        }, 300);
     }
 
-    if (updateDir.path) {
-      setPath(updateDir.path)
-    }
-    setLoading(false)
-  }
+    useEffect(() => {
+        window.addEventListener("resize", updateWindowSize)
+        updateWindowSize()
 
-  useEffect(() => {
-    if (category === "search") {
-      search(parent)
-    } else {
-      getFiles()
-    }
-  }, [category, parent])
+        return () => window.removeEventListener("resize", updateWindowSize)
+    }, [])
 
-  const updateWindowSize = () => {
-    if (timerWindowSize) {
-      clearTimeout(timerWindowSize)
-    }
+    return (
+        <SelectionContextProvider>
 
-    timerWindowSize = setTimeout(() => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      })
-    }, 300);
-  }
+            <MainMenuProvider>
+                <Header />
+                <Sidebar />
+            </MainMenuProvider>
+            <div className="pageBodyMain">
+                <ModalProvider>
+                    {categoryParams.showTopPanel && <TopPanel path={path} />}
+                    <TitlePage>
+                        {parent !== userData.rootId && categoryParams.showBackButtonInTitle && <BackButton />}
+                        <h1>
+                            {currentDir?._id === userData.rootId || category === "search"
+                                ? categoryParams.title
+                                : currentDir?.name
+                            }
+                        </h1>
+                    </TitlePage>
+                    {loading
+                        ? <Loader />
+                        : <ContextMenuContextProvider>
+                            <DragnDropFilesContextProvider>
+                                <WindowSizeContext.Provider value={{ windowSize }} >
+                                    <DirContent />
+                                </WindowSizeContext.Provider>
+                            </DragnDropFilesContextProvider>
+                        </ContextMenuContextProvider>
+                    }
+                </ModalProvider>
+            </div>
+            <Notify />
+            <Footer />
 
-  useEffect(() => {
-    window.addEventListener("resize", updateWindowSize)
-    updateWindowSize()
-
-    return () => window.removeEventListener("resize", updateWindowSize) 
-  }, [])
-
-  return (
-      <SelectionContextProvider>
-
-        <MainMenuProvider>
-          <Header />
-          <Sidebar />
-        </MainMenuProvider>
-        <div className="pageBodyMain">
-          <ModalProvider>
-            {categoryParams.showTopPanel && <TopPanel path={path} /> }
-            <TitlePage>
-              { parent !== userData.rootId && categoryParams.showBackButtonInTitle && <BackButton /> }
-              <h1>
-                { path[path.length - 1]?._id === userData.rootId || category === "search"
-                    ? categoryParams.title
-                    : path[path.length - 1]?.name
-                }
-              </h1>
-            </TitlePage>
-            {loading 
-              ? <Loader /> 
-              : <ContextMenuContextProvider>
-                  <DragnDropFilesContextProvider>
-                    <WindowSizeContext.Provider value={{windowSize}} >
-                      <DirContent />
-                    </WindowSizeContext.Provider>
-                  </DragnDropFilesContextProvider>
-                </ContextMenuContextProvider>
-            }
-          </ModalProvider>
-        </div>
-        <Notify />
-        <Footer />
-
-      </SelectionContextProvider>
-  );
+        </SelectionContextProvider>
+    );
 }
 
 export default MainPage

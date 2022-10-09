@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { DirContext } from "../contexts/DirContext/DirContext"
+import { useSelector } from "react-redux"
+
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
@@ -16,7 +16,7 @@ import Selection from "./Selection"
 import '../styles/DirContent.css'
 
 function DirShareContent() {
-    const { dir } = useContext(DirContext)
+    const { dir } = useSelector(state => state.dir)
     const { selection, setSelected } = useContext(SelectionContext)
     const { isContextMenuOpened } = useContext(ContextMenuContext)
 

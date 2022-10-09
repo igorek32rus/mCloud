@@ -1,14 +1,15 @@
 import React, {useContext, useState} from "react"
+import { useDispatch } from "react-redux"
+
 import Button from "../UI/button/Button"
 import { ModalContext } from "../../Context"
 import { getFileSize } from "../../utils/getFileSize"
 import { URLS } from "../../constants"
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import { useParams } from "react-router-dom"
 
-import { useDispatch } from "react-redux"
 import { authUpdateUserData } from "../../store/authReducer"
 import useNotification from "../../hooks/useNotification"
+import { dirAddFile } from "../../store/dirReducer"
 
 import axios from 'axios'
 
@@ -16,7 +17,6 @@ function UploadFiles({files}) {
     const [uploadFiles, setUploadFiles] = useState(files)
     const {closeModal} = useContext(ModalContext)
     const [createNotification, removeNotification, updateNotification] = useNotification()
-    const {setDir} = useContext(DirContext)
     const {parent} = useParams()
     const dispatch = useDispatch()
 
@@ -65,7 +65,8 @@ function UploadFiles({files}) {
                 //     return {...prev, usedSpace: response.data.usedSpace}
                 // })
                 dispatch(authUpdateUserData({usedSpace: response.data.usedSpace}))
-                setDir(dir => [...dir, response.data.file])
+                // setDir(dir => [...dir, response.data.file])
+                dispatch(dirAddFile(response.data.file))
 
                 sizeUploaded += file.size
                 // console.log(sizeUploaded / onePersent + "%");

@@ -1,26 +1,26 @@
 import React, { useContext, useState, useRef, useEffect } from "react"
-import { useHistory, useParams } from "react-router-dom"
-import { NotifyContext } from "../../Context"
+import { useDispatch } from "react-redux"
+import { useParams } from "react-router-dom"
 import Button from "../UI/button/Button"
 
 import { ModalContext } from "../../Context"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import useNotification from "../../hooks/useNotification"
+import { dirAddFile } from "../../store/dirReducer"
 
 function CreateFolder() {
     const [nameFolder, setNameFolder] = useState('')
     const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
-    const {setDir} = useContext(DirContext)
 
     const {parent} = useParams()
 
     const fetch = useFetch()
 
     const inputRef = useRef()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         inputRef.current.focus()
@@ -54,7 +54,7 @@ function CreateFolder() {
             })
         
             if (newFolder.file) {
-                setDir(dir => [...dir, newFolder.file])
+                dispatch(dirAddFile(newFolder.file))
                 createNotification({title: 'Создание папки', message: `Папка (${nameFolder}) успешно создана`})
                 return
             }

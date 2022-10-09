@@ -1,31 +1,29 @@
-import React from "react"
-import { DirContext } from "./DirContext"
+import { useSelector, useDispatch } from "react-redux"
+import { dirUpdateDir } from "../store/dirReducer"
+import { authUpdateUserData } from "../store/authReducer"
+import { copyPasteSetMode, copyPasteSetItems } from "../store/copyPasteReducer"
+import useFetch from "./useFetch"
+import { URLS } from "../constants"
+import useNotification from "./useNotification"
 
-import { useDispatch } from "react-redux"
-import { authUpdateUserData } from "../../store/authReducer"
-
-import useFetch from "../../hooks/useFetch"
-import { URLS } from "../../constants"
-import useNotification from "../../hooks/useNotification"
-
-export const DirContextProvider = ({ children }) => {
-    const [dir, setDir] = React.useState([])
-    const [path, setPath] = React.useState([])
-
-    const [ createNotification, removeNotification ] = useNotification()
-    const fetch = useFetch()
+export default function useCopyPaste() {
+    const currentDir = useSelector(state => state.dir.currentDir)
+    const { mode, items } = useSelector(state => state.copyPaste)
     const dispatch = useDispatch()
+    const fetch = useFetch()
+    const [createNotification, removeNotification] = useNotification()
 
-    const changeParent = async (idNewParent, files) => {
+    const moveFiles = async (idNewParent, files) => {
         try {
             const updatedDir = await fetch({
                 url: URLS.MOVE_FILES, 
                 method: 'POST', 
-                data: {idNewParent, files, curDir: path[path.length - 1]}
+                data: {idNewParent, files, curDir: currentDir}
             })
 
             if (updatedDir.files) {
-                setDir(updatedDir.files)
+                // setDir(updatedDir.files)
+                dispatch(dirUpdateDir(updatedDir.files))
                 createNotification({
                     title: `Перемещение объектов`, 
                     message: `Объекты успешно перемещены`
@@ -60,7 +58,7 @@ export const DirContextProvider = ({ children }) => {
             removeNotification(idNotify)
 
             if (updatedDir.files) {
-                setDir(updatedDir.files)
+                dispatch(dirUpdateDir(updatedDir.files))
                 createNotification({
                     title: `Копирование файлов`, 
                     message: `Все файлы успешно скопированы`
@@ -79,16 +77,27 @@ export const DirContextProvider = ({ children }) => {
         }
     }
 
-    const providerValue = {
-        dir, setDir,
-        path, setPath,
-        changeParent,
-        copyFiles
+    const copy = (items) => {
+        dispatch(copyPasteSetMode("copy"))
+        dispatch(copyPasteSetItems(items))
     }
 
-    return (
-        <DirContext.Provider value={providerValue}>
-            { children }
-        </DirContext.Provider>
-    )
+    const cut = (items) => {
+        dispatch(copyPasteSetMode("cut"))
+        dispatch(copyPasteSetItems(items))
+    }
+
+    const paste = (parent) => {
+        if (mode === "copy") {
+            copyFiles(parent, items)
+        }
+
+        if (mode === "cut") {
+            moveFiles(parent, items)
+        }
+
+        dispatch(copyPasteSetMode(""))
+    }
+
+    return [copy, cut, paste]
 }

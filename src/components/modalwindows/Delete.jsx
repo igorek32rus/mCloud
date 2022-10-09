@@ -1,16 +1,17 @@
 import React, { useContext } from "react"
+import { useDispatch } from "react-redux"
 import { ModalContext } from "../../Context"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
-import { DirContext } from "../../contexts/DirContext/DirContext"
 import useNotification from "../../hooks/useNotification"
+import { dirRemoveFiles } from "../../store/dirReducer"
 
 function Delete({items}) {
     const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
-    const {setDir} = useContext(DirContext)
     const fetch = useFetch()
+    const dispatch = useDispatch()
 
     const handleDeleteBtn = async () => {
         closeModal()
@@ -22,9 +23,7 @@ function Delete({items}) {
             })
       
             if (updatedDir.count) {
-                setDir(dir => {
-                    return dir.filter(file => !items.find(itemDel => itemDel._id === file._id))
-                })
+                dispatch(dirRemoveFiles(items))
                 createNotification({
                     title: `Удаление объектов`, 
                     message: `Объекты помещены в корзину`

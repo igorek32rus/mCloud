@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react"
+import { useSelector } from "react-redux"
 import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
@@ -6,7 +7,6 @@ import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
 import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
-import { DirContext } from "../Context"
 
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
 
@@ -16,7 +16,8 @@ function DirItem({ file }) {
     const { shiftPosition, dragStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
     const { isContextMenuOpened } = React.useContext(ContextMenuContext)
     const { windowSize } = React.useContext(WindowSizeContext)
-    const { dir } = React.useContext(DirContext)
+    
+    const dir = useSelector(state => state.dir.dir)
 
     const fileRef = useRef(null)
 
