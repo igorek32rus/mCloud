@@ -1,8 +1,6 @@
-import React, { useContext, useEffect } from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
-// import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
 import DirItem from "./DirItem"
 import Selection from "./Selection"
@@ -14,10 +12,12 @@ import { useHandlerMouseUp } from "../hooks/eventHandlers/DirContent/useHandlerM
 import categories from "../categories"
 
 import '../styles/DirContent.css'
+import { clearSelected } from "../store/selectionReducer"
 
 function DirContent() {
     const dir = useSelector(state => state.dir.dir)
-    const { selection, setSelected } = useContext(SelectionContext)
+    const { selection } = useSelector(state => state.selection)
+    const dispatch = useDispatch()
     
     const { isContextMenuOpened } = useSelector(state => state.contextMenu)
 
@@ -30,9 +30,9 @@ function DirContent() {
 
     useEffect(() => {
         if (category !== "search") {
-            setSelected([])
+            dispatch(clearSelected())
         }
-    }, [category, setSelected])
+    }, [category])
 
     return (
         <div className="dirContent" 

@@ -1,38 +1,38 @@
 import React, { useState, useRef } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
-import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
 import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
 
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
 
+import { addPositionFile } from "../store/selectionReducer"
+
 function DirItem({ file }) {
     const [description, setDescription] = useState(false)
-    const { setPositionFiles, selected } = React.useContext(SelectionContext)
+    const { selected } = useSelector(state => state.selection)
     const { shiftPosition, dragStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
     const { isContextMenuOpened } = useSelector(state => state.contextMenu)
     const { windowSize } = React.useContext(WindowSizeContext)
     
     const dir = useSelector(state => state.dir.dir)
+    const dispatch = useDispatch()
 
     const fileRef = useRef(null)
 
     const handlerMouseDown = useHandlerMouseDown()
 
     React.useEffect(() => {
-        setPositionFiles(prev => {
-            return [...prev.filter(item => item._id !== file._id), {
-                _id: file._id,
-                left: fileRef.current.offsetLeft,
-                top: fileRef.current.offsetTop,
-                width: fileRef.current.offsetWidth,
-                height: fileRef.current.offsetHeight,
-                changed: false
-            }]
-        })
+        dispatch(addPositionFile({
+            _id: file._id,
+            left: fileRef.current.offsetLeft,
+            top: fileRef.current.offsetTop,
+            width: fileRef.current.offsetWidth,
+            height: fileRef.current.offsetHeight,
+            changed: false
+        }))
     }, [windowSize, dir])
 
     const handlerMouseEnter = (e) => {

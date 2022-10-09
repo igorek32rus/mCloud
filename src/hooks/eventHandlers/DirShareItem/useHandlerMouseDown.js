@@ -1,19 +1,20 @@
 import React from "react"
 import {useDispatch} from "react-redux"
 
-// import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
 import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 
 import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"
+import { store } from "../../../store"
+import { addSelected, removeSelected, setSelected, clearSelected } from "../../../store/selectionReducer"
 
 export const useHandlerMouseDown = () => {
-    // const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
     const { selected, setSelected } = React.useContext(SelectionContext)
     const dispatch = useDispatch()
 
     return (e, file, setDescription) => {
+        const { selected } = store.getState().selection
+
         e.stopPropagation()
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         setDescription(false)   // отключить описание
 
@@ -23,21 +24,21 @@ export const useHandlerMouseDown = () => {
         
                 if (e.ctrlKey) {
                     if (!elemSelected) {
-                        setSelected(prev => [...prev, file._id])
+                        dispatch(addSelected(file._id))
                     } else {
-                        setSelected(prev => prev.filter(item => item !== file._id))
+                        dispatch(removeSelected(file._id))
                     }
                 }
         
                 if (!e.ctrlKey && !elemSelected) {
-                    setSelected([file._id])
+                    dispatch(setSelected([file._id]))
                 }
                 return
             }
     
             if (e.detail > 1) {     // 2 клика
                 if (file.type === 'folder') {
-                    setSelected([])
+                    dispatch(clearSelected())
                 }
                 return
             }
@@ -45,7 +46,7 @@ export const useHandlerMouseDown = () => {
         
         if (e.button === 2) {    // ПКМ
             if (!selected.includes(file._id)) {
-                setSelected([file._id])
+                dispatch(setSelected([file._id]))
             }
 
             dispatch(setPositionContextMenu({

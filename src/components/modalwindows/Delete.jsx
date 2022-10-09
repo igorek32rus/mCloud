@@ -1,11 +1,16 @@
 import React, { useContext } from "react"
 import { useDispatch } from "react-redux"
+
 import { ModalContext } from "../../Context"
+
 import Button from "../UI/button/Button"
-import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
+
+import useFetch from "../../hooks/useFetch"
 import useNotification from "../../hooks/useNotification"
+
 import { dirRemoveFiles } from "../../store/dirReducer"
+import { removePositionFiles } from "../../store/selectionReducer"
 
 function Delete({items}) {
     const {closeModal} = useContext(ModalContext)
@@ -23,6 +28,7 @@ function Delete({items}) {
             })
       
             if (updatedDir.count) {
+                dispatch(removePositionFiles(items))
                 dispatch(dirRemoveFiles(items))
                 createNotification({
                     title: `Удаление объектов`, 

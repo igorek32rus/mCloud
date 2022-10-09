@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import '../styles/Search.css'
 
-import { SelectionContext } from '../contexts/SelectionContext/SelectionContext'
-
 import useFetch from '../hooks/useFetch'
 import { URLS } from '../constants'
+
+import { setSelected, clearSelected } from '../store/selectionReducer'
 
 function Search() {
     const [searchValue, setSearchValue] = useState('')
@@ -14,7 +15,7 @@ function Search() {
     const [showResults, setShowResults] = useState(false)
     const [openFullSearch, setOpenFullSearch] = useState(false)
 
-    const { setSelected } = React.useContext(SelectionContext)
+    const dispatch = useDispatch()
 
     const inputRef = useRef()
     const fetch = useFetch()
@@ -84,12 +85,12 @@ function Search() {
     }
 
     const handlerClick = (fileId) => {
-        setSelected([fileId])
+        dispatch(setSelected([fileId]))
         history.push("/files/search/" + searchValue)
     }
 
     const handlerClickFullSearch = () => {
-        setSelected([])
+        dispatch(clearSelected())
         history.push("/files/search/" + searchValue)
     }
 

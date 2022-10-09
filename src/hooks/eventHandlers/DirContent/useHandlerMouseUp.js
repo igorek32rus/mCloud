@@ -1,29 +1,31 @@
 import React from "react"
+import { useDispatch } from "react-redux"
 
-import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
 
 import useCopyPaste from "../../useCopyPaste"
+import { store } from "../../../store"
+import { setIsSelection, clearSelected } from "../../../store/selectionReducer"
 
 export const useHandlerMouseUp = () => {
-    const { selection, setSelection, 
-        selected, setSelected, 
-        positionSelection } = React.useContext(SelectionContext)
     const { dragStart, setDragStart, 
         dragnDropGoal, setDragnDropGoal, 
         setShiftPosition,
         setPositionStart } = React.useContext(DragnDropFilesContext)
 
     const [, cut, paste] = useCopyPaste()
+    const dispatch = useDispatch()
 
     return (e) => {
+        const { selection, selected, positionSelection } = store.getState().selection
+
         if (selection) {
             const posX = Math.abs(e.pageX - positionSelection.startX)
             const posY = Math.abs(e.pageY - positionSelection.startY)
 
-            if (posX < 2 && posY < 2) setSelected([])
+            if (posX < 2 && posY < 2) dispatch(clearSelected())
 
-            setSelection(false)
+            dispatch(setIsSelection(false))
             return
         }
 
@@ -31,7 +33,6 @@ export const useHandlerMouseUp = () => {
             if (dragnDropGoal) {
                 cut(selected)
                 paste(dragnDropGoal)
-                // changeParent(dragnDropGoal, selected)
             }
 
             // убрать цель

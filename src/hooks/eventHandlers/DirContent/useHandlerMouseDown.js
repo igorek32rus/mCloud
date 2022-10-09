@@ -1,35 +1,30 @@
-import React from "react"
 import { useDispatch } from "react-redux"
 
-// import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
-import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
-
 import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"
+import { setIsSelection, updatePositionSelection, resetChangedPositionFiles, clearSelected } from "../../../store/selectionReducer"
+
+import { store } from "../../../store"
 
 export const useHandlerMouseDown = () => {
-    // const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
-    const { setSelection, setPositionSelection, setPositionFiles, setSelected } = React.useContext(SelectionContext)
-
     const dispatch = useDispatch()
 
     return (e) => {
-        // setIsContextMenuOpened(false)
-        dispatch(setIsContextMenuOpened(false))
+        const { isContextMenuOpened } = store.getState().contextMenu
+        
+        if (isContextMenuOpened) dispatch(setIsContextMenuOpened(false))
 
         if (e.button === 0) {   // ЛКМ
-            setSelection(true)
-            setPositionSelection({
+            dispatch(setIsSelection(true))
+            dispatch(updatePositionSelection({
                 startX: e.pageX,
                 startY: e.pageY,
                 left: e.pageX,
                 top: e.pageY,
                 width: 0,
                 height: 0
-            })
+            }))
 
-            setPositionFiles(prevPos => {
-                return prevPos.reduce((prev, cur) => [...prev, {...cur, changed: false}], [])
-            })
+            dispatch(resetChangedPositionFiles())
             return
         }
         
@@ -38,13 +33,9 @@ export const useHandlerMouseDown = () => {
                 left: e.pageX,
                 top: e.pageY
             }))
-            // setPositionContextMenu({
-            //     left: e.pageX,
-            //     top: e.pageY
-            // })
             dispatch(setTypeContextMenu('workspace'))
             dispatch(setIsContextMenuOpened(true))
-            setSelected([])
+            dispatch(clearSelected())
         }
     }
     

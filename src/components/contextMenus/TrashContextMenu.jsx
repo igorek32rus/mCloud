@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux"
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
-import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
-// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 
 import PermanentDelete from "../modalwindows/PermanentDelete"
 import Restore from "../modalwindows/Restore/Restore"
@@ -14,8 +12,7 @@ import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 
 function TrashContextMenu() {
     const { openModal } = useContext(ModalContext)
-    const { selected } = useContext(SelectionContext)
-    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    const { selected } = useSelector(state => state.selection)
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
     const { dir } = useSelector(state => state.dir)
     const dispatch = useDispatch()
@@ -23,7 +20,6 @@ function TrashContextMenu() {
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerRestore = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Восстановить',
@@ -32,7 +28,6 @@ function TrashContextMenu() {
     }
 
     const handlerPermanentDelete = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Удалить навсегда',

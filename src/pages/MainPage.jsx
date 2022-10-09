@@ -1,5 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Header from '../components/Header'
 import Notify from '../components/Notify'
@@ -15,15 +16,13 @@ import BackButton from '../components/BackButton'
 import '../styles/App.css'
 
 import { ModalProvider, MainMenuProvider } from '../Context'
-import { SelectionContextProvider } from '../contexts/SelectionContext/SelectionContextProvider'
 import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
-import { ContextMenuContextProvider } from '../contexts/ContextMenuContext/ContextMenuContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
 import categories from '../categories'
 
-import { useSelector, useDispatch } from 'react-redux'
 import { asyncGetCategoryFiles, asyncGetSearchFiles } from '../store/asyncActions/dir'
+import { clearPositionFiles } from '../store/selectionReducer'
 
 function MainPage() {
     const userData = useSelector(state => state.auth.userData)
@@ -40,6 +39,7 @@ function MainPage() {
     const categoryParams = categories.find(cat => cat.name === category)
 
     useEffect(() => {
+        dispatch(clearPositionFiles())
         if (category === "search") {
             dispatch(asyncGetSearchFiles(parent))
         } else {
@@ -68,7 +68,7 @@ function MainPage() {
     }, [])
 
     return (
-        <SelectionContextProvider>
+        <>
 
             <MainMenuProvider>
                 <Header />
@@ -88,20 +88,18 @@ function MainPage() {
                     </TitlePage>
                     {loading
                         ? <Loader />
-                        : <ContextMenuContextProvider>
-                            <DragnDropFilesContextProvider>
-                                <WindowSizeContext.Provider value={{ windowSize }} >
-                                    <DirContent />
-                                </WindowSizeContext.Provider>
-                            </DragnDropFilesContextProvider>
-                        </ContextMenuContextProvider>
+                        : <DragnDropFilesContextProvider>
+                            <WindowSizeContext.Provider value={{ windowSize }} >
+                                <DirContent />
+                            </WindowSizeContext.Provider>
+                        </DragnDropFilesContextProvider>
                     }
                 </ModalProvider>
             </div>
             <Notify />
             <Footer />
 
-        </SelectionContextProvider>
+        </>
     );
 }
 

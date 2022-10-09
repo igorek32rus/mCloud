@@ -1,8 +1,5 @@
-import React, { useContext, useEffect } from "react"
-import { useSelector } from "react-redux"
-
-import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
-import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 
 import { useHandlerMouseDown } from '../hooks/eventHandlers/DirContent/useHandlerMouseDown'
 import { useHandlerMouseMove } from '../hooks/eventHandlers/DirContent/useHandlerMouseMove'
@@ -15,19 +12,22 @@ import Selection from "./Selection"
 
 import '../styles/DirContent.css'
 
+import { clearSelected } from "../store/selectionReducer"
+
 function DirShareContent() {
     const { dir } = useSelector(state => state.dir)
-    const { selection, setSelected } = useContext(SelectionContext)
+    const { selection } = useSelector(state => state.selection)
     const { isContextMenuOpened } = useSelector(state => state.contextMenu)
 
     const handlerMouseDown = useHandlerMouseDown()
     const handlerMouseMove = useHandlerMouseMove()
     const handlerMouseUp = useHandlerMouseUp()
 
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        setSelected([])
-    }, [setSelected])
+        dispatch(clearSelected())
+    }, [])
 
     return (
         <div className="dirContent" 

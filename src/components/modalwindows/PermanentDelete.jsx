@@ -8,6 +8,7 @@ import {getFileSize} from "../../utils/getFileSize"
 import { authUpdateUserData } from "../../store/authReducer"
 import useNotification from "../../hooks/useNotification"
 import { dirRemoveFiles } from "../../store/dirReducer"
+import { removePositionFiles } from "../../store/selectionReducer"
 
 function PermanentDelete({items, changeDir, currentDir}) {
     const {closeModal} = useContext(ModalContext)
@@ -25,6 +26,7 @@ function PermanentDelete({items, changeDir, currentDir}) {
             })
       
             if (updatedDir.count >=0) {
+                dispatch(removePositionFiles(items))
                 dispatch(dirRemoveFiles(items))
 
                 dispatch(authUpdateUserData({usedSpace: updatedDir.usedSpace}))

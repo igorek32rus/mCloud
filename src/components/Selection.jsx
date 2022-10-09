@@ -1,8 +1,8 @@
 import React from "react"
-import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
+import { useSelector } from "react-redux"
 
 const Selection = () => {
-    const { positionSelection } = React.useContext(SelectionContext)
+    const { positionSelection } = useSelector(state => state.selection)
 
     return (
         <div className="selection" 

@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux"
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
-import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
-// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import useNotification from "../../hooks/useNotification"
@@ -15,11 +13,9 @@ import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 
 function SharePageContextMenu() {
     const { openModal } = useContext(ModalContext)
-    const { selected } = useContext(SelectionContext)
+    const { selected } = useSelector(state => state.selection)
     const [ createNotification, removeNotification ] = useNotification()
-    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
-    // const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
     const dispatch = useDispatch()
 
@@ -30,7 +26,6 @@ function SharePageContextMenu() {
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerDownload = async ({downloadFolder = false}) => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
 
         if (!items.length && !downloadFolder) {
@@ -79,7 +74,6 @@ function SharePageContextMenu() {
     }
 
     const handlerAddToCloud = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
     }
 

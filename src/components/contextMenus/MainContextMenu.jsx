@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux"
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
-import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
 // import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
@@ -23,7 +22,7 @@ import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 
 function MainContextMenu() {
     const { openModal } = useContext(ModalContext)
-    const { selected } = useContext(SelectionContext)
+    const { selected } = useSelector(state => state.selection)
     // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const dispatch = useDispatch()
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)

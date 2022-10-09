@@ -1,19 +1,22 @@
 import React from "react"
+import { useDispatch } from "react-redux"
 
-import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
 
 import { checkIntersectSelection } from "../../../utils/intersects"
 import { checkIntersectDragElem } from "../../../utils/intersects"
 
+import { store } from "../../../store"
+import { updatePositionSelection, removeSelected, addSelected, addPositionFile } from "../../../store/selectionReducer"
+
 export const useHandlerMouseMove = () => {
-    const { selection,
-        positionSelection, setPositionSelection, 
-        positionFiles, setPositionFiles, 
-        selected, setSelected } = React.useContext(SelectionContext)
     const { dragStart, positionStart, setShiftPosition, setDragnDropGoal } = React.useContext(DragnDropFilesContext)
 
+    const dispatch = useDispatch()
+
     return (e, dir) => {
+        const { selection, positionSelection, positionFiles, selected } = store.getState().selection
+
         if (selection) {
             const posX = e.pageX - positionSelection.startX
             const posY = e.pageY - positionSelection.startY
@@ -23,36 +26,35 @@ export const useHandlerMouseMove = () => {
             if (posX < 0) left = e.pageX
             if (posY < 0) top = e.pageY
         
-            setPositionSelection(prev => {
-                return {...prev, 
-                    width: Math.abs(posX),
-                    height: Math.abs(posY),
-                    left,
-                    top
-                }
-            })
-        
+            dispatch(updatePositionSelection({
+                width: Math.abs(posX),
+                height: Math.abs(posY),
+                left,
+                top
+            }))
+            
             positionFiles.forEach((item) => {
                 const intersect = checkIntersectSelection(item, positionSelection)
           
                 if (e.ctrlKey) {
                     if (intersect && !item.changed) {
                         selected.includes(item._id) 
-                            ? setSelected(prev => prev.filter(itemSel => itemSel !== item._id)) 
-                            : setSelected(prev => [...prev, item._id])
+                            ? dispatch(removeSelected(item._id))
+                            : dispatch(addSelected(item._id))
                         const posItem = positionFiles.find(itemPos => itemPos._id === item._id)
                         posItem.changed = true
-                        setPositionFiles(prev => [...prev.filter(itemPos => itemPos._id !== item._id), posItem])
+                        dispatch(addPositionFile(posItem))
                     }
                     return
                 }
           
-                if (!intersect) {
-                    setSelected(prev => prev.filter(itemSel => itemSel !== item._id)) 
+                if (!intersect && selected.includes(item._id)) {
+                    dispatch(removeSelected(item._id))
                     return
                 }
         
-                setSelected(prev => [...prev.filter(itemSel => itemSel !== item._id), item._id])
+                if (intersect && !selected.includes(item._id))
+                    dispatch(addSelected(item._id))
             })
         }
         

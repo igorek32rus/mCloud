@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux"
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
-import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
-// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import Rename from "../modalwindows/Rename"
@@ -16,8 +14,7 @@ import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 
 function SharedContextMenu() {
     const { openModal } = useContext(ModalContext)
-    const { selected } = useContext(SelectionContext)
-    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    const { selected } = useSelector(state => state.selection)
     const { dir } = useSelector(state => state.dir)
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
     const { windowSize } = useContext(WindowSizeContext)
@@ -26,7 +23,6 @@ function SharedContextMenu() {
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerRename = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Переименовать',
@@ -35,7 +31,6 @@ function SharedContextMenu() {
     }
 
     const handlerShare = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Поделиться',

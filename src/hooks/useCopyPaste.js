@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import { dirUpdateDir } from "../store/dirReducer"
 import { authUpdateUserData } from "../store/authReducer"
 import { copyPasteSetMode, copyPasteSetItems } from "../store/copyPasteReducer"
