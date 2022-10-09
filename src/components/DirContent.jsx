@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
-import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 
 import DirItem from "./DirItem"
 import Selection from "./Selection"
@@ -17,10 +17,9 @@ import '../styles/DirContent.css'
 
 function DirContent() {
     const dir = useSelector(state => state.dir.dir)
-    const changeParent = {}
     const { selection, setSelected } = useContext(SelectionContext)
     
-    const { isContextMenuOpened } = useContext(ContextMenuContext)
+    const { isContextMenuOpened } = useSelector(state => state.contextMenu)
 
     const handlerMouseDown = useHandlerMouseDown()
     const handlerMouseMove = useHandlerMouseMove()

@@ -1,24 +1,28 @@
 import React, { useContext } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
-import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import useNotification from "../../hooks/useNotification"
 
 import { URLS } from "../../constants"
+import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 
 function SharePageContextMenu() {
     const { openModal } = useContext(ModalContext)
     const { selected } = useContext(SelectionContext)
     const [ createNotification, removeNotification ] = useNotification()
-    const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
     // const { dir } = useContext(DirContext)
     const { windowSize } = useContext(WindowSizeContext)
+    const dispatch = useDispatch()
+
 
     const isAuth = useSelector(state => state.auth.isAuth)
     const { dir } = useSelector(state => state.dir)
@@ -26,7 +30,8 @@ function SharePageContextMenu() {
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerDownload = async ({downloadFolder = false}) => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
 
         if (!items.length && !downloadFolder) {
             return createNotification({
@@ -74,7 +79,8 @@ function SharePageContextMenu() {
     }
 
     const handlerAddToCloud = () => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
     }
 
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"

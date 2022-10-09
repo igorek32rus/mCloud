@@ -1,15 +1,20 @@
 import React from "react"
+import {useDispatch} from "react-redux"
 
-import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
 import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 
+import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"
+
 export const useHandlerMouseDown = () => {
-    const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
+    // const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
     const { selected, setSelected } = React.useContext(SelectionContext)
+    const dispatch = useDispatch()
 
     return (e, file, setDescription) => {
         e.stopPropagation()
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         setDescription(false)   // отключить описание
 
         if (e.button === 0) {       // ЛКМ
@@ -43,12 +48,12 @@ export const useHandlerMouseDown = () => {
                 setSelected([file._id])
             }
 
-            setPositionContextMenu({
+            dispatch(setPositionContextMenu({
                 left: e.pageX,
                 top: e.pageY
-            })
-            setTypeContextMenu('item')
-            setIsContextMenuOpened(true)
+            }))
+            dispatch(setTypeContextMenu('item'))
+            dispatch(setIsContextMenuOpened(true))
         }
     }
     

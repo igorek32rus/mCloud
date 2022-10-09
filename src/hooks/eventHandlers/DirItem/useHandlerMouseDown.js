@@ -1,24 +1,28 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
+import { useDispatch } from "react-redux"
 
-import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
 import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
 
 import categories from "../../../categories"
+import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"
 
 export const useHandlerMouseDown = () => {
-    const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
+    // const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
     const { selected, setSelected } = React.useContext(SelectionContext)
     const { setPositionStart, setDragFileId, setDragStart } = React.useContext(DragnDropFilesContext)
 
+    const dispatch = useDispatch()
     const { category } = useParams()
     const history = useHistory()
     const categoryParams = categories.find(cat => cat.name === category)
 
     return (e, file, setDescription) => {
         e.stopPropagation()
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         setDescription(false)   // отключить описание
 
         if (e.button === 0) {       // ЛКМ
@@ -65,12 +69,12 @@ export const useHandlerMouseDown = () => {
                 setSelected([file._id])
             }
 
-            setPositionContextMenu({
+            dispatch(setPositionContextMenu({
                 left: e.pageX,
                 top: e.pageY
-            })
-            setTypeContextMenu('item')
-            setIsContextMenuOpened(true)
+            }))
+            dispatch(setTypeContextMenu('item'))
+            dispatch(setIsContextMenuOpened(true))
         }
     }
     

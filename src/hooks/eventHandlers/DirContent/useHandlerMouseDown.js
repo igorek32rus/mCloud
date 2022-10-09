@@ -1,14 +1,20 @@
 import React from "react"
+import { useDispatch } from "react-redux"
 
-import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../../../contexts/ContextMenuContext/ContextMenuContext"
 import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 
+import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"
+
 export const useHandlerMouseDown = () => {
-    const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
+    // const { setIsContextMenuOpened, setPositionContextMenu, setTypeContextMenu } = React.useContext(ContextMenuContext)
     const { setSelection, setPositionSelection, setPositionFiles, setSelected } = React.useContext(SelectionContext)
 
+    const dispatch = useDispatch()
+
     return (e) => {
-        setIsContextMenuOpened(false)
+        // setIsContextMenuOpened(false)
+        dispatch(setIsContextMenuOpened(false))
 
         if (e.button === 0) {   // ЛКМ
             setSelection(true)
@@ -28,12 +34,16 @@ export const useHandlerMouseDown = () => {
         }
         
         if (e.button === 2) {   // ПКМ
-            setPositionContextMenu({
+            dispatch(setPositionContextMenu({
                 left: e.pageX,
                 top: e.pageY
-            })
-            setTypeContextMenu('workspace')
-            setIsContextMenuOpened(true)
+            }))
+            // setPositionContextMenu({
+            //     left: e.pageX,
+            //     top: e.pageY
+            // })
+            dispatch(setTypeContextMenu('workspace'))
+            dispatch(setIsContextMenuOpened(true))
             setSelected([])
         }
     }

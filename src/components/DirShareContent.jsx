@@ -18,7 +18,7 @@ import '../styles/DirContent.css'
 function DirShareContent() {
     const { dir } = useSelector(state => state.dir)
     const { selection, setSelected } = useContext(SelectionContext)
-    const { isContextMenuOpened } = useContext(ContextMenuContext)
+    const { isContextMenuOpened } = useSelector(state => state.contextMenu)
 
     const handlerMouseDown = useHandlerMouseDown()
     const handlerMouseMove = useHandlerMouseMove()

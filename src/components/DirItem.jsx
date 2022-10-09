@@ -5,7 +5,6 @@ import { getExtension } from '../utils/getExtension'
 
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
-import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
 
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
@@ -14,7 +13,7 @@ function DirItem({ file }) {
     const [description, setDescription] = useState(false)
     const { setPositionFiles, selected } = React.useContext(SelectionContext)
     const { shiftPosition, dragStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
-    const { isContextMenuOpened } = React.useContext(ContextMenuContext)
+    const { isContextMenuOpened } = useSelector(state => state.contextMenu)
     const { windowSize } = React.useContext(WindowSizeContext)
     
     const dir = useSelector(state => state.dir.dir)

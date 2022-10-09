@@ -1,28 +1,33 @@
 import React, { useContext } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
-import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import Rename from "../modalwindows/Rename"
 import Share from '../modalwindows/Share'
 import Delete from "../modalwindows/Delete"
 
+import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
+
 function SharedContextMenu() {
     const { openModal } = useContext(ModalContext)
     const { selected } = useContext(SelectionContext)
-    const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const { dir } = useSelector(state => state.dir)
+    const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
     const { windowSize } = useContext(WindowSizeContext)
+    const dispatch = useDispatch()
 
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerRename = () => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Переименовать',
             children: <Rename items={items} />
@@ -30,7 +35,8 @@ function SharedContextMenu() {
     }
 
     const handlerShare = () => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Поделиться',
             children: <Share items={items} />
@@ -38,7 +44,8 @@ function SharedContextMenu() {
     }
 
     const handlerDelete = () => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Удалить в корзину',
             children: <Delete items={items} />

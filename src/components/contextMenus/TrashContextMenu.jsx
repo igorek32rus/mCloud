@@ -1,25 +1,30 @@
 import React, { useContext } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
 
 import { ModalContext } from '../../Context'
 import { SelectionContext } from "../../contexts/SelectionContext/SelectionContext"
-import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
+// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
 
 import PermanentDelete from "../modalwindows/PermanentDelete"
 import Restore from "../modalwindows/Restore/Restore"
 
+import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
+
 function TrashContextMenu() {
     const { openModal } = useContext(ModalContext)
     const { selected } = useContext(SelectionContext)
-    const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
+    const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
     const { dir } = useSelector(state => state.dir)
+    const dispatch = useDispatch()
 
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerRestore = () => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Восстановить',
             children: <Restore items={items} />
@@ -27,7 +32,8 @@ function TrashContextMenu() {
     }
 
     const handlerPermanentDelete = () => {
-        setIsContextMenuOpened(false)   // закрыть контекстное меню
+        // setIsContextMenuOpened(false)   // закрыть контекстное меню
+        dispatch(setIsContextMenuOpened(false))
         openModal({
             title: 'Удалить навсегда',
             children: <PermanentDelete items={items} />

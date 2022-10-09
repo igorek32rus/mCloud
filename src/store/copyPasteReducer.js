@@ -1,5 +1,5 @@
 const defaultState = {
-    mode: "",    // copy || cut
+    mode: "",    // "copy" || "cut" || ""
     items: []
 }
 

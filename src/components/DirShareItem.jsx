@@ -5,16 +5,14 @@ import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
 import { SelectionContext } from "../contexts/SelectionContext/SelectionContext"
-import { ContextMenuContext } from "../contexts/ContextMenuContext/ContextMenuContext"
 import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
-import { DirContext } from "../Context"
 
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirShareItem/useHandlerMouseDown"
 
 function DirShareItem({ file }) {
     const [description, setDescription] = useState(false)
     const { setPositionFiles, selected } = React.useContext(SelectionContext)
-    const { isContextMenuOpened } = React.useContext(ContextMenuContext)
+    const { isContextMenuOpened } = useSelector(state => state.contextMenu)
     const { windowSize } = React.useContext(WindowSizeContext)
     const { dir } = useSelector(state => state.dir)
 
