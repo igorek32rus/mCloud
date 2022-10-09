@@ -437,7 +437,7 @@ class FileController {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const dbFile = await File.findOne({ _id: file, user: req.user.id })
-                const dbFileExist = await File.findOne({ name: dbFile.name, type: dbFile.type, user: req.user.id, parent: idNewParent })
+                const dbFileExist = await File.findOne({ name: dbFile.name, type: dbFile.type, user: req.user.id, parent: idNewParent, deleted: null })
 
                 if (dbFileExist) {
                     return res.status(400).json({error: `Файл с именем ${dbFileExist.name} уже существует в дирректории для перемещения`})

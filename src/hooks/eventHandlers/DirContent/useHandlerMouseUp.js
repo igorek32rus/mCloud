@@ -3,6 +3,8 @@ import React from "react"
 import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
 import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
 
+import useCopyPaste from "../../useCopyPaste"
+
 export const useHandlerMouseUp = () => {
     const { selection, setSelection, 
         selected, setSelected, 
@@ -12,7 +14,9 @@ export const useHandlerMouseUp = () => {
         setShiftPosition,
         setPositionStart } = React.useContext(DragnDropFilesContext)
 
-    return (e, changeParent) => {
+    const [, cut, paste] = useCopyPaste()
+
+    return (e) => {
         if (selection) {
             const posX = Math.abs(e.pageX - positionSelection.startX)
             const posY = Math.abs(e.pageY - positionSelection.startY)
@@ -25,7 +29,9 @@ export const useHandlerMouseUp = () => {
 
         if (dragStart) {
             if (dragnDropGoal) {
-                changeParent(dragnDropGoal, selected)
+                cut(selected)
+                paste(dragnDropGoal)
+                // changeParent(dragnDropGoal, selected)
             }
 
             // убрать цель

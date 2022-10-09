@@ -40,7 +40,7 @@ function DirContent() {
             onContextMenu={ (e) => e.preventDefault() } 
             onMouseDown={ (e) => handlerMouseDown(e) } 
             onMouseMove={ (e) => handlerMouseMove(e, dir) } 
-            onMouseUp={ (e) => handlerMouseUp(e, changeParent) } 
+            onMouseUp={ (e) => handlerMouseUp(e) } 
             onDragStart={ () => false } 
         >
 

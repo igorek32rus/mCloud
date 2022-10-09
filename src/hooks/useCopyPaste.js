@@ -6,14 +6,16 @@ import useFetch from "./useFetch"
 import { URLS } from "../constants"
 import useNotification from "./useNotification"
 
+import {store} from "../store"
+
 export default function useCopyPaste() {
-    const currentDir = useSelector(state => state.dir.currentDir)
-    const { mode, items } = useSelector(state => state.copyPaste)
     const dispatch = useDispatch()
     const fetch = useFetch()
     const [createNotification, removeNotification] = useNotification()
 
     const moveFiles = async (idNewParent, files) => {
+        const { currentDir } =  store.getState().dir
+
         try {
             const updatedDir = await fetch({
                 url: URLS.MOVE_FILES, 
@@ -88,6 +90,8 @@ export default function useCopyPaste() {
     }
 
     const paste = (parent) => {
+        const { mode, items } =  store.getState().copyPaste
+
         if (mode === "copy") {
             copyFiles(parent, items)
         }
