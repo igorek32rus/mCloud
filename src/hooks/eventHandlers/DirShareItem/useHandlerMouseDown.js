@@ -1,14 +1,11 @@
 import React from "react"
 import {useDispatch} from "react-redux"
 
-import { SelectionContext } from "../../../contexts/SelectionContext/SelectionContext"
-
 import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"
 import { store } from "../../../store"
 import { addSelected, removeSelected, setSelected, clearSelected } from "../../../store/selectionReducer"
 
 export const useHandlerMouseDown = () => {
-    const { selected, setSelected } = React.useContext(SelectionContext)
     const dispatch = useDispatch()
 
     return (e, file, setDescription) => {
