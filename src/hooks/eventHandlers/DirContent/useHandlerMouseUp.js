@@ -1,23 +1,18 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 
-import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
-
 import useCopyPaste from "../../useCopyPaste"
 import { store } from "../../../store"
 import { setIsSelection, clearSelected } from "../../../store/selectionReducer"
+import { setIsDragStart, setDragGoal, setShiftPosition, setPositionStart } from "../../../store/dragAndDropReducer"
 
 export const useHandlerMouseUp = () => {
-    const { dragStart, setDragStart, 
-        dragnDropGoal, setDragnDropGoal, 
-        setShiftPosition,
-        setPositionStart } = React.useContext(DragnDropFilesContext)
-
     const [, cut, paste] = useCopyPaste()
     const dispatch = useDispatch()
 
     return (e) => {
         const { selection, selected, positionSelection } = store.getState().selection
+        const { dragStart, dragnDropGoal } = store.getState().dragAndDrop
 
         if (selection) {
             const posX = Math.abs(e.pageX - positionSelection.startX)
@@ -36,16 +31,16 @@ export const useHandlerMouseUp = () => {
             }
 
             // убрать цель
-            setDragnDropGoal(0)
-            setDragStart(false)
-            setPositionStart({
+            dispatch(setIsDragStart(false))
+            dispatch(setDragGoal(0))
+            dispatch(setPositionStart({
                 startX: 0,
                 startY: 0
-            })
-            setShiftPosition({
+            }))
+            dispatch(setShiftPosition({
                 posX: 0,
                 posY: 0
-            })
+            }))
         }
     }
     

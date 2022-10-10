@@ -1,4 +1,3 @@
-import React from "react"
 import {useDispatch} from "react-redux"
 
 import { setIsContextMenuOpened, setTypeContextMenu, setPositionContextMenu } from "../../../store/contextMenuReducer"

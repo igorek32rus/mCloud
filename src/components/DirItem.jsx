@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
-import { DragnDropFilesContext } from "../contexts/DragnDropFilesContext/DragnDropFilesContext"
 import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
 
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
@@ -13,7 +12,7 @@ import { addPositionFile } from "../store/selectionReducer"
 function DirItem({ file }) {
     const [description, setDescription] = useState(false)
     const { selected } = useSelector(state => state.selection)
-    const { shiftPosition, dragStart, dragnDropGoal } = React.useContext(DragnDropFilesContext)
+    const { shiftPosition, dragStart, dragnDropGoal } = useSelector(state => state.dragAndDrop)
     const { isContextMenuOpened } = useSelector(state => state.contextMenu)
     const { windowSize } = React.useContext(WindowSizeContext)
     

@@ -16,7 +16,6 @@ import BackButton from '../components/BackButton'
 import '../styles/App.css'
 
 import { ModalProvider, MainMenuProvider } from '../Context'
-import { DragnDropFilesContextProvider } from '../contexts/DragnDropFilesContext/DragnDropFilesContextProvider'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
 import categories from '../categories'
@@ -88,11 +87,9 @@ function MainPage() {
                     </TitlePage>
                     {loading
                         ? <Loader />
-                        : <DragnDropFilesContextProvider>
-                            <WindowSizeContext.Provider value={{ windowSize }} >
-                                <DirContent />
-                            </WindowSizeContext.Provider>
-                        </DragnDropFilesContextProvider>
+                        : <WindowSizeContext.Provider value={{ windowSize }} >
+                            <DirContent />
+                        </WindowSizeContext.Provider>
                     }
                 </ModalProvider>
             </div>

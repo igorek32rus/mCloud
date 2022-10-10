@@ -1,21 +1,20 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 
-import { DragnDropFilesContext } from "../../../contexts/DragnDropFilesContext/DragnDropFilesContext"
-
 import { checkIntersectSelection } from "../../../utils/intersects"
 import { checkIntersectDragElem } from "../../../utils/intersects"
 
 import { store } from "../../../store"
 import { updatePositionSelection, removeSelected, addSelected, addPositionFile } from "../../../store/selectionReducer"
+import { setDragGoal, setShiftPosition } from "../../../store/dragAndDropReducer"
 
 export const useHandlerMouseMove = () => {
-    const { dragStart, positionStart, setShiftPosition, setDragnDropGoal } = React.useContext(DragnDropFilesContext)
 
     const dispatch = useDispatch()
 
     return (e, dir) => {
         const { selection, positionSelection, positionFiles, selected } = store.getState().selection
+        const { dragStart, positionStart } = store.getState().dragAndDrop
 
         if (selection) {
             const posX = e.pageX - positionSelection.startX
@@ -59,10 +58,10 @@ export const useHandlerMouseMove = () => {
         }
         
         if (dragStart) {
-            setShiftPosition({
+            dispatch(setShiftPosition({
                 posX: e.pageX - positionStart.startX,
                 posY: e.pageY - positionStart.startY
-            })
+            }))
         
             // проверка над каким элементом перетаскиваются
             const notSelected = positionFiles.filter(item => !selected.includes(item._id) && dir.find(itemDir => itemDir._id === item._id && itemDir.type === 'folder'))
@@ -71,13 +70,13 @@ export const useHandlerMouseMove = () => {
             for (let i = 0; i < notSelected.length; i++) {
                 const item = notSelected[i];
                 if (checkIntersectDragElem(item, e.pageX, e.pageY)) {
-                    setDragnDropGoal(item._id)
+                    dispatch(setDragGoal(item._id))
                     someItersects = true
                 }
             }
         
             if (!someItersects) {
-                setDragnDropGoal(0)
+                dispatch(setDragGoal(0))
             }
         }
     }
