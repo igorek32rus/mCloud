@@ -1,9 +1,8 @@
-import { dirLoad, dirSetCurrentDir, dirSetErrorMessage, dirSetLoading } from "../dirReducer"
+import { dirLoad, dirSetCurrentDir, dirSetErrorMessage } from "../dirReducer"
 import { URLS } from "../../constants"
 
 export const asyncGetCategoryFiles = (parent, category) => {
     return async dispatch => {
-        dispatch(dirSetLoading(true))
         try {
             let headers = {
                 'Content-Type': 'application/json'
@@ -29,15 +28,12 @@ export const asyncGetCategoryFiles = (parent, category) => {
             }
         } catch (error) {
             console.log(error)
-        } finally {
-            dispatch(dirSetLoading(false))
         }
     }
 }
 
 export const asyncGetSearchFiles = (fileName) => {
     return async dispatch => {
-        dispatch(dirSetLoading(true))
         try {
             let headers = {
                 'Content-Type': 'application/json'
@@ -59,15 +55,12 @@ export const asyncGetSearchFiles = (fileName) => {
             }
         } catch (error) {
             console.log(error)
-        } finally {
-            dispatch(dirSetLoading(false))
         }
     }
 }
 
 export const asyncGetSharedFile = (fileID) => {
     return async dispatch => {
-        dispatch(dirSetLoading(true))
         try {
             let headers = {}
             const token = localStorage.getItem('token')
@@ -93,8 +86,6 @@ export const asyncGetSharedFile = (fileID) => {
             if (json.message) dirSetErrorMessage(json.message)
         } catch (error) {
             console.log(error)
-        } finally {
-            dispatch(dirSetLoading(false))
         }
     }
 }

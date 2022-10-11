@@ -2,8 +2,7 @@ const defaultState = {
     dir: [],
     path: [],
     currentDir: null,
-    errorMessage: "",
-    loading: false
+    errorMessage: ""
 }
 
 const LOAD_DIR = "LOAD_DIR"
@@ -13,7 +12,6 @@ const REMOVE_FILES = "REMOVE_FILES"
 const UPDATE_FILE = "UPDATE_FILE"
 const SET_CURRENT_DIR = "SET_CURRENT_DIR"
 const SET_ERROR = "SET_ERROR"
-const SET_LOADING = "SET_LOADING"
 const UPDATE_DIR = "UPDATE_DIR"
 
 export const dirReducer = (state = defaultState, action) => {
@@ -32,8 +30,6 @@ export const dirReducer = (state = defaultState, action) => {
             return { ...state, currentDir: action.payload }
         case SET_ERROR:
             return { ...state, errorMessage: action.payload }
-        case SET_LOADING:
-            return { ...state, loading: action.payload, errorMessage: action.payload && "" }
         case UPDATE_DIR:
             return { ...state, dir: action.payload }
         default:
@@ -48,5 +44,4 @@ export const dirRemoveFiles = (payload) => ({ type: REMOVE_FILES, payload })
 export const dirUpdateFile = (payload) => ({ type: UPDATE_FILE, payload })
 export const dirSetCurrentDir = (payload) => ({ type: SET_CURRENT_DIR, payload })
 export const dirSetErrorMessage = (payload) => ({ type: SET_ERROR, payload })
-export const dirSetLoading = (payload) => ({ type: SET_LOADING, payload })
 export const dirUpdateDir = (payload) => ({ type: UPDATE_DIR, payload })

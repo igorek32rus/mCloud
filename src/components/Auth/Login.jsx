@@ -1,5 +1,4 @@
-import React, {useState, useContext} from "react"
-import { LoaderContext } from "../../Context"
+import React, {useState} from "react"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
@@ -8,11 +7,10 @@ import { useDispatch } from "react-redux"
 import { authLoginAction } from "../../store/authReducer"
 import useNotification from "../../hooks/useNotification"
 
-const Login = ({setLoginWindow}) => {
+const Login = ({setLoginWindow, setLoading}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const {setLoading} = useContext(LoaderContext)
     const fetch = useFetch()
     const dispatch = useDispatch()
     const [createNotification] = useNotification()
