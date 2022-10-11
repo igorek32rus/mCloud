@@ -13,7 +13,7 @@ import Sidebar from '../components/Sidebar'
 
 import '../styles/App.css'
 
-import { ModalProvider, MainMenuProvider } from '../Context'
+import { ModalProvider } from '../Context'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
 import { asyncGetSharedFile } from '../store/asyncActions/dir'
@@ -58,10 +58,10 @@ function SharePage() {
 
     return (
         <>
-            <MainMenuProvider>
+            <>
                 <Header />
                 <Sidebar />
-            </MainMenuProvider>
+            </>
             <div className="pageBodyMain">
                 <ModalProvider>
                     {/* <TopPanel path={path} /> */}

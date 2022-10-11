@@ -9,6 +9,7 @@ import { copyPasteReducer } from './copyPasteReducer'
 import { contextMenuReducer } from './contextMenuReducer'
 import { selectionReducer } from './selectionReducer'
 import { dragAndDropReducer } from './dragAndDropReducer'
+import { mainMenuReducer } from './mainMenuReducer'
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     copyPaste: copyPasteReducer,
     contextMenu: contextMenuReducer,
     selection: selectionReducer,
-    dragAndDrop: dragAndDropReducer
+    dragAndDrop: dragAndDropReducer,
+    mainMenu: mainMenuReducer
 })
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))

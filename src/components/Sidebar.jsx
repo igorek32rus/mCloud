@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { MainMenuContext } from '../Context'
+
 import '../styles/Sidebar.css'
 import { getFileSize } from '../utils/getFileSize'
 
@@ -9,11 +10,13 @@ import categories from '../categories'
 import SettingsIcon from "../images/settings.svg"
 import LogoutIcon from "../images/logout.svg"
 
-import { useDispatch, useSelector } from 'react-redux'
 import { authLogoutAction } from '../store/authReducer'
+import { asyncCloseMenu } from '../store/asyncActions/mainMenu'
 
 function Sidebar() {
-    const {isMenuOpened, setIsMenuOpened, setIsMenuClosing, isMenuClosing} = useContext(MainMenuContext)
+    const isMenuOpened = useSelector(state => state.mainMenu.opened)
+    const isMenuClosing = useSelector(state => state.mainMenu.closing)
+
     const userData = useSelector(state => state.auth.userData)
     const dispatch = useDispatch()
 
@@ -23,11 +26,7 @@ function Sidebar() {
     }
 
     const handlerClickBackdrop = (e) => {
-        setIsMenuClosing(true)
-        setTimeout(() => {
-            setIsMenuOpened(false)
-            setIsMenuClosing(false)
-        }, 200);
+        dispatch(asyncCloseMenu())
     }
 
     return (

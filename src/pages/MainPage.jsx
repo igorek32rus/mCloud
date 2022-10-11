@@ -15,7 +15,7 @@ import BackButton from '../components/BackButton'
 
 import '../styles/App.css'
 
-import { ModalProvider, MainMenuProvider } from '../Context'
+import { ModalProvider } from '../Context'
 import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
 import categories from '../categories'
@@ -71,10 +71,10 @@ function MainPage() {
     return (
         <>
 
-            <MainMenuProvider>
+            <>
                 <Header />
                 <Sidebar />
-            </MainMenuProvider>
+            </>
             <div className="pageBodyMain">
                 <ModalProvider>
                     {categoryParams.showTopPanel && <TopPanel path={path} />}

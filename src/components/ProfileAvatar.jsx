@@ -1,15 +1,21 @@
-import React, {useContext, useEffect, useState} from "react"
-import { MainMenuContext } from "../Context"
+import React, {useEffect, useState} from "react"
+import { useSelector, useDispatch } from "react-redux"
+
+import { setMenuOpened } from "../store/mainMenuReducer"
 
 function ProfileAvatar(props) {
-    const {isMenuOpened, setIsMenuOpened, isMenuClosing} = useContext(MainMenuContext)
+    const isMenuOpened = useSelector(state => state.mainMenu.opened)
+    const isMenuClosing = useSelector(state => state.mainMenu.closing)
+
+    const dispatch = useDispatch()
+
     const [styleAva, setStyleAva] = useState({
         transform: 'translate(0, 0) scale(1)',
         opacity: 0.8
     })
 
     const handleClickProfile = () => {
-        setIsMenuOpened((prev) => !prev)
+        dispatch(setMenuOpened(!isMenuOpened))
     }
 
     useEffect(() => {
