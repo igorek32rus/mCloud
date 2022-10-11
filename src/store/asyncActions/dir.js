@@ -1,7 +1,7 @@
 import { dirLoad, dirSetCurrentDir, dirSetErrorMessage } from "../dirReducer"
 import { URLS } from "../../constants"
 
-export const asyncGetCategoryFiles = (parent, category) => {
+export const asyncGetCategoryFiles = (parent, category, setLoading) => {
     return async dispatch => {
         try {
             let headers = {
@@ -28,11 +28,13 @@ export const asyncGetCategoryFiles = (parent, category) => {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 }
 
-export const asyncGetSearchFiles = (fileName) => {
+export const asyncGetSearchFiles = (fileName, setLoading) => {
     return async dispatch => {
         try {
             let headers = {
@@ -55,6 +57,8 @@ export const asyncGetSearchFiles = (fileName) => {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 }

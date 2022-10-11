@@ -25,7 +25,8 @@ import { clearPositionFiles } from '../store/selectionReducer'
 
 function MainPage() {
     const userData = useSelector(state => state.auth.userData)
-    const { path, loading, currentDir } = useSelector(state => state.dir)
+    const { path, currentDir } = useSelector(state => state.dir)
+    const [loading, setLoading] = useState(true)
     const dispatch = useDispatch()
 
     const [windowSize, setWindowSize] = useState({
@@ -39,10 +40,11 @@ function MainPage() {
 
     useEffect(() => {
         dispatch(clearPositionFiles())
+        setLoading(true)
         if (category === "search") {
-            dispatch(asyncGetSearchFiles(parent))
+            dispatch(asyncGetSearchFiles(parent, setLoading))
         } else {
-            dispatch(asyncGetCategoryFiles(parent, category))
+            dispatch(asyncGetCategoryFiles(parent, category, setLoading))
         }
     }, [category, parent])
 
