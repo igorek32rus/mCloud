@@ -1,28 +1,47 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { GeneralProvider } from './Context'
 import AppRouter from './AppRouter'
-// import Auth from './components/Auth/Auth'
 import { useAuth } from './hooks/useAuth'
 import Loader from './components/UI/loader/Loader'
+import { setWindowSize } from './store/windowSizeReducer'
 
 function App() {
-    const auth = useAuth()
     const { loading } = useSelector(state => state.auth)
+    const auth = useAuth()
+    const dispatch = useDispatch()
+    let timerWindowSize = 0
 
     React.useEffect(() => {
         auth()
     }, [])
 
+    const updateWindowSize = () => {
+        if (timerWindowSize) {
+            clearTimeout(timerWindowSize)
+        }
+
+        timerWindowSize = setTimeout(() => {
+            dispatch(setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            }))
+        }, 300)
+    }
+
+    React.useEffect(() => {
+        window.addEventListener("resize", updateWindowSize)
+        updateWindowSize()
+
+        return () => window.removeEventListener("resize", updateWindowSize)
+    }, [])
+
     return (
         <>
             { loading ? <Loader /> : (
-                <GeneralProvider>
-                    <BrowserRouter>
-                        <AppRouter />
-                    </BrowserRouter>
-                </GeneralProvider>
+                <BrowserRouter>
+                    <AppRouter />
+                </BrowserRouter>
             )}
         </>
     );

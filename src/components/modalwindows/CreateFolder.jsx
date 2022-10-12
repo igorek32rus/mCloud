@@ -1,18 +1,17 @@
-import React, { useContext, useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 import Button from "../UI/button/Button"
 
-import { ModalContext } from "../../Context"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
 
 import useNotification from "../../hooks/useNotification"
 import { dirAddFile } from "../../store/dirReducer"
+import { closeModal } from "../../store/modalWindowReducer"
 
 function CreateFolder() {
     const [nameFolder, setNameFolder] = useState('')
-    const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
 
     const {parent} = useParams()
@@ -28,7 +27,7 @@ function CreateFolder() {
 
     const handleCreateFolder = async () => {
         setNameFolder(nameFolder.trim())
-        closeModal()
+        dispatch(closeModal())
 
         if (!nameFolder) {
             createNotification({
@@ -73,7 +72,7 @@ function CreateFolder() {
         <>
             <input type="text" ref={inputRef} placeholder="Новая папка" value={nameFolder} onChange={(e) => setNameFolder(e.target.value)} onKeyDown={(e) => e.key === 'Enter' ? handleCreateFolder() : false} />
             <div className="buttons">
-                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
+                <Button click={() => dispatch(closeModal())} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleCreateFolder} className={"btn blue"} style={{width: '100%'}} >Создать папку</Button>
             </div>
         </> 

@@ -1,12 +1,8 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
-
-import { ModalContext } from '../../Context'
-// import { ContextMenuContext } from "../../contexts/ContextMenuContext/ContextMenuContext"
-import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import useNotification from "../../hooks/useNotification"
 
@@ -19,15 +15,14 @@ import { URLS } from "../../constants"
 
 import useCopyPaste from "../../hooks/useCopyPaste"
 import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
+import { openModal } from "../../store/modalWindowReducer"
 
 function MainContextMenu() {
-    const { openModal } = useContext(ModalContext)
     const { selected } = useSelector(state => state.selection)
-    // const { setIsContextMenuOpened, typeContextMenu, positionContextMenu } = useContext(ContextMenuContext)
     const dispatch = useDispatch()
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
 
-    const { windowSize } = useContext(WindowSizeContext)
+    const { windowSize } = useSelector(state => state.windowSize)
     const [copy, cut, paste] = useCopyPaste()
     const modePaste = useSelector(state => state.copyPaste.mode)
     const [ createNotification, removeNotification ] = useNotification()
@@ -40,52 +35,45 @@ function MainContextMenu() {
 
     const createFolder = () => {
         dispatch(setIsContextMenuOpened(false))
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
-        openModal({
+        dispatch(openModal({
             title: 'Создание папки',
             children: <CreateFolder />
-        })
+        }))
     }
 
     const handlerRename = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
-        
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Переименовать',
             children: <Rename items={items} />
-        })
+        }))
     }
 
     const handlerShare = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Поделиться',
             children: <Share items={items} />
-        })
+        }))
     }
 
     const handlerShareCurrentDir = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Поделиться',
             children: <Share items={[{_id: parent}]} />
-        })
+        }))
     }
 
     const handlerDelete = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Удалить в корзину',
             children: <Delete items={items} />
-        })
+        }))
     }
 
     const handlerDownload = async () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
 
         const idNotify = createNotification({
@@ -126,11 +114,8 @@ function MainContextMenu() {
     }
 
     const handlerCopy = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         copy(selected)
-        // setItemsPaste(selected)
-        // setModePaste("copy")
         createNotification({
             title: `Копирование файлов`, 
             message: `Скопировано`
@@ -138,11 +123,8 @@ function MainContextMenu() {
     }
 
     const handlerCut = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         cut(selected)
-        // setItemsPaste(selected)
-        // setModePaste("cut")
         createNotification({
             title: `Вырезать файлы`, 
             message: `Вырезано`
@@ -150,10 +132,8 @@ function MainContextMenu() {
     }
 
     const handlerPaste = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
         paste(parent)
-        // pasteItems(parent)
     }
 
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"

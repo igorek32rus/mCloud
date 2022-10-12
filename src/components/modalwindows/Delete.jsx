@@ -1,7 +1,5 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useDispatch } from "react-redux"
-
-import { ModalContext } from "../../Context"
 
 import Button from "../UI/button/Button"
 import { URLS } from "../../constants"
@@ -11,15 +9,15 @@ import useNotification from "../../hooks/useNotification"
 
 import { dirRemoveFiles } from "../../store/dirReducer"
 import { removePositionFiles } from "../../store/selectionReducer"
+import { closeModal } from "../../store/modalWindowReducer"
 
 function Delete({items}) {
-    const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
     const fetch = useFetch()
     const dispatch = useDispatch()
 
     const handleDeleteBtn = async () => {
-        closeModal()
+        dispatch(closeModal())
         try {
             const updatedDir = await fetch({
                 url: URLS.DELETE_FILES, 
@@ -44,7 +42,7 @@ function Delete({items}) {
         <>
             <p style={{margin: '10px 0'}}>Вы действительно хотите удалить выбранные файлы?</p>
             <div className="buttons">
-                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
+                <Button click={() => dispatch(closeModal())} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleDeleteBtn} className={"btn red"} style={{width: '100%'}} >Удалить</Button>
             </div>
         </>

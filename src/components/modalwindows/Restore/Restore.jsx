@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 
-import { ModalContext } from "../../../Context"
 import Button from "../../UI/button/Button"
 import useFetch from "../../../hooks/useFetch"
 import { URLS } from "../../../constants"
@@ -10,9 +9,9 @@ import Loader from "../../UI/loader/Loader"
 
 import useNotification from "../../../hooks/useNotification"
 import { dirRemoveFiles } from "../../../store/dirReducer"
+import { closeModal } from "../../../store/modalWindowReducer"
 
 function Restore({items}) {
-    const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
     const dispatch = useDispatch()
 
@@ -23,7 +22,7 @@ function Restore({items}) {
     const fetch = useFetch()
 
     const handleRestoreBtn = async () => {
-        closeModal()
+        dispatch(closeModal())
         try {
             const restoreDir = await fetch({
                 url: URLS.RESTORE_FILE, 
@@ -80,7 +79,7 @@ function Restore({items}) {
             ) }
             {!loading && !!tree && <Tree tree={tree} setTargetFolder={setTargetFolder} />}
             <div className="buttons">
-                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
+                <Button click={() => dispatch(closeModal())} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleRestoreBtn} className={"btn blue"} style={{width: '100%'}} >Восстановить</Button>
             </div>
         </>

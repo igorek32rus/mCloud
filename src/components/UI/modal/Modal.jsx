@@ -1,20 +1,21 @@
-import React, { useContext } from "react";
+import React from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { closeModal } from "../../../store/modalWindowReducer"
 
 import './Modal.css'
 
-import { ModalContext } from '../../../Context'
-
-function Modal({title, children}) {
-    const {closeModal} = useContext(ModalContext)
+function Modal() {
+    const { modalContent } = useSelector(state => state.modalWindow)
+    const dispatch = useDispatch()
 
     return (
-        <div className="modal-backdrop" onClick={closeModal}>
+        <div className="modal-backdrop" onClick={() => dispatch(closeModal())}>
             <div className="modal" onClick={(e) => e.stopPropagation() }>
                 <div className="modal-header">
-                    <h1>{title}</h1>
+                    <h1>{modalContent.title}</h1>
                 </div>
                 <div className="modal-body">
-                    {children}
+                    {modalContent.children}
                 </div>
             </div>
         </div>

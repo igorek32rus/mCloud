@@ -1,10 +1,7 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
-
-import { ModalContext } from '../../Context'
-import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import useNotification from "../../hooks/useNotification"
 
@@ -12,11 +9,10 @@ import { URLS } from "../../constants"
 import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 
 function SharePageContextMenu() {
-    const { openModal } = useContext(ModalContext)
     const { selected } = useSelector(state => state.selection)
     const [ createNotification, removeNotification ] = useNotification()
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
-    const { windowSize } = useContext(WindowSizeContext)
+    const { windowSize } = useSelector(state => state.windowSize)
     const dispatch = useDispatch()
 
 

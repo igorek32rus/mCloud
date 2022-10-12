@@ -1,24 +1,24 @@
-import React, { useContext } from "react"
-
-import '../styles/TopPanel.css'
-import Button from "./UI/button/Button"
-
-import Path from "./Path"
+import React from "react"
+import { useDispatch } from "react-redux"
 
 import CreateFolder from './modalwindows/CreateFolder'
 import UploadFiles from './modalwindows/UploadFiles'
+import Button from "./UI/button/Button"
+import Path from "./Path"
 
-import { ModalContext } from "../contexts/ModalContext/ModalContext"
+import { openModal } from "../store/modalWindowReducer"
 
-function TopPanel({path, changeDir}) {
+import '../styles/TopPanel.css'
+
+function TopPanel({path}) {
     const inputFile = React.createRef()
-    const {openModal} = useContext(ModalContext)
+    const dispatch = useDispatch()
 
     const createFolder = () => {
-        openModal({
+        dispatch(openModal({
             title: 'Создание папки',
             children: <CreateFolder />
-        })
+        }))
     }
 
     const uploadFiles = () => {
@@ -30,10 +30,10 @@ function TopPanel({path, changeDir}) {
         e.target.value = null;
         if (!listFiles.length) return
         
-        openModal({
+        dispatch(openModal({
             title: 'Загрузка файлов',
             children: <UploadFiles files={listFiles} />
-        })
+        }))
     }
 
     return (

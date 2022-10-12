@@ -1,18 +1,20 @@
 import React, { useContext, useState, useRef, useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { ModalContext } from "../../Context"
+
 import Button from "../UI/button/Button"
-import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
+
+import useFetch from "../../hooks/useFetch"
 import useNotification from "../../hooks/useNotification"
+
 import { dirUpdateFile } from "../../store/dirReducer"
+import { closeModal } from "../../store/modalWindowReducer"
 
 function Rename({items}) {
     const [newName, setNewName] = useState(items[0].name)
     const inputRef = useRef()
     const fetch = useFetch()
 
-    const {closeModal} = useContext(ModalContext)
     const [createNotification] = useNotification()
     const dispatch = useDispatch()
 
@@ -28,7 +30,7 @@ function Rename({items}) {
 
     const handleRenameBtn = async () => {
         setNewName(newName.trim())
-        closeModal()
+        dispatch(closeModal())
 
         if (!newName) {
             createNotification({
@@ -54,11 +56,7 @@ function Rename({items}) {
             })
             
             if (updatedFile.file) {
-                // changeDir(items[0].parent)
                 dispatch(dirUpdateFile(updatedFile.file))
-                // setDir(dir => {
-                //     return [...dir.filter(file => file._id !== items[0]._id), updatedFile.file]
-                // })
                 createNotification({
                     title: `Переименование ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'}`, 
                     message: `Новое имя ${ updatedFile.file.type === 'folder' ? 'папки' : 'файла'} - ${updatedFile.file.name}`
@@ -80,7 +78,7 @@ function Rename({items}) {
                 onKeyDown={(e) => e.key === 'Enter' ? handleRenameBtn() : false} 
             />
             <div className="buttons">
-                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
+                <Button click={() => dispatch(closeModal())} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleRenameBtn} className="btn blue" style={{width: '100%'}}>Переименовать</Button>
             </div>
         </>

@@ -10,6 +10,8 @@ import { contextMenuReducer } from './contextMenuReducer'
 import { selectionReducer } from './selectionReducer'
 import { dragAndDropReducer } from './dragAndDropReducer'
 import { mainMenuReducer } from './mainMenuReducer'
+import { modalWindowReducer } from './modalWindowReducer'
+import { windowSizeReducer } from './windowSizeReducer'
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -19,7 +21,9 @@ const rootReducer = combineReducers({
     contextMenu: contextMenuReducer,
     selection: selectionReducer,
     dragAndDrop: dragAndDropReducer,
-    mainMenu: mainMenuReducer
+    mainMenu: mainMenuReducer,
+    modalWindow: modalWindowReducer,
+    windowSize: windowSizeReducer
 })
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))

@@ -10,13 +10,10 @@ import TitlePage from '../components/TitlePage'
 import DirContent from '../components/DirContent'
 import Loader from '../components/UI/loader/Loader'
 import Sidebar from '../components/Sidebar'
-
+import Modal from '../components/UI/modal/Modal'
 import BackButton from '../components/BackButton'
 
 import '../styles/App.css'
-
-import { ModalProvider } from '../Context'
-import { WindowSizeContext } from '../contexts/WindowSizeContext/WindowSizeContext'
 
 import categories from '../categories'
 
@@ -27,13 +24,8 @@ function MainPage() {
     const userData = useSelector(state => state.auth.userData)
     const { path, currentDir } = useSelector(state => state.dir)
     const [loading, setLoading] = useState(true)
+    const { modalOpened } = useSelector(state => state.modalWindow)
     const dispatch = useDispatch()
-
-    const [windowSize, setWindowSize] = useState({
-        width: 0,
-        height: 0
-    })
-    let timerWindowSize = 0
 
     const { category, parent } = useParams()
     const categoryParams = categories.find(cat => cat.name === category)
@@ -48,26 +40,6 @@ function MainPage() {
         }
     }, [category, parent])
 
-    const updateWindowSize = () => {
-        if (timerWindowSize) {
-            clearTimeout(timerWindowSize)
-        }
-
-        timerWindowSize = setTimeout(() => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            })
-        }, 300);
-    }
-
-    useEffect(() => {
-        window.addEventListener("resize", updateWindowSize)
-        updateWindowSize()
-
-        return () => window.removeEventListener("resize", updateWindowSize)
-    }, [])
-
     return (
         <>
 
@@ -76,7 +48,8 @@ function MainPage() {
                 <Sidebar />
             </>
             <div className="pageBodyMain">
-                <ModalProvider>
+                <>
+                    { modalOpened && <Modal /> }
                     {categoryParams.showTopPanel && <TopPanel path={path} />}
                     <TitlePage>
                         {parent !== userData.rootId && categoryParams.showBackButtonInTitle && <BackButton />}
@@ -89,11 +62,9 @@ function MainPage() {
                     </TitlePage>
                     {loading
                         ? <Loader />
-                        : <WindowSizeContext.Provider value={{ windowSize }} >
-                            <DirContent />
-                        </WindowSizeContext.Provider>
+                        : <DirContent />
                     }
-                </ModalProvider>
+                </>
             </div>
             <Notify />
             <Footer />

@@ -1,50 +1,46 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 
 import '../../styles/ContextMenu.css'
-
-import { ModalContext } from '../../Context'
-import { WindowSizeContext } from "../../contexts/WindowSizeContext/WindowSizeContext"
 
 import Rename from "../modalwindows/Rename"
 import Share from '../modalwindows/Share'
 import Delete from "../modalwindows/Delete"
 
 import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
+import { openModal } from "../../store/modalWindowReducer"
 
 function SharedContextMenu() {
-    const { openModal } = useContext(ModalContext)
     const { selected } = useSelector(state => state.selection)
     const { dir } = useSelector(state => state.dir)
     const { typeContextMenu, positionContextMenu } = useSelector(state => state.contextMenu)
-    const { windowSize } = useContext(WindowSizeContext)
+    const { windowSize } = useSelector(state => state.windowSize)
     const dispatch = useDispatch()
 
     const items = dir.filter(item => selected.includes(item._id))
 
     const handlerRename = () => {
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Переименовать',
             children: <Rename items={items} />
-        })
+        }))
     }
 
     const handlerShare = () => {
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Поделиться',
             children: <Share items={items} />
-        })
+        }))
     }
 
     const handlerDelete = () => {
-        // setIsContextMenuOpened(false)   // закрыть контекстное меню
         dispatch(setIsContextMenuOpened(false))
-        openModal({
+        dispatch(openModal({
             title: 'Удалить в корзину',
             children: <Delete items={items} />
-        })
+        }))
     }
 
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"

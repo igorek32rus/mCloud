@@ -1,27 +1,26 @@
-import React, {useContext, useState} from "react"
+import React, {useState} from "react"
 import { useDispatch } from "react-redux"
-
-import Button from "../UI/button/Button"
-import { ModalContext } from "../../Context"
-import { getFileSize } from "../../utils/getFileSize"
-import { URLS } from "../../constants"
 import { useParams } from "react-router-dom"
 
-import { authUpdateUserData } from "../../store/authReducer"
+import Button from "../UI/button/Button"
+import { getFileSize } from "../../utils/getFileSize"
+import { URLS } from "../../constants"
 import useNotification from "../../hooks/useNotification"
+
+import { authUpdateUserData } from "../../store/authReducer"
 import { dirAddFile } from "../../store/dirReducer"
+import { closeModal } from "../../store/modalWindowReducer"
 
 import axios from 'axios'
 
 function UploadFiles({files}) {
     const [uploadFiles, setUploadFiles] = useState(files)
-    const {closeModal} = useContext(ModalContext)
     const [createNotification, removeNotification, updateNotification] = useNotification()
     const {parent} = useParams()
     const dispatch = useDispatch()
 
     const handleUploadFilesBtn = async () => {
-        closeModal()
+        dispatch(closeModal())
 
         const idNotification = createNotification({
             title: `Загрузка файлов`, 
@@ -61,11 +60,7 @@ function UploadFiles({files}) {
                         })
                     }
                 })
-                // setUserData((prev) => {
-                //     return {...prev, usedSpace: response.data.usedSpace}
-                // })
                 dispatch(authUpdateUserData({usedSpace: response.data.usedSpace}))
-                // setDir(dir => [...dir, response.data.file])
                 dispatch(dirAddFile(response.data.file))
 
                 sizeUploaded += file.size
@@ -100,7 +95,7 @@ function UploadFiles({files}) {
         copyUploadFiles.splice(num, 1)
         setUploadFiles(copyUploadFiles)
 
-        if (!copyUploadFiles.length) closeModal()
+        if (!copyUploadFiles.length) dispatch(closeModal())
     }
 
     return (
@@ -119,7 +114,7 @@ function UploadFiles({files}) {
             </div>
             
             <div className="buttons">
-                <Button click={closeModal} style={{width: '100%'}} >Отмена</Button>
+                <Button click={() => dispatch(closeModal())} style={{width: '100%'}} >Отмена</Button>
                 <Button click={handleUploadFilesBtn} className={"btn blue"} style={{width: '100%'}}>Загрузить</Button>
             </div>
         </>

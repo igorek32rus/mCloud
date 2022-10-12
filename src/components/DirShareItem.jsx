@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { getFileSize } from '../utils/getFileSize'
 import { getExtension } from '../utils/getExtension'
 
-import { WindowSizeContext } from "../contexts/WindowSizeContext/WindowSizeContext" 
-
 import { useHandlerMouseDown } from "../hooks/eventHandlers/DirShareItem/useHandlerMouseDown"
 import { addPositionFile } from "../store/selectionReducer"
 
@@ -13,7 +11,7 @@ function DirShareItem({ file }) {
     const [description, setDescription] = useState(false)
     const { selected } = useSelector(state => state.selection)
     const { isContextMenuOpened } = useSelector(state => state.contextMenu)
-    const { windowSize } = React.useContext(WindowSizeContext)
+    const { windowSize } = useSelector(state => state.windowSize)
     const { dir } = useSelector(state => state.dir)
 
     const fileRef = useRef(null)
