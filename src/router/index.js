@@ -1,6 +1,6 @@
-import AuthPage from "../pages/AuthPage"
-import MainPage from "../pages/MainPage"
-import SharePage from "../pages/SharePage"
+import AuthPage from "../pages/AuthPage/AuthPage"
+import MainPage from "../pages/MainPage/MainPage"
+import SharePage from "../pages/SharePage/SharePage"
 
 export const privateRoutes = [
     { path: '/share/:fileID', component: SharePage, exact: true },

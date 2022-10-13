@@ -6,6 +6,8 @@ import { useAuth } from './hooks/useAuth'
 import Loader from './components/UI/loader/Loader'
 import { setWindowSize } from './store/windowSizeReducer'
 
+import './styles/App.scss'
+
 function App() {
     const { loading } = useSelector(state => state.auth)
     const auth = useAuth()

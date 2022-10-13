@@ -2,20 +2,20 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Header from '../components/Header'
-import Notify from '../components/Notify'
-import Footer from '../components/Footer'
-import TopPanel from '../components/TopPanel'
-import TitlePage from '../components/TitlePage'
-import DirShareContent from '../components/DirShareContent'
-import Loader from '../components/UI/loader/Loader'
-import Sidebar from '../components/Sidebar'
-import Modal from '../components/UI/modal/Modal'
+import Header from '../../components/Header'
+import Notify from '../../components/Notify'
+import Footer from '../../components/Footer'
+import TopPanel from '../../components/TopPanel'
+import TitlePage from '../../components/TitlePage'
+import DirShareContent from '../../components/DirShareContent'
+import Loader from '../../components/UI/loader/Loader'
+import Sidebar from '../../components/Sidebar'
+import Modal from '../../components/UI/modal/Modal'
 
-import '../styles/App.css'
+import './SharePage.scss'
 
-import { asyncGetSharedFile } from '../store/asyncActions/dir'
-import { clearPositionFiles } from '../store/selectionReducer'
+import { asyncGetSharedFile } from '../../store/asyncActions/dir'
+import { clearPositionFiles } from '../../store/selectionReducer'
 
 function SharePage() {
     const dispatch = useDispatch()
@@ -35,7 +35,7 @@ function SharePage() {
                 <Header />
                 <Sidebar />
             </>
-            <div className="pageBodyMain">
+            <div className="share-page">
                 <>
                     { modalOpened && <Modal /> }
                     {/* <TopPanel path={path} /> */}

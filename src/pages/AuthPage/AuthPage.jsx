@@ -1,10 +1,10 @@
 import React, { useState } from "react"
+import './AuthPage.scss'
 
-import Login from "../components/Auth/Login"
-import Registration from "../components/Auth/Registration"
-import Notify from "../components/Notify"
-import '../styles/Auth.css'
-import Loader from "../components/UI/loader/Loader"
+import Login from "../../components/Auth/Login"
+import Registration from "../../components/Auth/Registration"
+import Notify from "../../components/Notify"
+import Loader from "../../components/UI/loader/Loader"
 
 const AuthPage = () => {
     const [isLoginWindow, setIsLoginWindow] = useState(true)
@@ -24,8 +24,8 @@ const AuthPage = () => {
         <>
             { loading ? <Loader /> : (
                 <>
-                    <div className="page-auth">
-                        <div className="rotate-window" style={{transform: `perspective(1000px) rotateY(${degRotate}deg)`}}>
+                    <div className="auth-page">
+                        <div className="auth-window" style={{transform: `rotateY(${degRotate}deg)`}}>
                             { isLoginWindow 
                                 ? <Login setLoginWindow={setLoginWindow} setLoading={setLoading} /> 
                                 : <Registration setLoginWindow={setLoginWindow} setLoading={setLoading} /> 

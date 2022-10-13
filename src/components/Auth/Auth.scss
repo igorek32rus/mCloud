@@ -1,0 +1,32 @@
+.auth-window {
+    .flip-content-180 {
+        transform: rotateY(180deg);
+    }
+    
+    .logo {
+        background: url('../../images/cloud.svg') no-repeat;
+        background-size: contain;
+        width: 128px;
+        height: 128px;
+        margin: -20px auto;
+    }
+
+    .title {
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .input-fields {
+        width: 100%;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        button {
+            min-width: 100px;
+        }
+    }
+}

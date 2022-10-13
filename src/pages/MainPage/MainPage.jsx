@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import './MainPage.scss'
 
-import Header from '../components/Header'
-import Notify from '../components/Notify'
-import Footer from '../components/Footer'
-import TopPanel from '../components/TopPanel'
-import TitlePage from '../components/TitlePage'
-import DirContent from '../components/DirContent'
-import Loader from '../components/UI/loader/Loader'
-import Sidebar from '../components/Sidebar'
-import Modal from '../components/UI/modal/Modal'
-import BackButton from '../components/BackButton'
+import Header from '../../components/Header'
+import Notify from '../../components/Notify'
+import Footer from '../../components/Footer'
+import TopPanel from '../../components/TopPanel'
+import TitlePage from '../../components/TitlePage'
+import DirContent from '../../components/DirContent'
+import Loader from '../../components/UI/loader/Loader'
+import Sidebar from '../../components/Sidebar'
+import Modal from '../../components/UI/modal/Modal'
+import BackButton from '../../components/BackButton'
 
-import '../styles/App.css'
+import categories from '../../categories'
 
-import categories from '../categories'
-
-import { asyncGetCategoryFiles, asyncGetSearchFiles } from '../store/asyncActions/dir'
-import { clearPositionFiles } from '../store/selectionReducer'
+import { asyncGetCategoryFiles, asyncGetSearchFiles } from '../../store/asyncActions/dir'
+import { clearPositionFiles } from '../../store/selectionReducer'
 
 function MainPage() {
     const userData = useSelector(state => state.auth.userData)
@@ -47,7 +46,7 @@ function MainPage() {
                 <Header />
                 <Sidebar />
             </>
-            <div className="pageBodyMain">
+            <div className="main-page">
                 <>
                     { modalOpened && <Modal /> }
                     {categoryParams.showTopPanel && <TopPanel path={path} />}

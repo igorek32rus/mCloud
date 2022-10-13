@@ -2,9 +2,10 @@ import React, {useState} from "react"
 import Button from "../UI/button/Button"
 import useFetch from "../../hooks/useFetch"
 import { URLS } from "../../constants"
-import '../../styles/Auth.css'
-import { useDispatch } from "react-redux"
 import useNotification from "../../hooks/useNotification"
+
+import './Auth.scss'
+import Input from "../UI/input/Input"
 
 const Registration = ({setLoginWindow, setLoading}) => {
     const [email, setEmail] = useState('')
@@ -44,24 +45,17 @@ const Registration = ({setLoginWindow, setLoading}) => {
         if (e.key === 'Enter') registration()
     }
 
-    const confirmPassStyle = {
-        width: '100%',
-        borderColor: 'rgba(70, 70, 255, 1)',
-        color: 'rgba(70, 70, 255, 1)'
-    }
-
     return (
-        <div className="auth-window" style={{transform: 'rotateY(180deg)'}}>
+        <div className="flip-content-180">
             <div className="logo"></div>
             <div className="title">
                 <span className="thin">micro</span><span className="bold">Cloud</span>
             </div>
             <div style={{margin: 'auto 0'}}>
                 <form>
-                    <input type="text" placeholder='E-mail' style={{width: '100%'}} onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
-                    <input type="password" placeholder="Пароль" style={{width: '100%'}} onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
-                    <input type="password" placeholder="Повтротие пароль"
-                        style={(password === confirmPassword && confirmPassword.length > 0) ? confirmPassStyle : { width: '100%' }} 
+                    <Input type="text" placeholder='E-mail' className="input-fields" onChange={(e) => setEmail(e.target.value)} value={email} onKeyDown={(e) => handlerKeyDown(e)} />
+                    <Input type="password" placeholder="Пароль" className="input-fields" onChange={(e) => setPassword(e.target.value)} value={password} onKeyDown={(e) => handlerKeyDown(e)} />
+                    <Input type="password" placeholder="Повтротие пароль" className="input-fields"
                         onChange={(e) => setConfirmPassword(e.target.value)} 
                         value={confirmPassword} 
                         onKeyDown={(e) => handlerKeyDown(e)} />
