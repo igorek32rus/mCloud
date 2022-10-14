@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Header from '../../components/Header'
+import Header from '../../components/Header/Header'
 import Notify from '../../components/Notify'
 import Footer from '../../components/Footer'
 import TopPanel from '../../components/TopPanel'

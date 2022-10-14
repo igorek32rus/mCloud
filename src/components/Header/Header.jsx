@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
 
-import Logo from './Logo'
-import Search from './Search'
+import Logo from '../Logo'
+import Search from '../Search'
 
-import '../styles/Header.css'
+import './Header.scss'
 // import { AuthContext } from '../Context'
-import ProfileAvatar from './ProfileAvatar'
+import ProfileAvatar from '../ProfileAvatar'
 import { useSelector } from 'react-redux'
 
 function Header(props) {
