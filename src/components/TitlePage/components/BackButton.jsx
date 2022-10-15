@@ -1,5 +1,6 @@
 import React from "react"
 import { useHistory } from "react-router-dom"
+import './BackButton.scss'
 
 function BackButton() {
     const history = useHistory()

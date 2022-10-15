@@ -12,7 +12,7 @@ import DirContent from '../../components/DirContent/DirContent'
 import Loader from '../../components/UI/loader/Loader'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import Modal from '../../components/UI/modal/Modal'
-import BackButton from '../../components/BackButton'
+import BackButton from '../../components/TitlePage/components/BackButton'
 
 import categories from '../../categories'
 
