@@ -1,9 +1,9 @@
 import React from "react"
-import '../styles/Notify.css'
-import NotificationItem from "./NotificationItem"
+import './Notifications.scss'
+import NotificationItem from "../NotificationItem/NotificationItem"
 import { useSelector } from "react-redux"
 
-function Notify() {
+function Notifications() {
     const notifications = useSelector(state => state.notifications.notifications)
 
     return (
@@ -14,4 +14,4 @@ function Notify() {
     )
 }
 
-export default Notify
+export default Notifications

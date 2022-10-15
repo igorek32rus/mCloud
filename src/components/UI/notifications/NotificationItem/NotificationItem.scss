@@ -1,11 +1,4 @@
-#notifications {
-    position: fixed;
-    bottom: 50px;
-    right: 20px;
-    width: 300px;
-}
-
-.notify-block {
+.notification-item {
     display: flex;
     background-color: rgba(30, 36, 68, .95);
     border-radius: 7px;
@@ -14,41 +7,41 @@
     animation: fadeIn .2s linear;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-}
-  
-.loading-circle {
-    margin-right: 10px;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    border: 10px solid rgba(255, 255, 255, .2);
-    border-top: 10px solid #fff;
-    animation: animLoadingCircle 1.5s infinite linear;
-    float: left;
-}
 
-.progress_percent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 10px;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-}
-  
-.notify-title {
-    font-weight: bold;
-    margin-bottom: 5px;
-    word-wrap: break-word;
-}
-  
-.notify-message {
-    font-style: italic;
-    font-weight: 300;
-    word-wrap: break-word;
+    .progress_percent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 10px;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+    }
+
+    .loading-circle {
+        margin-right: 10px;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: 10px solid rgba(255, 255, 255, .2);
+        border-top: 10px solid #fff;
+        animation: animLoadingCircle 1.5s infinite linear;
+        float: left;
+    }
+
+    .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        word-wrap: break-word;
+    }
+
+    .notification-message {
+        font-style: italic;
+        font-weight: 300;
+        word-wrap: break-word;
+    }
 }
   
 @keyframes animLoadingCircle {

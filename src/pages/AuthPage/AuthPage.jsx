@@ -3,7 +3,7 @@ import './AuthPage.scss'
 
 import Login from "../../components/Auth/Login"
 import Registration from "../../components/Auth/Registration"
-import Notify from "../../components/Notify"
+import Notifications from "../../components/UI/notifications/Notifications/Notifications"
 import Loader from "../../components/UI/loader/Loader"
 
 const AuthPage = () => {
@@ -32,7 +32,7 @@ const AuthPage = () => {
                             }
                         </div>
                     </div>
-                    <Notify />
+                    <Notifications />
                 </>
             )}
         </>

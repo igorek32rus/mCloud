@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import './MainPage.scss'
 
 import Header from '../../components/Header/Header'
-import Notify from '../../components/Notify'
+import Notifications from '../../components/UI/notifications/Notifications/Notifications'
 import Footer from '../../components/Footer'
 import TopPanel from '../../components/TopPanel/TopPanel'
 import TitlePage from '../../components/TitlePage/TitlePage'
@@ -65,7 +65,7 @@ function MainPage() {
                     }
                 </>
             </div>
-            <Notify />
+            <Notifications />
             <Footer />
 
         </>

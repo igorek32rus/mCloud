@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header/Header'
-import Notify from '../../components/Notify'
+import Notifications from "../../components/UI/notifications/Notifications/Notifications"
 import Footer from '../../components/Footer'
 // import TopPanel from '../../components/TopPanel'
 import TitlePage from '../../components/TitlePage/TitlePage'
@@ -50,7 +50,7 @@ function SharePage() {
                     }
                 </>
             </div>
-            <Notify />
+            <Notifications />
             <Footer />
         </>
     );
