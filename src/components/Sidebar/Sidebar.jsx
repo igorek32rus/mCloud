@@ -2,16 +2,16 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import '../styles/Sidebar.css'
-import { getFileSize } from '../utils/getFileSize'
+import './Sidebar.scss'
+import { getFileSize } from '../../utils/getFileSize'
 
-import categories from '../categories'
+import categories from '../../categories'
 
-import SettingsIcon from "../images/settings.svg"
-import LogoutIcon from "../images/logout.svg"
+import SettingsIcon from "../../images/settings.svg"
+import LogoutIcon from "../../images/logout.svg"
 
-import { authLogoutAction } from '../store/authReducer'
-import { asyncCloseMenu } from '../store/asyncActions/mainMenu'
+import { authLogoutAction } from '../../store/authReducer'
+import { asyncCloseMenu } from '../../store/asyncActions/mainMenu'
 
 function Sidebar() {
     const isMenuOpened = useSelector(state => state.mainMenu.opened)

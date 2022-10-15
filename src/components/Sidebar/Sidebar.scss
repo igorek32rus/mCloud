@@ -17,6 +17,52 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, .7);
     z-index: 5;
     animation: showSidebar .2s ease-in-out forwards;
+
+    menu {
+        margin-top: 150px;
+
+        ul {
+            height: auto;
+            list-style: none;
+
+            li {
+                padding: 5px 10px;
+                border-bottom: 1px solid rgba(255, 255, 255, .15);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+
+                .icon {
+                    width: 20px;
+                    height: 20px;
+                    background-size: contain;
+                    margin-right: 5px;
+                }
+            }
+
+            li:hover {
+                background-color: rgba(255, 255, 255, .1);
+            }
+
+            li:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+
+    .used-disk-space {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 10px;
+        font-size: 12px;
+        font-style: italic;
+    }
+}
+
+ul li {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
 .sidebar.hide {
@@ -30,47 +76,6 @@
     border: 5px solid transparent;
     border-bottom: 5px solid rgba(30, 36, 68, .95);
 } */
-
-.sidebar menu {
-    margin-top: 150px;
-}
-
-.sidebar menu ul {
-    height: auto;
-    list-style: none;
-}
-
-.sidebar menu ul li {
-    padding: 5px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, .15);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar menu ul li:hover {
-    background-color: rgba(255, 255, 255, .1);
-}
-
-.main-menu ul li:last-child {
-    border-bottom: none;
-}
-
-.sidebar menu ul li .icon {
-    width: 20px;
-    height: 20px;
-    background-size: contain;
-    margin-right: 5px;
-}
-
-.sidebar .used-disk-space {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 10px;
-    font-size: 12px;
-    font-style: italic;
-}
 
 @supports (backdrop-filter: blur(10px)) {
     .sidebar {

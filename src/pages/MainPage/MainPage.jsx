@@ -10,7 +10,7 @@ import TopPanel from '../../components/TopPanel'
 import TitlePage from '../../components/TitlePage'
 import DirContent from '../../components/DirContent'
 import Loader from '../../components/UI/loader/Loader'
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../components/Sidebar/Sidebar'
 import Modal from '../../components/UI/modal/Modal'
 import BackButton from '../../components/BackButton'
 
