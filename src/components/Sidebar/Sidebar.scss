@@ -38,14 +38,14 @@
                     background-size: contain;
                     margin-right: 5px;
                 }
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, .1);
+                }
             }
 
-            li:hover {
-                background-color: rgba(255, 255, 255, .1);
-            }
-
-            li:last-child {
-                border-bottom: none;
+            a:first-child li {
+                border-top: 1px solid rgba(255, 255, 255, .15);
             }
         }
     }
@@ -58,10 +58,10 @@
         font-size: 12px;
         font-style: italic;
     }
-}
 
-.sidebar.hide {
-    animation: hideSidebar .2s ease-in-out forwards;
+    &.hide {
+        animation: hideSidebar .2s ease-in-out forwards;
+    }
 }
 
 /* .sidebar::after {
