@@ -1,0 +1,109 @@
+.context-menu {
+    position: absolute;
+    background-color: rgba(30, 36, 68, .85);
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, .15);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .8);
+    top: 0;
+    left: 0;
+    width: 200px;
+    display: block;
+    font-size: 12px;
+    z-index: 5;
+    backdrop-filter: blur(5px);
+
+    --size-icon: 17px;
+
+    ul {
+        list-style: none;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+
+        &.disabled {
+            opacity: .6;
+        }
+
+        &:first-child {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        &:not(:first-child) {
+            border-top: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        &:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, .07);
+        }
+
+        .icon {
+            width: var(--size-icon);
+            height: var(--size-icon);
+            filter: invert(1);
+            margin-right: 5px;
+    
+            &.share {
+                background: url('../../images/share.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.edit {
+                background: url('../../images/edit.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.restore {
+                background: url('../../images/restore.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.download {
+                background: url('../../images/download.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.copy {
+                background: url('../../images/copy.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.upload {
+                background: url('../../images/upload.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.cut {
+                background: url('../../images/cut.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.paste {
+                background: url('../../images/paste.svg') no-repeat;
+                background-size: contain;
+            }
+    
+            &.delete {
+                background: url('../../images/delete.svg') no-repeat;
+                background-size: contain;
+            }
+        }
+    }
+}
+  
+/* .dropMenu.contextMenu::after { */
+    /* content: ''; */
+    /* position: absolute; */
+    /* left: -10px; top: 10px; */
+    /* border: 5px solid transparent; */
+    /* border-right: 5px solid rgba(30, 36, 68, .95); */
+/* } */

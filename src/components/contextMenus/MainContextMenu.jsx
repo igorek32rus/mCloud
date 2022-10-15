@@ -2,7 +2,7 @@ import React from "react"
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 
-import '../../styles/ContextMenu.css'
+import './ContextMenu.scss'
 
 import useNotification from "../../hooks/useNotification"
 

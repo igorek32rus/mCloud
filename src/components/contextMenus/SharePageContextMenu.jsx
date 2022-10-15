@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-import '../../styles/ContextMenu.css'
+import './ContextMenu.scss'
 
 import useNotification from "../../hooks/useNotification"
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-import '../../styles/ContextMenu.css'
+import './ContextMenu.scss'
 
 import Rename from "../modalwindows/Rename"
 import Share from '../modalwindows/Share'

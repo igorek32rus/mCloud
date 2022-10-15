@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-import '../../styles/ContextMenu.css'
+import './ContextMenu.scss'
 
 import PermanentDelete from "../modalwindows/PermanentDelete"
 import Restore from "../modalwindows/Restore/Restore"
