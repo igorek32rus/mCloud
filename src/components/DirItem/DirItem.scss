@@ -1,0 +1,95 @@
+.dir-item {
+    /*background-color: #2b365b;*/
+    position: relative;
+    /* background: rgba(255, 255, 255, .2); */
+    height: 120px;
+    width: 100px;
+    border-radius: 5px;
+    margin: 0 10px 10px 0;
+    font-size: 12px;
+    transition: box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+
+    &.selected {
+        background: rgba(255, 255, 255, .2);
+        backdrop-filter: blur(10px);
+    }
+
+    &:hover {
+        /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
+    }
+
+    .image {
+        position: relative;
+        height: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px 0;
+        opacity: .5;
+
+        &.folder {
+            background: url('../../images/folder-64.webp') center no-repeat;
+        }
+          
+        &.file {
+            background: url('../../images/file-64.webp') center no-repeat;
+        }
+
+        .type {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 1);
+            font-size: 14px;
+            border: 5px solid rgba(255, 255, 255, 1);
+            border-radius: 7px;
+            font-weight: 600;
+            padding: 3px;
+            text-transform: uppercase;
+        }
+    }
+
+    .name {
+        margin: 5px;
+        /* max-height: 30px; */
+        overflow: hidden;
+        word-wrap: break-word;
+        /* white-space: nowrap; */
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        text-align: center;
+    }
+
+    .date {
+        margin: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .description {
+        background: rgba(30, 36, 68, .85);
+        border-radius: 5px;
+        padding: 5px;
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        min-width: 220px;
+        max-width: 400px;
+        z-index: 5;
+        opacity: 0;
+        animation: fadeInDesc .2s ease-in-out .7s forwards;
+        overflow: visible;
+
+        .text {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}

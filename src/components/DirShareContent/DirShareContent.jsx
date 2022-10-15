@@ -7,7 +7,7 @@ import { useHandlerMouseUp } from '../../hooks/eventHandlers/DirContent/useHandl
 
 import SharePageContextMenu from "../contextMenus/SharePageContextMenu"
 
-import DirItem from "../DirItem"
+import DirItem from "../DirItem/DirItem"
 import Selection from "../Selection/Selection"
 
 import '../DirContent/DirContent.scss'
@@ -30,7 +30,7 @@ function DirShareContent() {
     }, [])
 
     return (
-        <div className="dirContent" 
+        <div className="dir-content" 
             onContextMenu={ (e) => e.preventDefault() } 
             onDragStart={ () => false } 
             onMouseDown={handlerMouseDown}

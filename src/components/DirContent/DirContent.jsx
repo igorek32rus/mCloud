@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 
-import DirItem from "../DirItem"
+import DirItem from "../DirItem/DirItem"
 import Selection from "../Selection/Selection"
 
 import { useHandlerMouseDown } from "../../hooks/eventHandlers/DirContent/useHandlerMouseDown"
@@ -35,7 +35,7 @@ function DirContent() {
     }, [category])
 
     return (
-        <div className="dirContent" 
+        <div className="dir-content" 
             onContextMenu={ (e) => e.preventDefault() } 
             onMouseDown={ (e) => handlerMouseDown(e) } 
             onMouseMove={ (e) => handlerMouseMove(e, dir) } 

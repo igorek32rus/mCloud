@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { getFileSize } from '../utils/getFileSize'
-import { getExtension } from '../utils/getExtension'
+import { getFileSize } from '../../utils/getFileSize'
+import { getExtension } from '../../utils/getExtension'
 
-import { useHandlerMouseDown } from "../hooks/eventHandlers/DirItem/useHandlerMouseDown"
+import { useHandlerMouseDown } from "../../hooks/eventHandlers/DirItem/useHandlerMouseDown"
 
-import { addPositionFile } from "../store/selectionReducer"
+import { addPositionFile } from "../../store/selectionReducer"
+
+import './DirItem.scss'
 
 function DirItem({ file }) {
     const [description, setDescription] = useState(false)
@@ -50,8 +52,8 @@ function DirItem({ file }) {
     return (
         <div className={
             selected.includes(file._id) || dragnDropGoal === file._id
-                ? 'block selected' 
-                : 'block'
+                ? 'dir-item selected' 
+                : 'dir-item'
             } ref={fileRef} style={{transform: transformElement, zIndex: zIndexElement}}
             onContextMenu={(e) => e.preventDefault()} 
             onMouseDown={(e) => handlerMouseDown(e, file, setDescription)} 
