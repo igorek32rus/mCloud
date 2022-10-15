@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import CreateFolder from '../modalwindows/CreateFolder'
 import UploadFiles from '../modalwindows/UploadFiles'
 import Button from "../UI/button/Button"
-import Path from "../Path"
+import Path from "./components/Path"
 
 import { openModal } from "../../store/modalWindowReducer"
 

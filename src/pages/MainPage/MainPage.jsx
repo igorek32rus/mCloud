@@ -5,7 +5,7 @@ import './MainPage.scss'
 
 import Header from '../../components/Header/Header'
 import Notifications from '../../components/UI/notifications/Notifications/Notifications'
-import Footer from '../../components/Footer'
+import Footer from '../../components/Footer/Footer'
 import TopPanel from '../../components/TopPanel/TopPanel'
 import TitlePage from '../../components/TitlePage/TitlePage'
 import DirContent from '../../components/DirContent/DirContent'

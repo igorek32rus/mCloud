@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header/Header'
 import Notifications from "../../components/UI/notifications/Notifications/Notifications"
-import Footer from '../../components/Footer'
+import Footer from '../../components/Footer/Footer'
 // import TopPanel from '../../components/TopPanel'
 import TitlePage from '../../components/TitlePage/TitlePage'
 import DirShareContent from '../../components/DirShareContent/DirShareContent'

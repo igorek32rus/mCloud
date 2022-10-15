@@ -1,7 +1,7 @@
 import React from "react"
 import { useParams, Link } from "react-router-dom"
 
-import '../styles/Path.css'
+import './Path.scss'
 
 function Path({path}) {
     const {category} = useParams()
