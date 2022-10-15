@@ -1,6 +1,8 @@
 import React from "react"
 import { useSelector } from "react-redux"
 
+import './Selection.scss'
+
 const Selection = () => {
     const { positionSelection } = useSelector(state => state.selection)
 

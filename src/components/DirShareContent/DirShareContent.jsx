@@ -1,18 +1,18 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-import { useHandlerMouseDown } from '../hooks/eventHandlers/DirContent/useHandlerMouseDown'
-import { useHandlerMouseMove } from '../hooks/eventHandlers/DirContent/useHandlerMouseMove'
-import { useHandlerMouseUp } from '../hooks/eventHandlers/DirContent/useHandlerMouseUp'
+import { useHandlerMouseDown } from '../../hooks/eventHandlers/DirContent/useHandlerMouseDown'
+import { useHandlerMouseMove } from '../../hooks/eventHandlers/DirContent/useHandlerMouseMove'
+import { useHandlerMouseUp } from '../../hooks/eventHandlers/DirContent/useHandlerMouseUp'
 
-import SharePageContextMenu from "./contextMenus/SharePageContextMenu"
+import SharePageContextMenu from "../contextMenus/SharePageContextMenu"
 
-import DirItem from "./DirItem"
-import Selection from "./Selection"
+import DirItem from "../DirItem"
+import Selection from "../Selection/Selection"
 
-import '../styles/DirContent.css'
+import '../DirContent/DirContent.scss'
 
-import { clearSelected } from "../store/selectionReducer"
+import { clearSelected } from "../../store/selectionReducer"
 
 function DirShareContent() {
     const { dir } = useSelector(state => state.dir)

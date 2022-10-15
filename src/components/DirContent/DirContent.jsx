@@ -2,17 +2,17 @@ import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 
-import DirItem from "./DirItem"
-import Selection from "./Selection"
+import DirItem from "../DirItem"
+import Selection from "../Selection/Selection"
 
-import { useHandlerMouseDown } from "../hooks/eventHandlers/DirContent/useHandlerMouseDown"
-import { useHandlerMouseMove } from "../hooks/eventHandlers/DirContent/useHandlerMouseMove"
-import { useHandlerMouseUp } from "../hooks/eventHandlers/DirContent/useHandlerMouseUp"
+import { useHandlerMouseDown } from "../../hooks/eventHandlers/DirContent/useHandlerMouseDown"
+import { useHandlerMouseMove } from "../../hooks/eventHandlers/DirContent/useHandlerMouseMove"
+import { useHandlerMouseUp } from "../../hooks/eventHandlers/DirContent/useHandlerMouseUp"
 
-import categories from "../categories"
+import categories from "../../categories"
 
-import '../styles/DirContent.css'
-import { clearSelected } from "../store/selectionReducer"
+import './DirContent.scss'
+import { clearSelected } from "../../store/selectionReducer"
 
 function DirContent() {
     const dir = useSelector(state => state.dir.dir)
