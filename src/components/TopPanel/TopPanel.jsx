@@ -1,14 +1,14 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 
-import CreateFolder from './modalwindows/CreateFolder'
-import UploadFiles from './modalwindows/UploadFiles'
-import Button from "./UI/button/Button"
-import Path from "./Path"
+import CreateFolder from '../modalwindows/CreateFolder'
+import UploadFiles from '../modalwindows/UploadFiles'
+import Button from "../UI/button/Button"
+import Path from "../Path"
 
-import { openModal } from "../store/modalWindowReducer"
+import { openModal } from "../../store/modalWindowReducer"
 
-import '../styles/TopPanel.css'
+import './TopPanel.scss'
 
 function TopPanel({path}) {
     const inputFile = React.createRef()
