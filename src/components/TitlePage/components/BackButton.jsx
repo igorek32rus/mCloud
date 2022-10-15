@@ -6,7 +6,7 @@ function BackButton() {
     const history = useHistory()
 
     return (
-        <div className="back_btn" onClick={() => history.goBack()}>&laquo;</div>
+        <div className="title-back_btn" onClick={() => history.goBack()}>&laquo;</div>
     )
 }
 
