@@ -1,0 +1,21 @@
+.logo {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+
+    .logo-img {
+        background: url('../../../../images/cloud.svg') no-repeat;
+        background-size: contain;
+        height: 48px;
+        width: 48px;
+        margin-right: 5px;
+    }
+
+    .thin {
+        font-weight: 300;
+    }
+    
+    .bold {
+        font-weight: 900;
+    }
+}

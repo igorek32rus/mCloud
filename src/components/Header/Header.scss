@@ -8,47 +8,7 @@ header {
     justify-content: space-between;
     position: fixed;
     z-index: 10;
-
-    .logo {
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-
-        .logo-img {
-            background: url('../../images/cloud.svg') no-repeat;
-            background-size: contain;
-            height: 48px;
-            width: 48px;
-            margin-right: 5px;
-        }
-
-        .thin {
-            font-weight: 300;
-        }
-        
-        .bold {
-            font-weight: 900;
-        }
-    }
-
-    .profile-avatar-block {
-        display: flex;
-        opacity: .8;
-        transition: opacity .2s ease-in-out, transform .2s ease-in-out;
-        cursor: pointer;
-    }
-    
-    .profile-avatar-block:hover {
-        opacity: 1;
-    }
-    
-    img.profile-avatar-block.profile-avatar {
-        height: 35px;
-        border-radius: 50%;
-    }
 }
-
-
 
 @supports (backdrop-filter: blur(10px)) {
     header {

@@ -1,15 +1,13 @@
-import React, { useContext } from 'react'
-
-import Logo from '../Logo'
-import Search from '../Search'
-
-import './Header.scss'
-// import { AuthContext } from '../Context'
-import ProfileAvatar from '../ProfileAvatar'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
-function Header(props) {
-    // const {isAuth} = useContext(AuthContext)
+import Logo from './components/Logo/Logo'
+import Search from './components/Search/Search'
+import ProfileAvatar from './components/ProfileAvatar/ProfileAvatar'
+
+import './Header.scss'
+
+function Header() {
     const isAuth = useSelector(state => state.auth.isAuth)
 
     return (

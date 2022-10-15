@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react"
 import { useSelector, useDispatch } from "react-redux"
+import './ProfileAvatar.scss'
 
-import { setMenuOpened } from "../store/mainMenuReducer"
+import { setMenuOpened } from "../../../../store/mainMenuReducer"
 
-function ProfileAvatar(props) {
+function ProfileAvatar() {
     const isMenuOpened = useSelector(state => state.mainMenu.opened)
     const isMenuClosing = useSelector(state => state.mainMenu.closing)
 

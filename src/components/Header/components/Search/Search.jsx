@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import '../styles/Search.css'
+import './Search.scss'
 
-import useFetch from '../hooks/useFetch'
-import { URLS } from '../constants'
+import useFetch from '../../../../hooks/useFetch'
+import { URLS } from '../../../../constants'
 
-import { setSelected, clearSelected } from '../store/selectionReducer'
+import { setSelected, clearSelected } from '../../../../store/selectionReducer'
 
 function Search() {
     const [searchValue, setSearchValue] = useState('')

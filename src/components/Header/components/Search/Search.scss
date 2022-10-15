@@ -1,0 +1,112 @@
+.search {
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .15);
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 7px;
+    height: 32px;
+
+    --width-input-search: 300px;
+
+    position: absolute;
+    left: calc(50% - var(--width-input-search) / 2);
+
+    .icon-search {
+        background: url('../../../../images/search-16.webp');
+        height: 16px;
+        width: 16px;
+        margin-right: 10px;
+        opacity: .5;
+        margin: 5px;
+    }
+
+    input[type=text] {
+        border: none;
+        margin: 0;
+        padding: 5px 3px 5px 0;
+        width: var(--width-input-search);
+    }
+
+    .search-clear {
+        padding: 5px;
+        margin-right: 2px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        opacity: .5;
+        transition: opacity .3s ease-in-out;
+        visibility: hidden;
+
+        &:hover {
+            opacity: .8;
+        }
+    }
+
+    .search-result {
+        position: absolute;
+        left: 0;
+        top: 35px;
+        width: 100%;
+        background-color: rgba(30, 36, 68, .95);
+        border: 1px solid rgba(255, 255, 255, .3);
+        border-radius: 7px;
+        z-index: 5;
+
+        .item {
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, .3);
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            .img_type {
+                width: 30px;
+                height: 30px;
+                margin-right: 10px;
+                opacity: .7;
+
+                &.folder {
+                    background: url("../../../../images/folder-64.webp") center no-repeat;
+                    background-size: contain;
+                }
+
+                &.file {
+                    background: url("../../../../images/file-64.webp") center no-repeat;
+                    background-size: contain;
+                }
+            }
+
+            .info {
+                display: flex;
+                flex-direction: column;
+
+                .filename {
+                    font-size: 12px;
+                }
+
+                .folder {
+                    font-size: 10px;
+                    margin-top: 3px;
+                    color: rgba(255, 255, 255, .3);
+                    font-style: italic;
+                }
+            }
+
+            &:first-child {
+                border-top-left-radius: 7px;
+                border-top-right-radius: 7px;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 7px;
+                border-bottom-right-radius: 7px;
+                border: none;
+            }
+
+            &:hover {
+                background-color: rgba(255, 255, 255, .05);
+            }
+        }
+    }
+}
