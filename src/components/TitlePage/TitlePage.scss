@@ -1,0 +1,24 @@
+.title_page {
+    margin: 0 20px;
+    padding: 0 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+
+    .back_btn {
+        border: 3px solid rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        padding: 3px 5px;
+        border-radius: 3px;
+        margin-right: 5px;
+        height: 25px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    h1 {
+
+    }
+}

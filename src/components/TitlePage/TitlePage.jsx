@@ -1,5 +1,5 @@
 import React from "react"
-import '../styles/TitlePage.css'
+import './TitlePage.scss'
 
 function TitlePage({children}) {
     return (
