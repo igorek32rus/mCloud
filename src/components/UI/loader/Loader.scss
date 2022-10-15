@@ -3,28 +3,28 @@
     --page-loader-height: 80px;
 }
 
-.page-loader {
+.content-loader {
     position: absolute;
     display: inline-block;
     top: calc(50% - (var(--page-loader-height) / 2));
     left: calc(50% - (var(--page-loader-width) / 2));
     width: var(--page-loader-width);
     height: var(--page-loader-height);
+
+    div {
+        position: absolute;
+        border: 4px solid #fff;
+        opacity: 1;
+        border-radius: 50%;
+        animation: contentLoader 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+
+        &:nth-child(2) {
+            animation-delay: -0.5s;
+        }
+    }
 }
 
-.page-loader div {
-    position: absolute;
-    border: 4px solid #fff;
-    opacity: 1;
-    border-radius: 50%;
-    animation: pageLoader 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-}
-
-.page-loader div:nth-child(2) {
-    animation-delay: -0.5s;
-}
-
-@keyframes pageLoader {
+@keyframes contentLoader {
     0% {
         top: 36px;
         left: 36px;
