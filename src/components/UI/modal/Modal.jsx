@@ -2,7 +2,7 @@ import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { closeModal } from "../../../store/modalWindowReducer"
 
-import './Modal.css'
+import './Modal.scss'
 
 function Modal() {
     const { modalContent } = useSelector(state => state.modalWindow)
