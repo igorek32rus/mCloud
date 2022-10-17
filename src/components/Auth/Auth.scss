@@ -29,4 +29,8 @@
             min-width: 100px;
         }
     }
+    
+    input[type=password]:not(:placeholder-shown) {
+        font-family: 'pass', 'Roboto', Helvetica, Arial, sans-serif;
+    }
 }
