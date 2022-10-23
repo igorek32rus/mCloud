@@ -71,6 +71,7 @@ function UploadFiles({files}) {
                 })
             } catch (error) {
                 console.log(error);
+                removeNotification(idNotification)
                 createNotification({
                     title: `Ошибка загрузки файла`, 
                     message: `Файл: ${file.name}. ${error.response.data.message}`

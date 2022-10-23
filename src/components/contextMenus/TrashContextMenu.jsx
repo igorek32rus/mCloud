@@ -5,6 +5,7 @@ import './ContextMenu.scss'
 
 import PermanentDelete from "../modalwindows/PermanentDelete"
 import Restore from "../modalwindows/Restore/Restore"
+import ClearTrash from "../modalwindows/ClearTrash"
 
 import { setIsContextMenuOpened } from "../../store/contextMenuReducer"
 import { openModal } from "../../store/modalWindowReducer"
@@ -34,6 +35,14 @@ function TrashContextMenu() {
         }))
     }
 
+    const handlerClearTrash = () => {
+        dispatch(setIsContextMenuOpened(false))
+        dispatch(openModal({
+            title: 'Удалить навсегда',
+            children: <ClearTrash items={dir} />
+        }))
+    }
+
     const classContext = positionContextMenu.left + 200 > windowSize.width ? "context-menu slideLeft" : "context-menu slideRight"
     const leftContext = positionContextMenu.left + 200 > windowSize.width ? positionContextMenu.left - 200 : positionContextMenu.left
 
@@ -41,7 +50,7 @@ function TrashContextMenu() {
         <div className={classContext} style={{ left: leftContext, top: positionContextMenu.top }} onMouseDown={(e) => e.stopPropagation()}>
             { typeContextMenu === 'workspace'
                 ? ( <ul>
-                        <li><div className="icon delete"></div>Очистить корзину</li>
+                        <li onClick={handlerClearTrash}><div className="icon delete"></div>Очистить корзину</li>
                     </ul> ) 
                 : ( <ul>
                     <li onClick={handlerRestore}><div className="icon restore"></div>Восстановить</li>
