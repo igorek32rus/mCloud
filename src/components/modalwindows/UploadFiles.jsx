@@ -70,13 +70,11 @@ function UploadFiles({files}) {
                     progress: Math.round(sizeUploaded / onePersent)
                 })
             } catch (error) {
-                console.log(error);
-                removeNotification(idNotification)
+                console.log(error)
                 createNotification({
                     title: `Ошибка загрузки файла`, 
                     message: `Файл: ${file.name}. ${error.response.data.message}`
                 })
-                return
             }
         }
 
@@ -86,7 +84,7 @@ function UploadFiles({files}) {
     
         createNotification({
             title: `Загрузка файлов`, 
-            message: `Файлы успешно загружены`
+            message: `Загрузка завершена`
         })
             
     }
