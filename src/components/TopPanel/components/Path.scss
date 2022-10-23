@@ -8,27 +8,28 @@
     flex-grow: 1;
     display: flex;
     align-items: center;
-    /* overflow: hidden; */
 
     position: relative;
     z-index: 2;
     height: 2.5rem;
     overflow-y: hidden;
+    overflow-x: scroll;
     scroll-behavior: smooth;
+
+    -ms-overflow-style: none;  /* IE и Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     ul {
         display: flex;
         align-items: center;
         flex-wrap: nowrap;
-        padding-bottom: 1.5rem;
-        padding-left: 0;
-        margin-block: 0;
-        overflow-x: scroll;
         list-style: none;
         text-align: center;
         white-space: nowrap;
-        position: relative;
-        top: 1.3rem;
 
         li {
             display: flex;
