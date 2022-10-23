@@ -429,9 +429,13 @@ class FileController {
     }
 
     async changeParent(req, res) {
+
         try {
             const {idNewParent, files, curDir} = req.body
+            if (!files.length) return res.status(400).json({error: 'Не выбраны файл для перемещения'})
 
+            const firstFile = await File.findOne({ _id: files[0], user: req.user.id })
+            const sourceParentID = firstFile.parent
             let sizeToParent = 0
 
             for (let i = 0; i < files.length; i++) {
@@ -448,13 +452,14 @@ class FileController {
                 await dbFile.save()
             }
 
+            await recursiveUpdateSizeParent(req.user.id, sourceParentID, -sizeToParent)
             await recursiveUpdateSizeParent(req.user.id, idNewParent, sizeToParent)
 
             const dirFiles = await File.find({user: req.user.id, parent: curDir, deleted: null })
             return res.json({files: dirFiles})
         } catch (error) {
             console.log(error)
-            return res.status(500).json({error: 'Can`t delete files'})
+            return res.status(500).json({error: 'Can`t move files'})
         }
     }
 
