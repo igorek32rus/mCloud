@@ -22,6 +22,37 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     backdrop-filter: blur(10px);
 
+    .share_input {
+        color: rgba(255, 255, 255, .5);
+        transition: color .2s ease-in-out, border .2s ease-in-out, background-color .2s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            color: rgba(255, 255, 255, .7);
+            border: 1px solid rgba(255, 255, 255, .6);
+            background-color: rgba(255, 255, 255, .1);
+        }
+    }
+
+    .button_share {
+        width: 31px;
+        height: 31px;
+        margin-left: 5px;
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: invert(1);
+        border: 1px solid rgba(0, 0, 0, 1);
+        opacity: .4;
+        border-radius: 5px;
+        transition: opacity .2s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            opacity: .7;
+        }
+    }
+
     .list_upload {
         max-height: 400px;
         overflow: auto;
