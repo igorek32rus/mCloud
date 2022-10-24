@@ -15,6 +15,8 @@ function DirItem({ file }) {
     const { shiftPosition, dragStart, dragnDropGoal } = useSelector(state => state.dragAndDrop)
     const { isContextMenuOpened } = useSelector(state => state.contextMenu)
     const { windowSize } = useSelector(state => state.windowSize)
+    const copyPasteMode = useSelector(state => state.copyPaste.mode)
+    const cuttedItems = useSelector(state => state.copyPaste.items)
     
     const dir = useSelector(state => state.dir.dir)
     const dispatch = useDispatch()
@@ -49,12 +51,12 @@ function DirItem({ file }) {
         ? 100
         : 1
 
+    let classItem = "dir-item"
+    if (selected.includes(file._id) || dragnDropGoal === file._id) classItem += " selected"
+    if (copyPasteMode === "cut" && cuttedItems.includes(file._id)) classItem += " cutted"
+
     return (
-        <div className={
-            selected.includes(file._id) || dragnDropGoal === file._id
-                ? 'dir-item selected' 
-                : 'dir-item'
-            } ref={fileRef} style={{transform: transformElement, zIndex: zIndexElement}}
+        <div className={classItem} ref={fileRef} style={{transform: transformElement, zIndex: zIndexElement}}
             onContextMenu={(e) => e.preventDefault()} 
             onMouseDown={(e) => handlerMouseDown(e, file, setDescription)} 
             onMouseEnter={handlerMouseEnter} 
