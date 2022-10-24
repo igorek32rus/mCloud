@@ -23,11 +23,12 @@ function Path({ path }) {
             event.preventDefault()
         }
     }
-
+    
     React.useEffect(() => {
-        pathRef.current.addEventListener('wheel', handlerScrollPath)
+        const pathElem = pathRef.current
+        pathElem.addEventListener('wheel', handlerScrollPath)
 
-        return () => pathRef.current.removeEventListener('wheel', handlerScrollPath)
+        return () => pathElem.removeEventListener('wheel', handlerScrollPath)
     }, [])
 
     React.useEffect(() => {
