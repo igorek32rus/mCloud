@@ -68,8 +68,8 @@ function Search() {
     const handleClearSearch = () => {
         setSearchValue("")
         setSearchResult([])
-        setShowResults(false)
         inputRef.current.focus()
+        setShowResults(false)
     }
 
     const handlerBlur = () => {
