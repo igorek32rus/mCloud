@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 
@@ -12,7 +12,6 @@ import { useHandlerMouseUp } from "../../hooks/eventHandlers/DirContent/useHandl
 import categories from "../../categories"
 
 import './DirContent.scss'
-import { clearSelected } from "../../store/selectionReducer"
 
 function DirContent() {
     const dir = useSelector(state => state.dir.dir)
@@ -27,12 +26,6 @@ function DirContent() {
 
     const { category } = useParams()
     const categoryParams = categories.find(cat => cat.name === category)
-
-    useEffect(() => {
-        if (category !== "search") {
-            dispatch(clearSelected())
-        }
-    }, [category])
 
     return (
         <div className="dir-content" 

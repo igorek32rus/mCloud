@@ -37,7 +37,7 @@ function Search() {
             setShowResults(true)
         }
 
-        if (res.files.length > 5) {
+        if (res.files.length >= 5) {
             setOpenFullSearch(true)
             return
         }
@@ -84,9 +84,9 @@ function Search() {
         }
     }
 
-    const handlerClick = (fileId) => {
+    const handlerClick = (fileId, parent) => {
         dispatch(setSelected([fileId]))
-        history.push("/files/search/" + searchValue)
+        history.push(`/files/main/${parent}/${fileId}`)
     }
 
     const handlerClickFullSearch = () => {
@@ -104,7 +104,7 @@ function Search() {
                 <div className="search-result">
                     { searchResult.length > 0 &&
                         searchResult.map(file => (
-                            <div className="item" key={file._id} onClick={() => handlerClick(file._id)}>
+                            <div className="item" key={file._id} onClick={() => handlerClick(file._id, file.parent)}>
                                 <div className={file.type === "folder" ? "img_type folder" : "img_type file"}></div>
                                 <div className="info">
                                     <div className="filename">{file.name}</div>

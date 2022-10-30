@@ -18,6 +18,7 @@ import categories from '../../categories'
 
 import { asyncGetCategoryFiles, asyncGetSearchFiles } from '../../store/asyncActions/dir'
 import { clearPositionFiles } from '../../store/selectionReducer'
+import { clearSelected } from "../../store/selectionReducer"
 
 function MainPage() {
     const userData = useSelector(state => state.auth.userData)
@@ -26,10 +27,14 @@ function MainPage() {
     const { modalOpened } = useSelector(state => state.modalWindow)
     const dispatch = useDispatch()
 
-    const { category, parent } = useParams()
+    const { category, parent, fileID } = useParams()
     const categoryParams = categories.find(cat => cat.name === category)
 
     useEffect(() => {
+        if ((category !== "search") && (!fileID)) {
+            dispatch(clearSelected())
+        }
+
         dispatch(clearPositionFiles())
         setLoading(true)
         if (category === "search") {
