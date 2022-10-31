@@ -1,5 +1,7 @@
 import { dirLoad, dirSetCurrentDir, dirSetErrorMessage } from "../dirReducer"
+import { openModal } from "../modalWindowReducer"
 import { URLS } from "../../constants"
+import Button from "../../components/UI/button/Button"
 
 export const asyncGetCategoryFiles = (parent, category, setLoading) => {
     return async dispatch => {
@@ -18,6 +20,18 @@ export const asyncGetCategoryFiles = (parent, category, setLoading) => {
             })
 
             const json = await response.json()
+
+            if (json.error) {
+                dispatch(openModal({
+                    title: 'Ошибка',
+                    children: <>
+                        <p style={{margin: "10px 0"}}>{ json.error }</p>
+                        <Button click={() => window.history.go(-1)} className="btn blue" style={{width: '100%', margin: 0}}>Назад</Button>
+                    </>
+                }))
+                dispatch(dirSetErrorMessage(json.error))
+                return
+            }
 
             if (json.files && json.path) {
                 dispatch(dirLoad({ dir: json.files, path: json.path }))

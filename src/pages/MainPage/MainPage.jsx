@@ -22,7 +22,7 @@ import { clearSelected } from "../../store/selectionReducer"
 
 function MainPage() {
     const userData = useSelector(state => state.auth.userData)
-    const { path, currentDir } = useSelector(state => state.dir)
+    const { path, currentDir, errorMessage } = useSelector(state => state.dir)
     const [loading, setLoading] = useState(true)
     const { modalOpened } = useSelector(state => state.modalWindow)
     const dispatch = useDispatch()
@@ -54,7 +54,7 @@ function MainPage() {
             <div className="main-page">
                 <>
                     { modalOpened && <Modal /> }
-                    {categoryParams.showTopPanel && <TopPanel path={path} />}
+                    {categoryParams.showTopPanel && !errorMessage && <TopPanel path={path} />}
                     <TitlePage>
                         {parent !== userData.rootId && categoryParams.showBackButtonInTitle && <BackButton />}
                         <h1>

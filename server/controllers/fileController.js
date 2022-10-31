@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs")
+const { ObjectId } = require("mongoose").Types
 
 const JSZip = require("jszip")
 
@@ -275,8 +276,8 @@ class FileController {
         try {
             const {category, parent} = req.query
 
-            if (!parent) {
-                return res.status(500).json({error: 'Can`t get files'})
+            if (!parent || !ObjectId.isValid(parent)) {
+                return res.status(500).json({error: 'Невозможно получить файлы данной директории'})
             }
 
             const root = await File.findOne({user: req.user.id, parent: null})
