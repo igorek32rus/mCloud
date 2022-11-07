@@ -47,6 +47,8 @@ function SharePageContextMenu() {
             })
         })
 
+        removeNotification(idNotify)
+
         if (response.ok) {
 
             const filename = response.headers.get('content-disposition')
@@ -64,9 +66,15 @@ function SharePageContextMenu() {
             document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
             a.click();    
             a.remove();
+            return
         }
 
-        removeNotification(idNotify)
+        const jsonRes = await response.json()
+
+        createNotification({
+            title: `Скачивание файлов`, 
+            message: `Ошибка. ${jsonRes.message}`
+        })
     }
 
     const handlerAddToCloud = () => {

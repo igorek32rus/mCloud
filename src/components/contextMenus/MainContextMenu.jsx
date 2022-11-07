@@ -111,6 +111,13 @@ function MainContextMenu() {
         }
 
         removeNotification(idNotify)
+
+        const jsonRes = await response.json()
+
+        createNotification({
+            title: `Скачивание файлов`, 
+            message: `Ошибка. ${jsonRes.message}`
+        })
     }
 
     const handlerCopy = () => {
