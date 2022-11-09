@@ -1,9 +1,9 @@
 import React from "react"
 import './TitlePage.scss'
 
-function TitlePage({children}) {
+function TitlePage({children, margin = "left-right-margins"}) {
     return (
-        <div className="title_page">
+        <div className={"title_page " + margin}>
             { children }
         </div>
     )

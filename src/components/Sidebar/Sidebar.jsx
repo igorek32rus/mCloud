@@ -37,7 +37,7 @@ function Sidebar() {
                         <menu>
                             <ul>
                                 <ListCategories />
-                                <li key={"settings"} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}><div className='icon' style={{backgroundImage: `url(${SettingsIcon})`}}></div>Настройки</li>
+                                <Link key={"settings"} to={"/settings"}><li key={"settings"} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}><div className='icon' style={{backgroundImage: `url(${SettingsIcon})`}}></div>Настройки</li></Link>
                                 <li key={"logout"} onClick={handlerLogout}><div className='icon' style={{backgroundImage: `url(${LogoutIcon})`}}></div>Выйти</li>
                             </ul>
                         </menu>

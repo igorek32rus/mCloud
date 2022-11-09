@@ -1,0 +1,14 @@
+.settings-page {
+    display: flex;
+    justify-content: center;
+    flex-grow: 3;
+
+    .settings-content {
+        margin: 70px 20px 20px 20px;
+        width: 70%;
+        background: rgba(255, 255, 255, .2);
+        min-height: 500px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+}
