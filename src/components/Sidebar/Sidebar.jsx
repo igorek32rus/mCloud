@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import './Sidebar.scss'
 import { getFileSize } from '../../utils/getFileSize'
@@ -19,6 +19,7 @@ function Sidebar() {
 
     const userData = useSelector(state => state.auth.userData)
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const handlerLogout = () => {
         localStorage.removeItem('token')
@@ -29,6 +30,11 @@ function Sidebar() {
         dispatch(asyncCloseMenu())
     }
 
+    const handlerClickSettings = () => {
+        dispatch(asyncCloseMenu())
+        history.push("/settings")
+    }
+
     return (
         <>
             { isMenuOpened && 
@@ -37,7 +43,7 @@ function Sidebar() {
                         <menu>
                             <ul>
                                 <ListCategories />
-                                <Link key={"settings"} to={"/settings"}><li key={"settings"} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}><div className='icon' style={{backgroundImage: `url(${SettingsIcon})`}}></div>Настройки</li></Link>
+                                <li key={"settings"} onClick={handlerClickSettings} style={{borderTop: '1px solid rgba(255, 255, 255, .3)'}}><div className='icon' style={{backgroundImage: `url(${SettingsIcon})`}}></div>Настройки</li>
                                 <li key={"logout"} onClick={handlerLogout}><div className='icon' style={{backgroundImage: `url(${LogoutIcon})`}}></div>Выйти</li>
                             </ul>
                         </menu>
@@ -51,11 +57,18 @@ function Sidebar() {
 
 function ListCategories() {
     const userData = useSelector(state => state.auth.userData)
+    const dispatch = useDispatch()
+    const history = useHistory()
+
+    const handlerClickCategory = (catName, id) => {
+        dispatch(asyncCloseMenu())
+        history.push(`/files/${catName}/${id}`)
+    }
 
     return (
         <>
             {categories.map(category => {
-                return !category.hidden && <Link key={category.name} to={"/files/" + category.name + "/" + userData.rootId}><li><div className='icon' style={{backgroundImage: `url(${category.icon})`}}></div>{category.title}</li></Link>
+                return !category.hidden && <li key={category.name} onClick={() => handlerClickCategory(category.name, userData.rootId)}><div className='icon' style={{backgroundImage: `url(${category.icon})`}}></div>{category.title}</li>
             })}
         </>
     )
