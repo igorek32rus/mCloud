@@ -24,6 +24,18 @@ const SettingsPage = () => {
                             <TitlePage margin="">
                                 <h1>Настройки</h1>
                             </TitlePage>
+                            <div className="settings-body">
+                                <div className="settings-name">Name</div>
+                                <div className="settings-value">Value</div>
+                                <div className="settings-name">Name</div>
+                                <div className="settings-value">Value</div>
+                                <div className="settings-name">Name</div>
+                                <div className="settings-value">Value</div>
+                                <div className="settings-name">Name</div>
+                                <div className="settings-value">Value</div>
+                                <div className="settings-name">Name</div>
+                                <div className="settings-value">Value</div>
+                            </div>
                         </div>
                     </div>
                     <Notifications />
