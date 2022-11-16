@@ -100,16 +100,17 @@ function UploadFiles({files}) {
     return (
         <>
             <div className="list_upload">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Имя файла</th>
-                            <th>Размер</th>
-                            <th></th>
-                        </tr>
-                        {uploadFiles.map((file, i) => <tr key={i}><td>{file.name}</td><td>{getFileSize(file.size)}</td><td onClick={() => handleRemoveFile(i)} className="removeUpload">&times;</td></tr> )}
-                    </tbody>
-                </table>
+                <div className="filename">Имя файла</div>
+                <div className="filesize">Размер</div>
+                <div className="filedelete"></div>
+
+                {uploadFiles.map((file, i) => (
+                    <>
+                        <div className="filename">{file.name}</div>
+                        <div className="filesize">{getFileSize(file.size)}</div>
+                        <div className="filedelete"><div className="removeUpload" onClick={() => handleRemoveFile(i)}>&times;</div></div>
+                    </>
+                ))}
             </div>
             
             <div className="buttons">

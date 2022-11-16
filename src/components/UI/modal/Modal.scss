@@ -53,27 +53,56 @@
         }
     }
 
+    // .list_upload {
+    //     max-height: 400px;
+    //     overflow: auto;
+    //     margin: 10px 0;
+
+    //     table {
+    //         /* margin-right: 10px; */
+    //         width: 100%;
+    //         margin: 10px 0;
+    //         border-collapse: collapse;
+
+    //         tr {
+    //             border-bottom: 1px solid rgba(255, 255, 255, .5);
+    //         }
+
+    //         td, th {
+    //             padding: 5px 10px;
+    //             max-width: 50vw;
+    //             overflow: hidden;
+    //             text-overflow: ellipsis;
+    //         }
+    //     }
+    // }
+
     .list_upload {
-        max-height: 400px;
-        overflow: auto;
+        display: grid;
+        grid-template-columns: 1fr 80px 20px;
+        grid-row-gap: 5px;
         margin: 10px 0;
 
-        table {
-            /* margin-right: 10px; */
-            width: 100%;
-            margin: 10px 0;
-            border-collapse: collapse;
+        &>div {
+            padding: 2px 5px 4px 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, .2);
+        }
 
-            tr {
-                border-bottom: 1px solid rgba(255, 255, 255, .5);
-            }
+        &>div:nth-last-child(-n+3) {
+            border: none;
+        }
 
-            td, th {
-                padding: 5px 10px;
-                max-width: 50vw;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+        .filename:first-child, .filesize, .filedelete {
+            text-align: center;
+        }
+        
+        div:nth-child(-n+3) {
+            font-weight: bold;
+        }
+
+        .filename {
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
