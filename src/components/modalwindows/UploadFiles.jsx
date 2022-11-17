@@ -14,7 +14,7 @@ import { closeModal } from "../../store/modalWindowReducer"
 import axios from 'axios'
 
 function UploadFiles({files}) {
-    const [uploadFiles, setUploadFiles] = useState(files)
+    const [uploadFiles, setUploadFiles] = useState(files.reduce((acc, cur, i) => [...acc, {id: i, file: cur}], []))
     const [createNotification, removeNotification, updateNotification] = useNotification()
     const {parent} = useParams()
     const dispatch = useDispatch()
@@ -36,8 +36,8 @@ function UploadFiles({files}) {
         const onePersent = sizeAllFiles / 100
         // console.log('1 persent: ' + onePersent);
     
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
+        for (let i = 0; i < uploadFiles.length; i++) {
+            const {file} = uploadFiles[i]
             
             updateNotification(idNotification, {
                 message: 'Загрузка ' + file.name
@@ -90,25 +90,24 @@ function UploadFiles({files}) {
     }
 
     const handleRemoveFile = (num) => {
-        let copyUploadFiles = uploadFiles.slice(0)
-        copyUploadFiles.splice(num, 1)
-        setUploadFiles(copyUploadFiles)
+        setUploadFiles((prev) => prev.filter((item) => item.id !== num))
 
-        if (!copyUploadFiles.length) dispatch(closeModal())
+        if (!uploadFiles.length) dispatch(closeModal())
     }
 
     return (
         <>
+            { console.log(uploadFiles) }
             <div className="list_upload">
                 <div className="filename">Имя файла</div>
                 <div className="filesize">Размер</div>
                 <div className="filedelete"></div>
 
-                {uploadFiles.map((file, i) => (
+                {uploadFiles.map((item) => (
                     <>
-                        <div className="filename">{file.name}</div>
-                        <div className="filesize">{getFileSize(file.size)}</div>
-                        <div className="filedelete"><div className="removeUpload" onClick={() => handleRemoveFile(i)}>&times;</div></div>
+                        <div className="filename">{item.file.name}</div>
+                        <div className="filesize">{getFileSize(item.file.size)}</div>
+                        <div className="filedelete"><div className="removeUpload" onClick={() => handleRemoveFile(item.id)}>&times;</div></div>
                     </>
                 ))}
             </div>
