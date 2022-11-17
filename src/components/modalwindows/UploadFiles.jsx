@@ -97,18 +97,17 @@ function UploadFiles({files}) {
 
     return (
         <>
-            { console.log(uploadFiles) }
             <div className="list_upload">
                 <div className="filename">Имя файла</div>
                 <div className="filesize">Размер</div>
                 <div className="filedelete"></div>
 
                 {uploadFiles.map((item) => (
-                    <>
+                    <React.Fragment key={item.id}>
                         <div className="filename">{item.file.name}</div>
                         <div className="filesize">{getFileSize(item.file.size)}</div>
                         <div className="filedelete"><div className="removeUpload" onClick={() => handleRemoveFile(item.id)}>&times;</div></div>
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
             
