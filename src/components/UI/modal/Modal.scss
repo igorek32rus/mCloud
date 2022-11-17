@@ -53,56 +53,30 @@
         }
     }
 
-    // .list_upload {
-    //     max-height: 400px;
-    //     overflow: auto;
-    //     margin: 10px 0;
-
-    //     table {
-    //         /* margin-right: 10px; */
-    //         width: 100%;
-    //         margin: 10px 0;
-    //         border-collapse: collapse;
-
-    //         tr {
-    //             border-bottom: 1px solid rgba(255, 255, 255, .5);
-    //         }
-
-    //         td, th {
-    //             padding: 5px 10px;
-    //             max-width: 50vw;
-    //             overflow: hidden;
-    //             text-overflow: ellipsis;
-    //         }
-    //     }
-    // }
-
     .list_upload {
         display: grid;
-        grid-template-columns: 1fr 80px 20px;
+        grid-template-columns: 1fr 90px 20px;
         grid-row-gap: 5px;
         margin: 10px 0;
 
         &>div {
             padding: 2px 5px 4px 5px;
             border-bottom: 1px solid rgba(255, 255, 255, .2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         &>div:nth-last-child(-n+3) {
             border: none;
-        }
-
-        .filename:first-child, .filesize, .filedelete {
-            text-align: center;
         }
         
         div:nth-child(-n+3) {
             font-weight: bold;
         }
 
-        .filename {
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .filename:not(:first-child) {
+            justify-content: left;
         }
     }
 
