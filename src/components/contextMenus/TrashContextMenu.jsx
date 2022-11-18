@@ -50,7 +50,7 @@ function TrashContextMenu() {
         <div className={classContext} style={{ left: leftContext, top: positionContextMenu.top }} onMouseDown={(e) => e.stopPropagation()}>
             { typeContextMenu === 'workspace'
                 ? ( <ul>
-                        <li onClick={handlerClearTrash}><div className="icon delete"></div>Очистить корзину</li>
+                        <li className={!items.length && "disabled"} onClick={!!items.length && handlerClearTrash}><div className="icon delete"></div>Очистить корзину</li>
                     </ul> ) 
                 : ( <ul>
                     <li onClick={handlerRestore}><div className="icon restore"></div>Восстановить</li>
