@@ -90,9 +90,11 @@ function UploadFiles({files}) {
     }
 
     const handleRemoveFile = (num) => {
-        setUploadFiles((prev) => prev.filter((item) => item.id !== num))
-
-        if (!uploadFiles.length) dispatch(closeModal())
+        setUploadFiles((prev) => {
+            const res = prev.filter((item) => item.id !== num)
+            if (!res.length) dispatch(closeModal())
+            return res
+        })
     }
 
     return (
